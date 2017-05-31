@@ -14,12 +14,12 @@ import (
 // connectCmd represents the connect command
 var connectCmd = &cobra.Command{
 	Use:   "connect",
-	Short: "Connect the current virtualgo environment to the this directory",
+	Short: "Connect the current virtualgo workspace to the this directory",
 	Long:  ``,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		name := os.Getenv("VIRTUALGO")
 		if name == "" {
-			return errors.New("A virtualgo environment should be activated first by using `vg activate [environmentName]`")
+			return errors.New("A virtualgo workspace should be activated first by using `vg activate [workspaceName]`")
 		}
 		err := ioutil.WriteFile(".virtualgo", []byte(name), 0644)
 		if err != nil {

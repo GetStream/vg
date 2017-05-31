@@ -87,6 +87,10 @@ install_required = true
 
 [[constraint]]
   branch = "master"
+  name = "github.com/jteeuwen/go-bindata"
+
+[[constraint]]
+  branch = "master"
   name = "github.com/golang/dep"
 
 [[constraint]]

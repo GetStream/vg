@@ -46,7 +46,7 @@ _vg_activate() {
 
 _vg_deactivate() {
     if [ -z "$VIRTUALGO" ]; then
-        echo Error: No go environment is active at the moment
+        echo Error: No go workspace is active at the moment
         vg help
         return 1
     fi

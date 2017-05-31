@@ -10,15 +10,15 @@ import (
 
 // activateCmd represents the activate command
 var activateCmd = &cobra.Command{
-	Use:   "activate [environmentName]",
-	Short: "Activate a specific virtualgo environment",
+	Use:   "activate [workspaceName]",
+	Short: "Activate a specific virtualgo workspace",
 	Long: `
-The most simple way to use it is to activate an environment named after the
+The most simple way to use it is to activate an workspace named after the
 current directory, by just calling:
 
 	vg activate
 
-If you want to activate a specific environment you can specify it as an
+If you want to activate a specific workspace you can specify it as an
 optional argument like this:
 
 	vg activate my-personal-env

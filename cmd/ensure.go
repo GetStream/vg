@@ -38,7 +38,7 @@ type depConfig struct {
 // ensureCmd represents the ensure command
 var ensureCmd = &cobra.Command{
 	Use:   "ensure [-- [arguments to dep ensure]]",
-	Short: "A wrapper for dep that installs the dependencies in the virtualgo environment instead of vendor",
+	Short: "A wrapper for dep that installs the dependencies in the virtualgo workspace instead of vendor",
 	Long: `To simlpy install the dependencies in Gopkg.lock you can run:
 
 	vg ensure
@@ -49,7 +49,7 @@ It's also possible to pass arguments to dep ensure, such as:
 	vg ensure -- github.com/pkg/errors
 
 This command also adds an extra feature to Gopkg.toml. You can install certain
-packages (such as binaries) in the virtualgo environment. This uses the
+packages (such as binaries) in the virtualgo workspace. This uses the
 metadata section in the Gopkg.toml
 
 	[metadata]
@@ -68,7 +68,7 @@ This command requires that dep is installed in $PATH. `,
 
 		virtualgoPath := os.Getenv("VIRTUALGO_PATH")
 		if virtualgoPath == "" {
-			return errors.New("A virtualgo environment should be activated first by using `vg activate [environmentName]`")
+			return errors.New("A virtualgo workspace should be active first by using `vg activate [workspaceName]`")
 		}
 
 		virtualgoPath = filepath.Join(virtualgoPath, "src")
@@ -86,7 +86,7 @@ This command requires that dep is installed in $PATH. `,
 				err = err.(*os.LinkError).Err
 				if err != syscall.ENOENT {
 					// If src doesn't exist it doesn't have to be moved
-					return errors.Wrap(err, "Couldn't move the the sources of the activated environment to vendor")
+					return errors.Wrap(err, "Couldn't move the the sources of the active workspace to vendor")
 				}
 			}
 		}
@@ -106,12 +106,12 @@ This command requires that dep is installed in $PATH. `,
 
 		err = os.RemoveAll(virtualgoPath)
 		if err != nil {
-			return errors.Wrap(err, "Couldn't clear the src path of the activated environment")
+			return errors.Wrap(err, "Couldn't clear the src path of the active workspace")
 		}
 
 		err = os.Rename("vendor", virtualgoPath)
 		if err != nil {
-			return errors.Wrap(err, "Couldn't move the vendor directory to the activated environment")
+			return errors.Wrap(err, "Couldn't move the vendor directory to the active workspace")
 		}
 
 		gopkgData, err := ioutil.ReadFile("Gopkg.toml")
