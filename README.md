@@ -38,11 +38,6 @@ The following commands are the main commands to use `vg`:
 # Activate (and create) a workspace
 vg activate myProject
 
-# Without a workspace name it will activate a workspace named after the current
-# directory
-cd $GOPATH/src/github.com/pkg/errors
-vg activate # activates a workspace called errors
-
 # All go commands are now executed from within your workspace
 go get github.com/pkg/errors
 
@@ -54,6 +49,12 @@ vg connect
 # Deactivate the current workspace
 vg deactivate
 # Activating a new workspace automatically deactivates the previous one as well
+
+# Without a workspace name it will activate a workspace named after the current
+# directory
+cd $GOPATH/src/github.com/pkg/errors
+vg activate # activates a workspace called errors
+
 ```
 
 
