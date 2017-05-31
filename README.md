@@ -1,5 +1,5 @@
 # virtualgo
-Virtualgo (or `vg`) is a virtualenv like solution to the go package isolation
+Virtualgo (or `vg` for short) is a virtualenv like solution to the go package isolation
 problem with `dep` integration. If you have had any of the following problems
 this package will solve them for you:
 
@@ -13,21 +13,26 @@ this package will solve them for you:
 ## Installation
 
 First install the package:
+
 ```bash
 go get -u github.com/getstream/vg
 ```
 
 For POSIX compatible shells put the following in your .bashrc/.zshrc/.whateverrc:
+
 ```bash
 eval "$(vg eval)"
 ```
 
 Or for fish, put this in your config.fish:
+
 ```fish
 vg eval --shell fish | source
 ```
 
 ## Usage
+
+The following commands are the main commands to use `vg`:
 
 ```bash
 # Activate (and create) a workspace
@@ -39,7 +44,7 @@ go get github.com/pkg/errors
 # Bind the currently active workspace to the current directory
 vg connect
 # Everytime you cd into this directory the workspace will be activated
-automaticlally
+# automatically
 
 # Deactivate the current workspace
 vg deactivate
@@ -51,7 +56,7 @@ vg deactivate
 
 `vg` integrates well with `dep` (https://github.com/golang/dep):
 
-```
+```bash
 # Install the dependencies from Gopkg.lock into your workspace instead of the
 # vendor directory
 vg ensure
