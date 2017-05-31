@@ -68,6 +68,7 @@ vg ensure -- -update
 It also extends dep with a way to install executable dependencies. The `vg` repo
 itself uses it to install the go-bindata command. It does this by having the
 following in `Gopkg.toml`
+
 ```toml
 required = [
     'github.com/jteeuwen/go-bindata/go-bindata'
