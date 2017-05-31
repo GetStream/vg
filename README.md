@@ -1,14 +1,17 @@
 # virtualgo
-Virtualgo (or `vg` for short) is a virtualenv like solution to the go package isolation
-problem with `dep` integration. If you have had any of the following problems
-this package will solve them for you:
+Virtualgo (or `vg` for short) is a [`dep`](https://github.com/golang/dep)
+compatible solution to problems caused be managing dependencies in the `vendor`
+directory. If you have had any of the following problems this package will solve
+them for you:
 
-- You want to depend on a specific version of an executable dependency. You find
-  out the `vendor` directory works only for libraries.
-- You work on two projects with a vendor directory and want to your local
-  version of one of those into the other. Some of the packages in these vendor
-  directories overlap and suddenly get a lot of import errors.
-- You want to `vendor` plug-ins and run into the issues: https://github.com/akutz/gpd
+- When running `go test ./...` the tests in your vendor directory are executed.
+- You want to depend on a specific version of an executable package. You find
+  out that the `vendor` directory only works for libraries.
+- You work on two projects, A and B. Both of them contain a vendor directory.
+  You want to use project A from your `GOPATH` when compiling B. To do this you
+  remove A from the vendor directory of B, so it will fallback to import A from
+  `GOPATH`. Suddenly you get a lot of weird import errors.
+- You want to `vendor` plug-ins and run into issues: https://github.com/akutz/gpd
 
 ## Installation
 
