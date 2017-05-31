@@ -1,0 +1,96 @@
+#!/bin/sh
+
+
+vg() {
+    case "$1" in
+        activate)
+            _vg_activate "${@:2}"
+            ;;
+        deactivate)
+            _vg_deactivate "${@:2}"
+            ;;
+        *)
+            echo calling actual vg command
+            command vg $@
+    esac
+
+}
+
+_vg_activate() {
+    if [ -n "$VIRTUALGO" ]; then
+        vg deactivate
+    fi
+
+    export VIRTUALGO=$1
+    if [ -z "$VIRTUALGO" ]; then
+        export VIRTUALGO=$(basename $PWD)
+    fi
+
+    export VIRTUALGO_PATH=$HOME/.virtualgo/$VIRTUALGO
+
+    export _VIRTUALGO_OLDPS1=$PS1
+    export _VIRTUALGO_OLDGOPATH=$GOPATH
+    export _VIRTUALGO_OLDGOBIN=$GOBIN
+    export _VIRTUALGO_OLDPATH=$PATH
+
+    export GOPATH=$VIRTUALGO_PATH:$GOPATH
+    export GOBIN=$VIRTUALGO_PATH/bin
+    export PATH="$GOBIN:$PATH"
+    if [ -z "$VIRTUALGO_DISABLE_PROMPT" ]; then
+        export PS1="($VIRTUALGO) $PS1"
+    fi
+
+    mkdir -p $VIRTUALGO_PATH/src/
+    mkdir -p $GOBIN
+}
+
+_vg_deactivate() {
+    if [ -z "$VIRTUALGO" ]; then
+        echo Error: No go environment is active at the moment
+        vg help
+        return 1
+    fi
+    export PS1=$_VIRTUALGO_OLDPS1
+    export GOBIN=$_VIRTUALGO_OLDGOBIN
+    export GOPATH=$_VIRTUALGO_OLDGOPATH
+    export PATH=$_VIRTUALGO_OLDPATH
+
+    unset VIRTUALGO _VIRTUALGO_OLDPS1 _VIRTUALGO_OLDPATH _VIRTUALGO_OLDGOBIN _VIRTUALGO_OLDGOPATH VIRTUALGO_PATH
+}
+
+_PREV_VIRTUALGO_PWD=""
+_PREV_VIRTUALGO_PROMPT_COMMAND=$PROMPT_COMMAND
+__vg_prompt_command() {
+    # find an auto-activation file
+    if [ "" != "$_PREV_VIRTUALGO_PROMPT_COMMAND" ]; then
+        $_PREV_VIRTUALGO_PROMPT_COMMAND
+    fi
+
+    if [ "$PWD" = "$_PREV_VIRTUALGO_PWD" ]; then
+        return
+    fi
+    _PREV_VIRTUALGO_PWD="$PWD"
+
+    __vg_auto_activate
+}
+
+PROMPT_COMMAND=__vg_prompt_command
+
+__vg_auto_activate() {
+    activation_root=$PWD
+    while [ "$activation_root" != "" ]; do
+        if [ -f "$activation_root/.virtualgo" ]; then
+            new_virtualgo_name=$(cat "$activation_root/.virtualgo")
+            if [ "" = "$VIRTUALGO" -o "$new_virtualgo_name" != "$VIRTUALGO" ]; then
+                vg activate $new_virtualgo_name
+            fi
+            return
+        fi
+        # this strips the last path component from the path.
+        activation_root=$(echo $activation_root | sed 's|/[^/]*$||')
+    done
+}
+
+chpwd_functions=(${chpwd_functions[@]} "__vg_auto_activate")
+
+__vg_auto_activate
