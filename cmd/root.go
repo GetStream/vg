@@ -1,4 +1,4 @@
-// Copyright © 2017 Jelte Fennema <license-tech@jeltef.nl>
+// Copyright © 2017 Stream
 
 package cmd
 
