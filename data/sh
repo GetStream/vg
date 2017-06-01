@@ -74,6 +74,8 @@ __vg_prompt_command() {
     __vg_auto_activate
 }
 
+shopt -u promptvars
+
 PROMPT_COMMAND=__vg_prompt_command
 
 __vg_auto_activate() {
