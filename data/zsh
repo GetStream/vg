@@ -1,0 +1,1 @@
+chpwd_functions=(${chpwd_functions[@]} "__vg_auto_activate")

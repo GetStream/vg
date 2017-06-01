@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 vg() {
     case "$1" in
         init)
@@ -65,26 +64,6 @@ __vg_deactivate() {
     unset VIRTUALGO _VIRTUALGO_OLDPS1 _VIRTUALGO_OLDPATH _VIRTUALGO_OLDGOBIN _VIRTUALGO_OLDGOPATH VIRTUALGO_PATH
 }
 
-_PREV_VIRTUALGO_PWD=""
-_PREV_VIRTUALGO_PROMPT_COMMAND=$PROMPT_COMMAND
-__vg_prompt_command() {
-    # find an auto-activation file
-    if [ "" != "$_PREV_VIRTUALGO_PROMPT_COMMAND" ]; then
-        $_PREV_VIRTUALGO_PROMPT_COMMAND
-    fi
-
-    if [ "$PWD" = "$_PREV_VIRTUALGO_PWD" ]; then
-        return
-    fi
-    _PREV_VIRTUALGO_PWD="$PWD"
-
-    __vg_auto_activate
-}
-
-shopt -u promptvars
-
-PROMPT_COMMAND=__vg_prompt_command
-
 __vg_auto_activate() {
     activation_root=$PWD
     while [ "$activation_root" != "" ]; do
@@ -99,7 +78,5 @@ __vg_auto_activate() {
         activation_root=$(echo $activation_root | sed 's|/[^/]*$||')
     done
 }
-
-chpwd_functions=(${chpwd_functions[@]} "__vg_auto_activate")
 
 __vg_auto_activate

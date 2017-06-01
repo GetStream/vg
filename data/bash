@@ -1,0 +1,22 @@
+#!/bin/bash
+
+_PREV_VIRTUALGO_PWD=""
+_PREV_VIRTUALGO_PROMPT_COMMAND=$PROMPT_COMMAND
+__vg_prompt_command() {
+    # find an auto-activation file
+    if [ "" != "$_PREV_VIRTUALGO_PROMPT_COMMAND" ]; then
+        $_PREV_VIRTUALGO_PROMPT_COMMAND
+    fi
+
+    if [ "$PWD" = "$_PREV_VIRTUALGO_PWD" ]; then
+        return
+    fi
+    _PREV_VIRTUALGO_PWD="$PWD"
+
+    __vg_auto_activate
+}
+
+shopt -u promptvars
+
+PROMPT_COMMAND=__vg_prompt_command
+

@@ -21,10 +21,18 @@ First install the package:
 go get -u github.com/getstream/vg
 ```
 
-For POSIX compatible shells put the following in your .bashrc/.zshrc/.whateverrc:
+
+For bash put this in your .bashrc:
 
 ```bash
 eval "$(vg eval)"
+```
+
+
+Or for zsh, put his in your .zshrc:
+
+```zsh
+eval "$(vg eval --shell zsh)"
 ```
 
 Or for fish, put this in your config.fish:
