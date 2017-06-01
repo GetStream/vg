@@ -44,8 +44,8 @@ vg activate myProject
 # All go commands are now executed from within your workspace
 go get github.com/pkg/errors
 
-# Bind the currently active workspace to the current directory
-vg connect
+# Link the currently active workspace to the current directory
+vg link
 # Everytime you cd into this directory the workspace will be activated
 # automatically
 
