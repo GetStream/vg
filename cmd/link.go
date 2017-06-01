@@ -28,7 +28,7 @@ var linkCmd = &cobra.Command{
 			return errors.Wrap(err, "Couldn't get current working directory")
 		}
 
-		fmt.Printf("Linking workspace '%s' to %s\n", name, curdir)
+		fmt.Printf("Linking %s to workspace '%s'\n", curdir, name)
 
 		err = ioutil.WriteFile(".virtualgo", []byte(name), 0644)
 		if err != nil {
