@@ -5,8 +5,6 @@ package cmd
 
 import (
 	"os"
-	"os/user"
-	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
@@ -23,17 +21,26 @@ var setupCmd = &cobra.Command{
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var err error
+
+		// bash
 		err = appendToFile("~/.bashrc", "\neval \"$(vg eval --shell bash)\"\n")
 		if err != nil {
 			return err
 		}
 
+		// zsh
 		err = appendToFile("~/.zshrc", "\neval \"$(vg eval --shell zsh)\"\n")
 		if err != nil {
 			return err
 		}
 
-		err = os.MkdirAll("~/.config/fish/", 0755)
+		// fish
+		fishdir, err := replaceHomeDir("~/.config/fish")
+		if err != nil {
+			return err
+		}
+
+		err = os.MkdirAll(fishdir, 0755)
 		if err != nil {
 			return err
 		}
@@ -44,13 +51,9 @@ var setupCmd = &cobra.Command{
 }
 
 func appendToFile(fileName string, content string) error {
-	if fileName[:2] == "~/" {
-		usr, err := user.Current()
-		if err != nil {
-			return err
-		}
-		homeDir := usr.HomeDir
-		fileName = filepath.Join(homeDir, fileName[2:])
+	fileName, err := replaceHomeDir(fileName)
+	if err != nil {
+		return err
 	}
 
 	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)

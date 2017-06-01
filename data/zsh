@@ -10,6 +10,7 @@ __vg_completions() {
     compadd help
     compadd init
     compadd link
+    compadd list
     compadd setup
     compadd unlink
     # compadd -X "Activate a specific virtualgo workspace" activate

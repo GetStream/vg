@@ -112,5 +112,6 @@ complete -c vg -a eval        -d "Expose the script that should be eval-ed in th
 complete -c vg -a help        -d "Help about any command"
 complete -c vg -a init        -d "Create and enable a workspace and link it to the current directory"
 complete -c vg -a link        -d "Link the current virtualgo workspace to the this directory"
+complete -c vg -a list        -d "List all existing workspaces"
 complete -c vg -a unlink      -d "Unlinks the current directory from the workspace it's linked to"
 complete -c vg -a setup       -d "Enables virtualgo in your shell"
