@@ -102,3 +102,15 @@ function __vg_auto_activate --on-variable PWD
 end
 
 __vg_auto_activate
+
+complete -c vg --no-files
+
+complete -c vg -a activate    -d "Activate a specific virtualgo workspace"
+complete -c vg -a deactivate  -d "Deactivate the current virtualgo workspace"
+complete -c vg -a ensure      -d "A wrapper for dep that installs the dependencies in the virtualgo workspace instead of vendor"
+complete -c vg -a eval        -d "Expose the script that should be eval-ed in the current shell"
+complete -c vg -a help        -d "Help about any command"
+complete -c vg -a init        -d "Create and enable a workspace and link it to the current directory"
+complete -c vg -a link        -d "Link the current virtualgo workspace to the this directory"
+complete -c vg -a unlink      -d "Unlinks the current directory from the workspace it's linked to"
+

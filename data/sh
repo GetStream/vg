@@ -4,13 +4,13 @@
 vg() {
     case "$1" in
         init)
-            _vg_init "${@:2}"
+            __vg_init "${@:2}"
             ;;
         activate)
-            _vg_activate "${@:2}"
+            __vg_activate "${@:2}"
             ;;
         deactivate)
-            _vg_deactivate "${@:2}"
+            __vg_deactivate "${@:2}"
             ;;
         *)
             command vg $@
@@ -18,12 +18,12 @@ vg() {
 
 }
 
-_vg_init() {
+__vg_init() {
     vg activate $@
     vg link
 }
 
-_vg_activate() {
+__vg_activate() {
     if [ -n "$VIRTUALGO" ]; then
         vg deactivate
     fi
@@ -51,7 +51,7 @@ _vg_activate() {
     mkdir -p $GOBIN
 }
 
-_vg_deactivate() {
+__vg_deactivate() {
     if [ -z "$VIRTUALGO" ]; then
         echo Error: No go workspace is active at the moment
         vg help
