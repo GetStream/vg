@@ -21,21 +21,41 @@ First install the package:
 go get -u github.com/getstream/vg
 ```
 
+### Automatic shell configuration
 
-For bash put this in your .bashrc:
+You can run the following command to configure all supported shells
+automatically:
 
-```bash
-eval "$(vg eval)"
+```sh
+vg setup
 ```
 
+After this you have to reload (`source`) your config:
 
-Or for zsh, put his in your .zshrc:
+```sh
+source ~/.bashrc                   # for bash
+source ~/.zshrc                    # for zsh
+source ~/.config/fish/config.fish  # for fish
+```
+
+### Manual shell configuration
+
+You can also edit your shell config file manually. Afterwards you still have to
+`source` the file like explained above.
+
+For bash put this in your `.bashrc`:
+
+```bash
+eval "$(vg eval --shell bash)"
+```
+
+Or for zsh, put his in your `.zshrc`:
 
 ```zsh
 eval "$(vg eval --shell zsh)"
 ```
 
-Or for fish, put this in your config.fish:
+Or for fish, put this in your `config.fish`:
 
 ```fish
 vg eval --shell fish | source
