@@ -7,6 +7,8 @@ function vg
     end
     # echo $argv[1]
     switch $argv[1]
+        case init
+            _vg_init $argv[1..-1]
         case activate
             _vg_activate $argv[1..-1]
         case deactivate
@@ -15,6 +17,13 @@ function vg
             command vg $argv
     end
 end
+
+
+function _vg_init
+    _vg_activate $argv
+    vg link
+end
+
 
 function _vg_activate
     if [ -n "$VIRTUALGO" ]

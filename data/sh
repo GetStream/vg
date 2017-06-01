@@ -3,6 +3,9 @@
 
 vg() {
     case "$1" in
+        init)
+            _vg_init "${@:2}"
+            ;;
         activate)
             _vg_activate "${@:2}"
             ;;
@@ -10,10 +13,14 @@ vg() {
             _vg_deactivate "${@:2}"
             ;;
         *)
-            echo calling actual vg command
             command vg $@
     esac
 
+}
+
+_vg_init() {
+    vg activate $@
+    vg link
 }
 
 _vg_activate() {
