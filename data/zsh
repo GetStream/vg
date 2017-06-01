@@ -1,1 +1,25 @@
+#!/bin/zsh
+
 chpwd_functions=(${chpwd_functions[@]} "__vg_auto_activate")
+
+__vg_completions() {
+    compadd activate
+    compadd deactivate
+    compadd ensure
+    compadd eval
+    compadd help
+    compadd init
+    compadd link
+    compadd unlink
+    # compadd -X "Activate a specific virtualgo workspace" activate
+    # compadd -X "Deactivate the current virtualgo workspace" deactivate
+    # compadd -X "A wrapper for dep that installs the dependencies in the virtualgo workspace instead of vendor" ensure
+    # compadd -X "Expose the script that should be eval-ed in the current shell" eval
+    # compadd -X "Help about any command" help
+    # compadd -X "Create and enable a workspace and link it to the current directory" init
+    # compadd -X "Link the current virtualgo workspace to the this directory" link
+    # compadd -X "Unlinks the current directory from the workspace it's linked to" unlink
+
+}
+
+compdef __vg_completions vg
