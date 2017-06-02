@@ -137,6 +137,24 @@ the `GOPATH`. Furthermore it changes `GOBIN` and `PATH` to use `bin` directory
 in the workspace. Running `vg deactivate` undoes these changes again.
 
 
+## Using a virtualgo workspace with an IDE (e.g. Gogland)
+
+Because virtualgo is just a usability wrapper around changing your `GOPATH` for
+a specific project it is usually quite easy to use it in combination with an
+IDE. For Gogland you can set multiple `GOPATH`s in the preferences window on a
+per project basis. To find out which `GOPATH`s, activate your desired workspace
+and run:
+
+```bash
+$ echo $GOPATH
+/home/stream/.virtualgo/myworkspace:/home/stream/go
+```
+
+As you can see there's two path separated by a semicolon. If you can set this
+string directly that is fine. For Gogland you have to add the first one (with
+`.virtualgo` in it) first and then the second one.
+
+
 ## License
 
 MIT
