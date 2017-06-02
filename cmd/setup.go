@@ -4,6 +4,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -23,18 +24,21 @@ var setupCmd = &cobra.Command{
 		var err error
 
 		// bash
+		fmt.Println("Editing ~/.bashrc")
 		err = appendToFile("~/.bashrc", "\neval \"$(vg eval --shell bash)\"\n")
 		if err != nil {
 			return err
 		}
 
 		// zsh
+		fmt.Println("Editing ~/.zshrc")
 		err = appendToFile("~/.zshrc", "\neval \"$(vg eval --shell zsh)\"\n")
 		if err != nil {
 			return err
 		}
 
 		// fish
+		fmt.Println("Editing ~/.config/fish/config.fish")
 		fishdir, err := replaceHomeDir("~/.config/fish")
 		if err != nil {
 			return err
