@@ -155,6 +155,13 @@ string directly that is fine. For Gogland you have to add the first one (with
 `.virtualgo` in it) first and then the second one.
 
 
+## Possible future additions
+
+- [ ] `vg root <command>`, run command outside current active workspace
+- [ ] `vg uninistall <package>`, uninstall a package from the workspace
+  (pkg including cache)
+
+
 ## License
 
 MIT
