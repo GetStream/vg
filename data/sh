@@ -11,6 +11,9 @@ vg() {
         deactivate)
             __vg_deactivate "${@:2}"
             ;;
+        cdpackages)
+            __vg_cdpackages "${@:2}"
+            ;;
         *)
             command vg $@
     esac
@@ -21,6 +24,16 @@ __vg_init() {
     vg activate $@
     vg link
 }
+
+__vg_cdpackages() {
+    if [ -z "$VIRTUALGO" ]; then
+        echo Error: No virtualgo workspace is active at the moment
+        vg help cdpackages
+        return 1
+    fi
+    cd $VIRTUALGO_PATH/src/
+}
+
 
 __vg_activate() {
     if [ -n "$VIRTUALGO" ]; then
@@ -53,7 +66,7 @@ __vg_activate() {
 __vg_deactivate() {
     if [ -z "$VIRTUALGO" ]; then
         echo Error: No go workspace is active at the moment
-        vg help
+        vg help deactivate
         return 1
     fi
     export PS1=$_VIRTUALGO_OLDPS1

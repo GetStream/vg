@@ -4,6 +4,7 @@ chpwd_functions=(${chpwd_functions[@]} "__vg_auto_activate")
 
 __vg_completions() {
     compadd activate
+    compadd cdpackages
     compadd deactivate
     compadd destroy
     compadd ensure
