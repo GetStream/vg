@@ -107,6 +107,7 @@ complete -c vg --exclusive
 
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa activate    -d "Activate a specific virtualgo workspace"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa deactivate  -d "Deactivate the current virtualgo workspace"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa destroy  -d "Removes one or multiple workspace and all their contents"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa ensure      -d "A wrapper for dep that installs the dependencies in the virtualgo workspace instead of vendor"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa eval        -d "Expose the script that should be eval-ed in the current shell"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa help        -d "Help about any command"
@@ -129,3 +130,4 @@ function __fish_vg_using_command
 end
 
 complete -c vg -n "__fish_vg_using_command activate" -xa "(vg list)"
+complete -c vg -n "__fish_vg_using_command destroy" -xa "(vg list)"
