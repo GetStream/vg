@@ -114,8 +114,9 @@ complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa help       
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa init        -d "Create and enable a workspace and link it to the current directory"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa link        -d "Link the current virtualgo workspace to the this directory"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa list        -d "List all existing workspaces"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa unlink      -d "Unlinks the current directory from the workspace it's linked to"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa setup       -d "Enables virtualgo in your shell"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa status       -d "Show info about your current workspace"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa unlink      -d "Unlinks the current directory from the workspace it's linked to"
 
 function __fish_vg_using_command
     set cmd (commandline -opc)
