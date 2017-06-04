@@ -15,6 +15,7 @@ __vg_completions() {
     compadd list
     compadd setup
     compadd status
+    compadd uninstall
     compadd unlink
     # compadd -X "Activate a specific virtualgo workspace" activate
     # compadd -X "Deactivate the current virtualgo workspace" deactivate

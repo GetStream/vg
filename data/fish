@@ -126,7 +126,8 @@ complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa init       
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa link        -d "Link the current virtualgo workspace to the this directory"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa list        -d "List all existing workspaces"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa setup       -d "Enables virtualgo in your shell"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa status       -d "Show info about your current workspace"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa status      -d "Show info about your current workspace"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa uninstall   -d "Uninstall a package from the active workspace"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa unlink      -d "Unlinks the current directory from the workspace it's linked to"
 
 function __fish_vg_using_command
@@ -141,5 +142,10 @@ function __fish_vg_using_command
     return 1
 end
 
+function __vg_get_packages
+    find $VIRTUALGO_PATH/src/ -maxdepth 3 -mindepth 3 | rev | cut -d"/" -f-3 | rev
+end
+
 complete -c vg -n "__fish_vg_using_command activate" -xa "(vg list)"
 complete -c vg -n "__fish_vg_using_command destroy" -xa "(vg list)"
+    complete -c vg -n "__fish_vg_using_command uninstall" -xa '(__vg_get_packages)'
