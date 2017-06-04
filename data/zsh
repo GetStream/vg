@@ -13,6 +13,7 @@ __vg_completions() {
     compadd destroy
     compadd ensure
     compadd eval
+    compadd globalExec
     compadd help
     compadd init
     compadd link

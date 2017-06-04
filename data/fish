@@ -15,6 +15,8 @@ function vg
             _vg_deactivate
         case cdpackages
             _vg_cdpackages
+        case globalExec
+            _vg_globalExec $argv[1..-1]
         case upgrade
             _vg_upgrade
         case '*'
@@ -116,6 +118,25 @@ function _vg_upgrade
     end
 end
 
+function _vg_globalExec
+    if [ (count $argv) -lt 2 ]
+        echo Error: You should specify a command that should be executed
+        vg help globalExec
+        return 1
+    end
+
+    set -l old_virtualgo $VIRTUALGO
+    if [ -n "$VIRTUALGO" ]
+        _vg_deactivate
+    end
+
+    eval $argv[2..-1]
+
+    if [ -n "$old_virtualgo" -a "$VIRTUALGO" != "$old_virtualgo" ]
+        vg activate $old_virtualgo
+    end
+end
+
 function __vg_auto_activate --on-variable PWD
     if status --is-command-substitution
         return
@@ -146,6 +167,7 @@ complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa deactivate 
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa destroy     -d "Removes one or multiple workspace and all their contents"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa ensure      -d "A wrapper for dep that installs the dependencies in the virtualgo workspace instead of vendor"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa eval        -d "Expose the script that should be eval-ed in the current shell"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa globalExec  -d "Execute a command globally (outside the active workspace)"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa help        -d "Help about any command"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa init        -d "Create and enable a workspace and link it to the current directory"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa link        -d "Link the current virtualgo workspace to the this directory"
@@ -174,4 +196,4 @@ end
 
 complete -c vg -n "__fish_vg_using_command activate" -xa "(vg list)"
 complete -c vg -n "__fish_vg_using_command destroy" -xa "(vg list)"
-    complete -c vg -n "__fish_vg_using_command uninstall" -xa '(__vg_get_packages)'
+complete -c vg -n "__fish_vg_using_command uninstall" -xa '(__vg_get_packages)'

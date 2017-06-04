@@ -157,7 +157,7 @@ string directly that is fine. For Gogland you have to add the first one (with
 
 ## Possible future additions
 
-- [ ] `vg root <command>`, run command outside current active workspace
+- [x] `vg globalExec <command>`, run command outside current active workspace
 - [x] `vg uninistall <package>`, uninstall a package from the workspace
   (pkg including cache)
 - [x] `vg upgrade` update vg to the latest version and re-eval it

@@ -14,6 +14,9 @@ vg() {
         cdpackages)
             __vg_cdpackages "${@:2}"
             ;;
+        globalExec)
+            __vg_globalExec "${@:2}"
+            ;;
         upgrade)
             __vg_upgrade "${@:2}"
             ;;
@@ -118,6 +121,27 @@ __vg_upgrade() {
         vg activate $old_virtualgo
     fi
 }
+
+__vg_globalExec() {
+    if [ -z "$1" ]; then
+        echo Error: You should specify a command that should be executed
+        vg help globalExec
+        return 1
+    fi
+
+    old_virtualgo=$VIRTUALGO
+
+    if [ -n "$VIRTUALGO" ]; then
+        __vg_deactivate
+    fi
+
+    eval $@
+
+    if [ -n "$old_virtualgo" -a "$VIRTUALGO" != "$old_virtualgo" ]; then
+        vg activate $old_virtualgo
+    fi
+}
+
 
 
 __vg_auto_activate
