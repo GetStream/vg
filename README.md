@@ -160,7 +160,7 @@ string directly that is fine. For Gogland you have to add the first one (with
 - [ ] `vg root <command>`, run command outside current active workspace
 - [x] `vg uninistall <package>`, uninstall a package from the workspace
   (pkg including cache)
-- [ ] `vg upgrade` update vg to the latest version and re-eval it
+- [x] `vg upgrade` update vg to the latest version and re-eval it
 
 
 ## License

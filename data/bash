@@ -1,7 +1,15 @@
 #!/bin/bash
 
+__vg_reload() {
+    eval "$(vg eval --shell bash)"
+}
+
 _PREV_VIRTUALGO_PWD=""
-_PREV_VIRTUALGO_PROMPT_COMMAND=$PROMPT_COMMAND
+
+if [ "$PROMPT_COMMAND" != __vg_prompt_command ]; then
+    _PREV_VIRTUALGO_PROMPT_COMMAND=$PROMPT_COMMAND
+fi
+
 __vg_prompt_command() {
     # find an auto-activation file
     if [ "" != "$_PREV_VIRTUALGO_PROMPT_COMMAND" ]; then

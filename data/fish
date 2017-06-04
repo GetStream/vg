@@ -15,6 +15,8 @@ function vg
             _vg_deactivate
         case cdpackages
             _vg_cdpackages
+        case upgrade
+            _vg_upgrade
         case '*'
             command vg $argv
     end
@@ -45,6 +47,7 @@ function _vg_activate
     end
 
     set -gx VIRTUALGO $argv[2]
+    echo Activating $VIRTUALGO
     set -gx VIRTUALGO_PATH $HOME/.virtualgo/$VIRTUALGO
 
     set -gx _VIRTUALGO_OLDGOPATH $GOPATH
@@ -74,6 +77,9 @@ function _vg_deactivate
         vg help deactivate
         return 1
     end
+
+    echo Deactivating $VIRTUALGO
+
     set -x GOBIN $_VIRTUALGO_OLDGOBIN
     set -x GOPATH $_VIRTUALGO_OLDGOPATH
     set -x PATH $_VIRTUALGO_OLDPATH
@@ -89,6 +95,25 @@ function _vg_deactivate
     set -e _VIRTUALGO_OLDPATH
     set -e _VIRTUALGO_OLDGOBIN
     set -e _VIRTUALGO_OLDGOPATH
+end
+
+function _vg_upgrade
+    set -l old_virtualgo $VIRTUALGO
+    if [ -n "$VIRTUALGO" ]
+        _vg_deactivate
+    end
+
+    echo Updating virtualgo
+    go get -u github.com/GetStream/vg
+
+    echo Reloading the shell part of virtualgo
+    go get -u github.com/GetStream/vg
+    vg eval --shell fish | source
+
+    if [ -n "$old_virtualgo" -a "$VIRTUALGO" != "$old_virtualgo" ]
+        echo Reactivating $old_virtualgo
+        vg activate $old_virtualgo
+    end
 end
 
 function __vg_auto_activate --on-variable PWD
@@ -129,6 +154,7 @@ complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa setup      
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa status      -d "Show info about your current workspace"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa uninstall   -d "Uninstall a package from the active workspace"
 complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa unlink      -d "Unlinks the current directory from the workspace it's linked to"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa upgrade     -d "Upgrade the virtualgo binary and reload it in the current shell"
 
 function __fish_vg_using_command
     set cmd (commandline -opc)

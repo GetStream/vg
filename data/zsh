@@ -1,5 +1,9 @@
 #!/bin/zsh
 
+__vg_reload() {
+    eval "$(vg eval --shell zsh)"
+}
+
 chpwd_functions=(${chpwd_functions[@]} "__vg_auto_activate")
 
 __vg_completions() {
@@ -17,6 +21,7 @@ __vg_completions() {
     compadd status
     compadd uninstall
     compadd unlink
+    compadd upgrade
     # compadd -X "Activate a specific virtualgo workspace" activate
     # compadd -X "Deactivate the current virtualgo workspace" deactivate
     # compadd -X "A wrapper for dep that installs the dependencies in the virtualgo workspace instead of vendor" ensure

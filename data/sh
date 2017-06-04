@@ -14,6 +14,9 @@ vg() {
         cdpackages)
             __vg_cdpackages "${@:2}"
             ;;
+        upgrade)
+            __vg_upgrade "${@:2}"
+            ;;
         *)
             command vg $@
     esac
@@ -45,6 +48,8 @@ __vg_activate() {
         export VIRTUALGO=$(basename $PWD)
     fi
 
+    echo Activating $VIRTUALGO
+
     export VIRTUALGO_PATH=$HOME/.virtualgo/$VIRTUALGO
 
     export _VIRTUALGO_OLDPS1=$PS1
@@ -69,6 +74,9 @@ __vg_deactivate() {
         vg help deactivate
         return 1
     fi
+
+    echo Deactivating $VIRTUALGO
+
     export PS1=$_VIRTUALGO_OLDPS1
     export GOBIN=$_VIRTUALGO_OLDGOBIN
     export GOPATH=$_VIRTUALGO_OLDGOPATH
@@ -91,5 +99,25 @@ __vg_auto_activate() {
         activation_root=$(echo $activation_root | sed 's|/[^/]*$||')
     done
 }
+
+__vg_upgrade() {
+    old_virtualgo=$VIRTUALGO
+    if [ -n "$VIRTUALGO" ]; then
+        __vg_deactivate
+    fi
+
+    echo Updating virtualgo
+    go get -u github.com/GetStream/vg
+
+    echo Reloading the shell part of virtualgo
+    go get -u github.com/GetStream/vg
+    __vg_reload
+
+    if [ -n "$old_virtualgo" -a "$VIRTUALGO" != "$old_virtualgo" ]; then
+        echo Reactivating $old_virtualgo
+        vg activate $old_virtualgo
+    fi
+}
+
 
 __vg_auto_activate
