@@ -84,6 +84,9 @@ required = [
 
 [metadata]
 install_required = true
+install = [
+  "github.com/spf13/cobra/cobra"
+]
 
 [[constraint]]
   branch = "master"
