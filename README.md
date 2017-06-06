@@ -1,6 +1,6 @@
 # virtualgo
 Virtualgo (or `vg` for short) is a [`dep`](https://github.com/golang/dep)
-compatible solution to problems caused be managing dependencies in the `vendor`
+compatible solution to problems caused by managing dependencies in the `vendor`
 directory. If you have had any of the following problems this package will solve
 them for you:
 
