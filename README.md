@@ -5,13 +5,15 @@ directory. If you have had any of the following problems this package will solve
 them for you:
 
 - When running `go test ./...` the tests in your vendor directory are executed.
-- You want to depend on a specific version of an executable package. You find
-  out that the `vendor` directory only works for libraries.
+- You want to depend on a specific version of an executable package, such as a
+  linter or a codegen tool. You find out that the `vendor` directory only works
+  for libraries.
 - You work on two projects, A and B. Both of them contain a vendor directory.
   You want to use project A from your `GOPATH` when compiling B. To do this you
   remove A from the vendor directory of B, so it will fallback to import A from
   `GOPATH`. Suddenly you get a lot of weird import errors.
 - You want to `vendor` plug-ins and run into issues: https://github.com/akutz/gpd
+
 
 ## Installation
 
@@ -126,6 +128,22 @@ install = [
 ]
 ```
 
+### Integration with other dependency management tools (e.g glide)
+
+Even `dep` is the main tool that virtualgo integrates with. It's also possible
+to use other dependency management tools instead, as long as they create a
+`vendor` directory. Installing executable dependcies is not supported though.
+
+To use `vg` with `glide` works like this:
+
+```bash
+# Install dependencies into vendor with glide
+glide install
+
+# Move these dependencies into the workspace
+vg moveVendor
+```
+
 
 ## How it works
 
@@ -155,12 +173,18 @@ string directly that is fine. For Gogland you have to add the first one (with
 `.virtualgo` in it) first and then the second one.
 
 
-## Possible future additions
+## Comparison to similar tools
 
-- [x] `vg globalExec <command>`, run command outside current active workspace
-- [x] `vg uninistall <package>`, uninstall a package from the workspace
-  (pkg including cache)
-- [x] `vg upgrade` update vg to the latest version and re-eval it
+The main difference between virtualgo and other similar tools is that it's just
+an easy wrapper around a feature that is already built into `go` itself, having
+multiple `GOPATH`s. Because of this all `go` commands simply keep working as
+they normally do.
+
+- [`gb`](https://github.com/constabulary/gb) requires to use the gb command for
+  everything.
+- [`wgo`](https://github.com/skelterjohn/wgo) uses the
+  `vendor` directory and thus has all the same issues mentioned at the start of the
+  README (e.g, no version pinning of executables).
 
 
 ## License
