@@ -16,3 +16,4 @@
 .virtualgo
 
 /vendor/
+/.installed-deps

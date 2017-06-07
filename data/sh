@@ -57,8 +57,14 @@ __vg_activate() {
 
     export _VIRTUALGO_OLDPS1=$PS1
     export _VIRTUALGO_OLDGOPATH=$GOPATH
-    export _VIRTUALGO_OLDGOBIN=$GOBIN
     export _VIRTUALGO_OLDPATH=$PATH
+
+    if [ -n "$GOBIN" ]; then
+        export _VIRTUALGO_OLDGOBIN=$GOBIN
+    else
+        export _VIRTUALGO_OLDGOBIN=$_VIRTUALGO_OLDGOPATH/bin
+    fi
+
 
     export GOPATH=$VIRTUALGO_PATH:$GOPATH
     export GOBIN=$VIRTUALGO_PATH/bin

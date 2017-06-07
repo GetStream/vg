@@ -53,7 +53,12 @@ function _vg_activate
     set -gx VIRTUALGO_PATH $HOME/.virtualgo/$VIRTUALGO
 
     set -gx _VIRTUALGO_OLDGOPATH $GOPATH
-    set -gx _VIRTUALGO_OLDGOBIN $GOBIN
+    if [ -n "$GOBIN" ]
+        set -gx _VIRTUALGO_OLDGOBIN $GOBIN
+    else
+        set -gx _VIRTUALGO_OLDGOBIN $_VIRTUALGO_OLDGOPATH/bin
+    end
+
     set -gx _VIRTUALGO_OLDPATH $PATH
 
     set -gx GOPATH $VIRTUALGO_PATH:$GOPATH
