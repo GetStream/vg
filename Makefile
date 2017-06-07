@@ -7,10 +7,6 @@ ifndef VIRTUALGO
     $(error No virtualgo workspace is not active)
 endif
 
-.installed-deps:
-	vg ensure
-	touch .installed-deps
-
 install: $(GO_FILES) $(BINDATA) .installed-deps
 	go install
 	@# install vg executable globally as well
@@ -19,3 +15,7 @@ install: $(GO_FILES) $(BINDATA) .installed-deps
 bindata: $(BINDATA) .installed-deps
 $(BINDATA): data/*
 	go-bindata -o cmd/bindata.go -pkg cmd data/*
+
+.installed-deps:
+	vg ensure
+	touch .installed-deps
