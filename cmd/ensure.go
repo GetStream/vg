@@ -4,6 +4,7 @@
 package cmd
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -84,6 +85,12 @@ This command requires that dep is installed in $PATH. `,
 		depCmd.Stderr = os.Stderr
 		depCmd.Stdout = os.Stdout
 
+		argsString := ""
+		if len(args) > 0 {
+			argsString = " " + strings.Join(args, " ")
+		}
+		fmt.Printf("Running %q\n", "dep ensure"+argsString)
+
 		err = depCmd.Run()
 		if err != nil {
 
@@ -129,6 +136,7 @@ func installPackages(virtualgoPath string, packages []string) error {
 	for _, pkg := range packages {
 		var recursive bool
 		var installCmd *exec.Cmd
+		fmt.Printf("Installing %q\n", pkg)
 		pkgComponents := strings.Split(pkg, "/")
 		if pkgComponents[len(pkgComponents)-1] == "..." {
 			recursive = true
