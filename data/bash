@@ -1,6 +1,7 @@
 #!/bin/bash
 
 __vg_reload() {
+    PROMPT_COMMAND=$_VIRTUALGO_ORIGINAL_PROMPT_COMMAND
     eval "$(vg eval --shell bash)"
 }
 
@@ -15,4 +16,5 @@ __vg_prompt_command() {
     __vg_auto_activate
 }
 
+_VIRTUALGO_ORIGINAL_PROMPT_COMMAND=$PROMPT_COMMAND
 PROMPT_COMMAND="__vg_prompt_command ; $PROMPT_COMMAND"
