@@ -16,6 +16,6 @@ bindata: $(BINDATA) .installed-deps
 $(BINDATA): data/*
 	go-bindata -o cmd/bindata.go -pkg cmd data/*
 
-.installed-deps:
+.installed-deps: Gopkg.lock Gopkg.toml
 	vg ensure
 	touch .installed-deps
