@@ -80,7 +80,7 @@ The following commands are the main commands to use `vg`:
 # you cd to this directory it will be activated automatically.
 vg init
 
-# All go commands are now executed from within your workspace. The followinging
+# All go commands are now executed from within your workspace. The following
 # will install github.com/pkg/errors inside the workspace
 go get github.com/pkg/errors
 
