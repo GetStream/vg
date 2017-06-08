@@ -32,21 +32,41 @@ var uninstallCmd = &cobra.Command{
 		}
 
 		for _, pkg := range args {
+			// pkgComponents := strings.Split(pkg, hello
 			fmt.Printf("Uninstalling %s from workspace\n", pkg)
 			err := os.RemoveAll(filepath.Join(virtualgoDir, workspace, "src", pkg))
 			if err != nil {
 				return errors.Wrapf(err, "Couldn't remove package src '%s'", workspace)
 			}
 
-			err = os.RemoveAll(filepath.Join(virtualgoDir, workspace, "pkg", pkg))
+			pkgInstalledDirs, err := filepath.Glob(filepath.Join(virtualgoDir, workspace, "pkg", "*", pkg))
 			if err != nil {
-				return errors.Wrapf(err, "Couldn't remove installed package files for '%s'", workspace)
+				return errors.Wrapf(err, "Something went wrong when globbing files for '%s'", pkg)
 			}
 
-			err = os.RemoveAll(filepath.Join(virtualgoDir, workspace, "pkg", pkg+".a"))
-			if err != nil {
-				return errors.Wrapf(err, "Couldn't remove installed package files for '%s'", workspace)
+			for _, path := range pkgInstalledDirs {
+				fmt.Println("Removing", path)
+
+				err = os.RemoveAll(path)
+				if err != nil {
+					return errors.Wrapf(err, "Couldn't remove installed package files for '%s'", pkg)
+				}
 			}
+
+			pkgInstalledFiles, err := filepath.Glob(filepath.Join(virtualgoDir, workspace, "pkg", "*", pkg+".a"))
+			if err != nil {
+				return errors.Wrapf(err, "Something went wrong when globbing files for '%s'", pkg)
+			}
+
+			for _, path := range pkgInstalledFiles {
+				fmt.Println("Removing", path)
+
+				err = os.RemoveAll(path)
+				if err != nil {
+					return errors.Wrapf(err, "Couldn't remove installed package files for '%s'", pkg)
+				}
+			}
+
 		}
 		return nil
 	},
