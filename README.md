@@ -1,11 +1,16 @@
 # virtualgo
-Virtualgo (or `vg` for short) is a solution to problems caused by managing
-dependencies with the `vendor` directory. It's extremely easy to use and
-[`dep`](https://github.com/golang/dep) compatible.
-It solves the problems with `vendor` by using an extra `GOPATH` for each
-project, which means that all the go tools just keep working the way you are
-used to. If you ever have had any of the following problems this package will
-solve them:
+
+Virtualgo (or `vg` for short) is a tool to add workspace based development to go
+projects. Its goal is to improve on the currently ubiquitous `vendor` directory
+based approach. It's extremely easy to use and optionally integrates with
+[`dep`](https://github.com/golang/dep) to allow for version pinning of
+dependencies.
+
+Virtualgo solves many problems with the `vendor` directory by using an extra
+`GOPATH` for each project instead. This means that all the `go` commands can be
+used in the normal way, but they will affect the workspace instead of the
+regular `GOPATH`. If you were already using the `vendor` directory and you had
+any of the following problems this package will solve them:
 
 - When running `go test ./...` the tests in your `vendor` directory are executed.
 - You want to depend on a specific version of an executable package, such as a
