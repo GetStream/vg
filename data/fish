@@ -196,7 +196,8 @@ function __fish_vg_using_command
 end
 
 function __vg_get_packages
-    find $VIRTUALGO_PATH/src/ -maxdepth 3 -mindepth 3 | rev | cut -d"/" -f-3 | rev
+    find $VIRTUALGO_PATH/src/ -maxdepth 3 -mindepth 3 -type d | sed s=$VIRTUALGO_PATH/src/== | grep -v '^google.golang.org/'
+    find $VIRTUALGO_PATH/src/ -maxdepth 2 -mindepth 2 -type d | sed s=$VIRTUALGO_PATH/src/== | grep '^google.golang.org/'
 end
 
 complete -c vg -n "__fish_vg_using_command activate" -xa "(vg list)"
