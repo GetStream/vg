@@ -91,9 +91,20 @@ vg activate myProject
 # You can then link the currently active workspace to the current directory
 vg link
 
+# You can also uninstall a package from your workspace
+vg uninstall github.com/pkg/errors
+# If the removed package is installed in your normal GOPATH as well imports will
+# now use that version instead. This can be usefull when patching one of
+# your projects dependencies. This way you can use test the patches directly
+# inside your workspace.
+
 # Deactivate the current workspace
 vg deactivate
 # Activating a new workspace automatically deactivates the previous one as well
+
+# For a full overview of all commands
+vg help
+
 ```
 
 
