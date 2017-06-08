@@ -149,7 +149,7 @@ install = [
 
 ### Integration with other dependency management tools (e.g glide)
 
-Even `dep` is the main tool that virtualgo integrates with. It's also possible
+Even though `dep` is the main tool that virtualgo integrates with. It's also possible
 to use other dependency management tools instead, as long as they create a
 `vendor` directory. Installing executable dependcies is not supported though.
 
@@ -187,7 +187,7 @@ $ echo $GOPATH
 /home/stream/.virtualgo/myworkspace:/home/stream/go
 ```
 
-As you can see there's two path separated by a semicolon. If you can set this
+As you can see there's two path separated by a colon. If you can set this
 string directly that is fine. For Gogland you have to add the first one (with
 `.virtualgo` in it) first and then the second one.
 
