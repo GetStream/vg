@@ -79,16 +79,19 @@ vg eval --shell fish | source
 The following commands are the main commands to use `vg`:
 
 ```bash
-# Create and activate a workspace named after the current direcory. Each time
-# you cd to this directory it will be activated automatically.
+# The most used command is to create and activate a workspace named after the
+# current direcory
 vg init
+# In the future each time you cd to this directory it will be activated
+# automatically.
 
-# All go commands are now executed from within your workspace. The following
-# will install github.com/pkg/errors inside the workspace
+# All go commands in this shell are now executed from within your workspace. The
+# following will install github.com/pkg/errors inside the workspace
 go get github.com/pkg/errors
+# (See below in the README on how to use the workspace from an IDE)
 
-# It's also possible to only activate Activate (and create) a workspace and not
-# link it to the current directory.
+# It's also possible to only activate (and create) a workspace and not link it
+# to the current directory.
 vg activate myProject
 
 # You can then link the currently active workspace to the current directory
