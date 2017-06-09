@@ -21,8 +21,8 @@ them:
   for libraries.
 - You work on two projects, A and B. Both of them contain a `vendor` directory.
   You want to use project A from your `GOPATH` when compiling B. To do this you
-  remove A from the `vendor` directory of B, so it will fallback to import A from
-  `GOPATH`. Suddenly you get a lot of weird import errors.
+  remove A from the `vendor` directory of B, so it will fall back to import A
+  from `GOPATH`. Suddenly you get a lot of weird import errors.
 - You want to `vendor` plug-ins and run into issues: https://github.com/akutz/gpd
 
 
