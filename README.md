@@ -7,10 +7,13 @@ based approach. It's extremely easy to use and optionally integrates with
 dependencies.
 
 Virtualgo solves many problems with the `vendor` directory by using an extra
-`GOPATH` for each project instead. This means that all the `go` commands can be
-used in the normal way, but they will affect the workspace instead of the
-regular `GOPATH`. If you were already using the `vendor` directory and you had
-any of the following problems this package will solve them:
+`GOPATH` for each project instead. One way this improves upon `vendor` is by
+allowing specific versions of an executable to be installed in a workspace, such
+as linters and codegen tools. Another advantage of this approach is that all the
+`go` commands can be used in the normal way, but they will affect the workspace
+instead of the regular `GOPATH`. If you were already using the `vendor`
+directory and you had any of the following problems this package will solve
+them:
 
 - When running `go test ./...` the tests in your `vendor` directory are executed.
 - You want to depend on a specific version of an executable package, such as a
