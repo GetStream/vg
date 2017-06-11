@@ -215,3 +215,8 @@ they normally do.
 ## License
 
 MIT
+
+## Careers @ Stream
+
+Would you like to work on cool projects like this? We are currently hiring for talented Gophers in Amsterdam and Boulder, get in touch with us if you are interested! tommaso@getstream.io
+
