@@ -157,7 +157,7 @@ install = [
 
 Even though `dep` is the main tool that virtualgo integrates with. It's also possible
 to use other dependency management tools instead, as long as they create a
-`vendor` directory. Installing executable dependcies is not supported though.
+`vendor` directory. Installing executable dependencies is not supported though.
 
 To use `vg` with `glide` works like this:
 
