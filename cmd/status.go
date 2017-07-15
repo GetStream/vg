@@ -33,9 +33,9 @@ var statusCmd = &cobra.Command{
 			return err
 		}
 
-		fmt.Println("Active workspace:", name)
-		fmt.Println("Workspace path:  ", path)
-		fmt.Println("Fully isolated:  ", settings.FullyIsolated)
+		fmt.Println("Active workspace:           ", name)
+		fmt.Println("Workspace path:             ", path)
+		fmt.Println("Fallback to global packages:", settings.GlobalFallback)
 		return nil
 
 	},

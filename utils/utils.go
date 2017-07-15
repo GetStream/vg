@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/user"
@@ -33,4 +34,12 @@ func VirtualgoDir() string {
 
 func WorkspaceDir(workspace string) string {
 	return filepath.Join(VirtualgoDir(), workspace)
+}
+
+func CurrentWorkspaceDir() (string, error) {
+	path := os.Getenv("VIRTUALGO_PATH")
+	if path == "" {
+		return "", errors.New("VIRTUALGO_PATH environment variable is not set")
+	}
+	return path, nil
 }

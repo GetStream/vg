@@ -10,15 +10,15 @@ import (
 )
 
 type WorkspaceSettings struct {
-	FullyIsolated bool
+	GlobalFallback bool
 }
 
 const settingsFile = "virtualgo.toml"
 
 // Settings returns the settings for a specific workspace.
 func Settings(workspace string) (*WorkspaceSettings, error) {
-	settings := &WorkspaceSettings{FullyIsolated: false}
-	settingsBytes, err := ioutil.ReadFile(filepath.Join(WorkspaceDir(workspace), settingsFile))
+	settings := &WorkspaceSettings{GlobalFallback: true}
+	settingsBytes, err := ioutil.ReadFile(SettingsPath(workspace))
 	if err != nil {
 		if os.IsNotExist(err) {
 			return settings, nil
@@ -31,4 +31,17 @@ func Settings(workspace string) (*WorkspaceSettings, error) {
 	}
 
 	return settings, nil
+}
+
+func SettingsPath(workspace string) string {
+	return filepath.Join(WorkspaceDir(workspace), settingsFile)
+
+}
+
+func CurrentSettingsPath() (string, error) {
+	dir, err := CurrentWorkspaceDir()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(dir, settingsFile), nil
 }
