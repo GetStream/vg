@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/GetStream/vg/utils"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -27,8 +28,14 @@ var statusCmd = &cobra.Command{
 			return errors.New("Somehow you have an active workspace, but not a path")
 		}
 
+		settings, err := utils.Settings(name)
+		if err != nil {
+			return err
+		}
+
 		fmt.Println("Active workspace:", name)
 		fmt.Println("Workspace path:  ", path)
+		fmt.Println("Fully isolated:  ", settings.FullyIsolated)
 		return nil
 
 	},

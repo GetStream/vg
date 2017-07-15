@@ -30,3 +30,7 @@ func VirtualgoDir() string {
 	}
 	return dir
 }
+
+func WorkspaceDir(workspace string) string {
+	return filepath.Join(VirtualgoDir(), workspace)
+}
