@@ -20,7 +20,7 @@ var initSettingsCmd = &cobra.Command{
 	Short: "This command initializes the settings file",
 	Long:  ``,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		path, err := utils.CurrentWorkspaceDir()
+		path, err := utils.CurrentSettingsPath()
 		if err != nil {
 			return errors.WithStack(err)
 		}
