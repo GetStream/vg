@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/GetStream/vg/utils"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -26,7 +27,7 @@ var destroyCmd = &cobra.Command{
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		for _, workspace := range args {
-			err := os.RemoveAll(filepath.Join(virtualgoDir, workspace))
+			err := os.RemoveAll(filepath.Join(utils.VirtualgoDir(), workspace))
 			if err != nil {
 				return errors.Wrapf(err, "Couldn't remove workspace '%s'", workspace)
 			}

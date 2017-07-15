@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	"github.com/GetStream/vg/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +17,7 @@ var listCmd = &cobra.Command{
 	Short: "List all existing workspaces",
 	Long:  ``,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		files, err := ioutil.ReadDir(virtualgoDir)
+		files, err := ioutil.ReadDir(utils.VirtualgoDir())
 		if err != nil {
 			return err
 		}

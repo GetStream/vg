@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/GetStream/vg/utils"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -34,12 +35,12 @@ var uninstallCmd = &cobra.Command{
 		for _, pkg := range args {
 			// pkgComponents := strings.Split(pkg, hello
 			fmt.Printf("Uninstalling %s from workspace\n", pkg)
-			err := os.RemoveAll(filepath.Join(virtualgoDir, workspace, "src", pkg))
+			err := os.RemoveAll(filepath.Join(utils.VirtualgoDir(), workspace, "src", pkg))
 			if err != nil {
 				return errors.Wrapf(err, "Couldn't remove package src '%s'", workspace)
 			}
 
-			pkgInstalledDirs, err := filepath.Glob(filepath.Join(virtualgoDir, workspace, "pkg", "*", pkg))
+			pkgInstalledDirs, err := filepath.Glob(filepath.Join(utils.VirtualgoDir(), workspace, "pkg", "*", pkg))
 			if err != nil {
 				return errors.Wrapf(err, "Something went wrong when globbing files for '%s'", pkg)
 			}
@@ -53,7 +54,7 @@ var uninstallCmd = &cobra.Command{
 				}
 			}
 
-			pkgInstalledFiles, err := filepath.Glob(filepath.Join(virtualgoDir, workspace, "pkg", "*", pkg+".a"))
+			pkgInstalledFiles, err := filepath.Glob(filepath.Join(utils.VirtualgoDir(), workspace, "pkg", "*", pkg+".a"))
 			if err != nil {
 				return errors.Wrapf(err, "Something went wrong when globbing files for '%s'", pkg)
 			}
