@@ -100,7 +100,7 @@ func CurrentSettingsPath() (string, error) {
 
 func LinkLocalInstalls(workspace string, settings *WorkspaceSettings) error {
 	for pkg, install := range settings.LocalInstalls {
-		fmt.Printf("Linking %q sources locally to %q\n", pkg, install.Path)
+		os.Stderr.WriteString(fmt.Sprintf("Linking %q sources locally to %q\n", pkg, install.Path))
 		pkgDir := filepath.Join(path.Split(pkg))
 		linkName := filepath.Join(SrcDir(workspace), pkgDir)
 
