@@ -33,6 +33,15 @@ func Settings(workspace string) (*WorkspaceSettings, error) {
 	return settings, nil
 }
 
+func CurrentSettings() (*WorkspaceSettings, error) {
+	workspace, err := CurrentWorkspace()
+	if err != nil {
+		return nil, err
+	}
+
+	return Settings(workspace)
+}
+
 func SettingsPath(workspace string) string {
 	return filepath.Join(WorkspaceDir(workspace), settingsFile)
 

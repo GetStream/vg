@@ -63,7 +63,14 @@ function _vg_activate
 
     set -gx _VIRTUALGO_OLDPATH $PATH
 
-    set -gx GOPATH $VIRTUALGO_PATH:$GOPATH
+    set global_fallback (vg querySettings)
+
+    if [ $global_fallback = true ]
+        set -gx GOPATH $VIRTUALGO_PATH:$GOPATH
+    else
+        set -gx GOPATH $VIRTUALGO_PATH
+    end
+
     set -gx GOBIN $VIRTUALGO_PATH/bin
 
     mkdir -p $VIRTUALGO_PATH/src/

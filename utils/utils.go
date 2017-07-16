@@ -43,3 +43,12 @@ func CurrentWorkspaceDir() (string, error) {
 	}
 	return path, nil
 }
+
+func CurrentWorkspace() (string, error) {
+	workspace := os.Getenv("VIRTUALGO")
+	if workspace == "" {
+		return "", errors.New("VIRTUALGO environment variable is not set")
+	}
+	return workspace, nil
+
+}

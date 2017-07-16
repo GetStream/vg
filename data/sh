@@ -46,10 +46,7 @@ __vg_activate() {
         vg deactivate
     fi
 
-    export VIRTUALGO=$1
-    if [ -z "$VIRTUALGO" ]; then
-        export VIRTUALGO=$(basename $PWD)
-    fi
+    export VIRTUALGO=$(vg initSettings $@)
 
     echo Activating $VIRTUALGO
 
@@ -65,8 +62,14 @@ __vg_activate() {
         export _VIRTUALGO_OLDGOBIN=$_VIRTUALGO_OLDGOPATH/bin
     fi
 
+    global_fallback=$(vg querySettings)
 
-    export GOPATH=$VIRTUALGO_PATH:$GOPATH
+    if [ "$global_fallback" = "true" ]; then
+        export GOPATH=$VIRTUALGO_PATH:$GOPATH
+    else
+        export GOPATH=$VIRTUALGO_PATH
+    fi
+
     export GOBIN=$VIRTUALGO_PATH/bin
     export PATH="$GOBIN:$PATH"
     if [ -z "$VIRTUALGO_DISABLE_PROMPT" ]; then
