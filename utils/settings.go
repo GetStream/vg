@@ -10,14 +10,31 @@ import (
 )
 
 type WorkspaceSettings struct {
-	GlobalFallback bool
+	GlobalFallback bool                    `toml:"global-fallback"`
+	LocalInstalls  map[string]LocalInstall `toml:"local-install"`
+}
+
+type LocalInstall struct {
+	Path string
+}
+
+func NewWorkspaceSettings() *WorkspaceSettings {
+	return &WorkspaceSettings{
+		LocalInstalls: make(map[string]LocalInstall),
+	}
+}
+
+func DefaultWorkspaceSettings() *WorkspaceSettings {
+	settings := NewWorkspaceSettings()
+	settings.GlobalFallback = true
+	return settings
 }
 
 const settingsFile = "virtualgo.toml"
 
 // Settings returns the settings for a specific workspace.
 func Settings(workspace string) (*WorkspaceSettings, error) {
-	settings := &WorkspaceSettings{GlobalFallback: true}
+	settings := DefaultWorkspaceSettings()
 	settingsBytes, err := ioutil.ReadFile(SettingsPath(workspace))
 	if err != nil {
 		if os.IsNotExist(err) {

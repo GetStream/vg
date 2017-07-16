@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/BurntSushi/toml"
 	"github.com/GetStream/vg/utils"
@@ -28,14 +29,15 @@ var initSettingsCmd = &cobra.Command{
 
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
 		workspace := ""
+		cwd, err := os.Getwd()
+		if err != nil {
+			return errors.WithStack(err)
+		}
+
 		if len(args) == 1 {
 			workspace = args[0]
 		} else {
-			workspace, err = os.Getwd()
-			if err != nil {
-				return errors.WithStack(err)
-			}
-			workspace = filepath.Base(workspace)
+			workspace = filepath.Base(cwd)
 
 		}
 		fmt.Println(workspace)
@@ -63,8 +65,21 @@ var initSettingsCmd = &cobra.Command{
 			return nil
 		}
 
-		settings := utils.WorkspaceSettings{}
+		settings := utils.NewWorkspaceSettings()
 		settings.GlobalFallback, err = cmd.Flags().GetBool("global-fallback")
+
+		srcpath := filepath.Join(utils.CurrentGopath(), "src") + string(filepath.Separator)
+
+		if strings.HasPrefix(cwd, srcpath) && !settings.GlobalFallback {
+			// If current directory is inside the current gopath
+			// add it to the packages that need to be symlinked
+			pkg := strings.TrimPrefix(cwd, srcpath)
+			settings.LocalInstalls[pkg] = utils.LocalInstall{
+				Path: cwd,
+			}
+
+		}
+
 		if err != nil {
 			return errors.WithStack(err)
 		}

@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"runtime"
 )
 
 func ReplaceHomeDir(path string) string {
@@ -51,4 +52,33 @@ func CurrentWorkspace() (string, error) {
 	}
 	return workspace, nil
 
+}
+
+func CurrentGopath() string {
+	gopath := os.Getenv("GOPATH")
+	if gopath == "" {
+		return defaultGOPATH()
+	}
+
+	return gopath
+}
+
+// Taken from https://github.com/golang/go/blob/go1.8/src/go/build/build.go#L260-L277
+func defaultGOPATH() string {
+	env := "HOME"
+	if runtime.GOOS == "windows" {
+		env = "USERPROFILE"
+	} else if runtime.GOOS == "plan9" {
+		env = "home"
+	}
+	if home := os.Getenv(env); home != "" {
+		def := filepath.Join(home, "go")
+		if filepath.Clean(def) == filepath.Clean(runtime.GOROOT()) {
+			// Don't set the default GOPATH to GOROOT,
+			// as that will trigger warnings from the go tool.
+			return ""
+		}
+		return def
+	}
+	return ""
 }
