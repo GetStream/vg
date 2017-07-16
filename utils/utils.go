@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/user"
+	"path"
 	"path/filepath"
 	"runtime"
 )
@@ -66,6 +67,15 @@ func CurrentWorkspace() (string, error) {
 
 }
 
+func OriginalGopath() string {
+	gopath := os.Getenv("_VIRTUALGO_OLDGOPATH")
+	if gopath == "" {
+		return defaultGOPATH()
+	}
+
+	return gopath
+}
+
 func CurrentGopath() string {
 	gopath := os.Getenv("GOPATH")
 	if gopath == "" {
@@ -93,4 +103,9 @@ func defaultGOPATH() string {
 		return def
 	}
 	return ""
+}
+
+func PkgToDir(pkg string) string {
+	return filepath.Join(path.Split(pkg))
+
 }

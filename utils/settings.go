@@ -61,6 +61,30 @@ func CurrentSettings() (*WorkspaceSettings, error) {
 	return Settings(workspace)
 }
 
+func SaveSettings(workspace string, settings *WorkspaceSettings) error {
+	settingsPath := SettingsPath(workspace)
+
+	file, err := os.OpenFile(settingsPath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	err = toml.NewEncoder(file).Encode(settings)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	return nil
+}
+
+func SaveCurrentSettings(settings *WorkspaceSettings) error {
+	workspace, err := CurrentWorkspace()
+	if err != nil {
+		return err
+	}
+
+	return SaveSettings(workspace, settings)
+}
+
 func SettingsPath(workspace string) string {
 	return filepath.Join(WorkspaceDir(workspace), settingsFile)
 

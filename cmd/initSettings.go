@@ -10,7 +10,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/BurntSushi/toml"
 	"github.com/GetStream/vg/utils"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -69,6 +68,10 @@ var initSettingsCmd = &cobra.Command{
 		settings := utils.NewWorkspaceSettings()
 		settings.GlobalFallback, err = cmd.Flags().GetBool("global-fallback")
 
+		if err != nil {
+			return errors.WithStack(err)
+		}
+
 		srcpath := filepath.Join(utils.CurrentGopath(), "src") + string(filepath.Separator)
 
 		if strings.HasPrefix(cwd, srcpath) && !settings.GlobalFallback {
@@ -86,23 +89,14 @@ var initSettingsCmd = &cobra.Command{
 
 		}
 
-		if err != nil {
-			return errors.WithStack(err)
-		}
-
 		err = os.MkdirAll(dir, 0755)
 		if err != nil {
 			return errors.WithStack(err)
 		}
 
-		file, err := os.OpenFile(settingsPath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+		err = utils.SaveSettings(workspace, settings)
 		if err != nil {
-			return errors.WithStack(err)
-		}
-
-		err = toml.NewEncoder(file).Encode(settings)
-		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		return utils.LinkLocalInstalls(workspace, settings)
