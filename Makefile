@@ -24,7 +24,7 @@ $(BINDATA): data/*
 	go-bindata -o cmd/bindata.go -pkg cmd data/*
 
 .installed-deps: Gopkg.lock Gopkg.toml
-	vg ensure
+	vg ensure -- -v
 	touch .installed-deps
 
 publish: $(BINDATA)

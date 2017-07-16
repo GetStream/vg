@@ -1,8 +1,10 @@
 package utils
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
 
 	"github.com/BurntSushi/toml"
@@ -15,7 +17,7 @@ type WorkspaceSettings struct {
 }
 
 type LocalInstall struct {
-	Path string
+	Path string `toml:"path"`
 }
 
 func NewWorkspaceSettings() *WorkspaceSettings {
@@ -70,4 +72,42 @@ func CurrentSettingsPath() (string, error) {
 		return "", err
 	}
 	return filepath.Join(dir, settingsFile), nil
+}
+
+func LinkLocalInstalls(workspace string, settings *WorkspaceSettings) error {
+	for pkg, install := range settings.LocalInstalls {
+		fmt.Printf("Linking %q sources locally to %q\n", pkg, install.Path)
+		pkgDir := filepath.Join(path.Split(pkg))
+		linkName := filepath.Join(SrcDir(workspace), pkgDir)
+
+		err := os.MkdirAll(filepath.Dir(linkName), 0755)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+
+		err = os.RemoveAll(linkName)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		err = os.Symlink(install.Path, linkName)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+	}
+	return nil
+}
+
+func LinkCurrentLocalInstalls() error {
+	workspace, err := CurrentWorkspace()
+	if err != nil {
+		return err
+	}
+
+	settings, err := CurrentSettings()
+	if err != nil {
+		return err
+	}
+
+	return LinkLocalInstalls(workspace, settings)
+
 }

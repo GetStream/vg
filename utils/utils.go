@@ -40,15 +40,27 @@ func WorkspaceDir(workspace string) string {
 func CurrentWorkspaceDir() (string, error) {
 	path := os.Getenv("VIRTUALGO_PATH")
 	if path == "" {
-		return "", errors.New("VIRTUALGO_PATH environment variable is not set")
+		return "", errors.New("A virtualgo workspace should be active first by using `vg activate [workspaceName]`")
 	}
 	return path, nil
+}
+
+func SrcDir(workspace string) string {
+	return filepath.Join(WorkspaceDir(workspace), "src")
+}
+
+func CurrentSrcDir() (string, error) {
+	workspaceDir, err := CurrentWorkspaceDir()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(workspaceDir, "src"), nil
 }
 
 func CurrentWorkspace() (string, error) {
 	workspace := os.Getenv("VIRTUALGO")
 	if workspace == "" {
-		return "", errors.New("VIRTUALGO environment variable is not set")
+		return "", errors.New("A virtualgo workspace should be active first by using `vg activate [workspaceName]`")
 	}
 	return workspace, nil
 

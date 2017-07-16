@@ -6,6 +6,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -42,12 +43,12 @@ var initSettingsCmd = &cobra.Command{
 		}
 		fmt.Println(workspace)
 
-		path := utils.SettingsPath(workspace)
+		settingsPath := utils.SettingsPath(workspace)
 		if err != nil {
 			return errors.WithStack(err)
 		}
 
-		dir := filepath.Dir(path)
+		dir := filepath.Dir(settingsPath)
 
 		force, err := cmd.Flags().GetBool("force")
 		if err != nil {
@@ -73,7 +74,12 @@ var initSettingsCmd = &cobra.Command{
 		if strings.HasPrefix(cwd, srcpath) && !settings.GlobalFallback {
 			// If current directory is inside the current gopath
 			// add it to the packages that need to be symlinked
-			pkg := strings.TrimPrefix(cwd, srcpath)
+			pkgDir := strings.TrimPrefix(cwd, srcpath)
+
+			// Make sure pkg is slash seperated
+			pkgComponents := filepath.SplitList(pkgDir)
+			pkg := path.Join(pkgComponents...)
+
 			settings.LocalInstalls[pkg] = utils.LocalInstall{
 				Path: cwd,
 			}
@@ -89,7 +95,7 @@ var initSettingsCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+		file, err := os.OpenFile(settingsPath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 		if err != nil {
 			return errors.WithStack(err)
 		}
@@ -99,7 +105,7 @@ var initSettingsCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		return nil
+		return utils.LinkLocalInstalls(workspace, settings)
 	},
 }
 

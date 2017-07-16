@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/GetStream/vg/utils"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -44,6 +45,12 @@ based project in your workspace do this:
 		if err != nil {
 			return errors.Wrap(err, "Couldn't move the vendor directory to the active workspace")
 		}
+
+		err = utils.LinkCurrentLocalInstalls()
+		if err != nil {
+			return err
+		}
+
 		return nil
 
 	},

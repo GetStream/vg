@@ -79,7 +79,8 @@
 # ]
 
 required = [
-    'github.com/jteeuwen/go-bindata/go-bindata'
+    'github.com/jteeuwen/go-bindata/go-bindata',
+    'github.com/spf13/viper',
 ]
 
 [metadata]
