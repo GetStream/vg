@@ -4,23 +4,43 @@
 package cmd
 
 import (
-	"io/ioutil"
+	"fmt"
 	"os"
 	"path/filepath"
 
+	"github.com/BurntSushi/toml"
 	"github.com/GetStream/vg/utils"
-	toml "github.com/pelletier/go-toml"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
 // initSettingsCmd represents the initSettings command
 var initSettingsCmd = &cobra.Command{
-	Use:   "initSettings",
-	Short: "This command initializes the settings file",
+	Use:   "initSettings [workspaceName]",
+	Short: "This command initializes the settings file for a certain workspace",
 	Long:  ``,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		path, err := utils.CurrentSettingsPath()
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		if len(args) > 1 {
+			return errors.New("Too much arguments specified")
+		}
+		return nil
+	},
+
+	RunE: func(cmd *cobra.Command, args []string) (err error) {
+		workspace := ""
+		if len(args) == 1 {
+			workspace = args[0]
+		} else {
+			workspace, err = os.Getwd()
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			workspace = filepath.Base(workspace)
+
+		}
+		fmt.Println(workspace)
+
+		path := utils.SettingsPath(workspace)
 		if err != nil {
 			return errors.WithStack(err)
 		}
@@ -49,17 +69,17 @@ var initSettingsCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		bytes, err := toml.Marshal(settings)
-		if err != nil {
-			return errors.WithStack(err)
-		}
-
 		err = os.MkdirAll(dir, 0755)
 		if err != nil {
 			return errors.WithStack(err)
 		}
 
-		err = ioutil.WriteFile(path, bytes, 0644)
+		file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+
+		err = toml.NewEncoder(file).Encode(settings)
 		if err != nil {
 			return errors.WithStack(err)
 		}
