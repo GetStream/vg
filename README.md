@@ -9,8 +9,8 @@ development for Go. The goals of the project are as follows:
 
 It doesn't do dependency resolution or version pinning itself, but it
 integrates well with `dep` and other dependency management tools.
-For people coming from Python it's very similar to `virtualenv`, except for
-being much easier to use.
+For people coming from Python it's very similar to `virtualenv`, except that
+it's much easier to use.
 
 ## Example usage
 
