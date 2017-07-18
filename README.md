@@ -1,29 +1,60 @@
 # virtualgo
 
-Virtualgo (or `vg` for short) is a tool to add workspace based development to go
-projects. Its goal is to improve on the currently ubiquitous `vendor` directory
-based approach. It's extremely easy to use and optionally integrates with
-[`dep`](https://github.com/golang/dep) to allow for version pinning of
-dependencies.
+Virtualgo (or `vg` for short) is a tool which provides workspace based
+development for Go. The goals of the project are as follows:
 
-Virtualgo solves many problems with the `vendor` directory by using an extra
-`GOPATH` for each project instead. One way this improves upon `vendor` is by
-allowing specific versions of an executable to be installed in a workspace, such
-as linters and codegen tools. Another advantage of this approach is that all the
-`go` commands can be used in the normal way, but they will affect the workspace
-instead of the regular `GOPATH`. If you were already using the `vendor`
-directory and you had any of the following problems this package will solve
-them:
+1. Must be extremely easy to use
+2. Shouldn't interfere with other go tools
+3. Must allow full isolation, for both imports and installed executables
 
-- When running `go test ./...` the tests in your `vendor` directory are executed.
-- You want to depend on a specific version of an executable package, such as a
-  linter or a codegen tool. You find out that the `vendor` directory only works
-  for libraries.
-- You work on two projects, A and B. Both of them contain a `vendor` directory.
-  You want to use project A from your `GOPATH` when compiling B. To do this you
-  remove A from the `vendor` directory of B, so it will fall back to import A
-  from `GOPATH`. Suddenly you get a lot of weird import errors.
-- You want to `vendor` plug-ins and run into issues: https://github.com/akutz/gpd
+It doesn't do dependency resolution or version pinning itself, but it
+integrates well with `dep` and other dependency management tools.
+For people coming from Python it's very similar to `virtualenv`, except for
+being much easier to use.
+
+## Example usage
+
+This is a basic example showing basic usage of `vg`. See below and `vg help` for
+more information.
+
+```bash
+$ cd $GOPATH/src/github.com/Getstream/example
+$ vg init  # initial creation of workspace
+
+# Now all commands will be executed from within the example workspace
+(example) $ go get github.com/pkg/errors # package only present in workspace
+(example) $ vg ensure  # installs the dependencies of the example project using dep
+(example) $ vg deactivate
+
+$ cd ~
+$ cd $GOPATH/src/github.com/Getstream/example
+(example) $ # The workspace is now activated automatically after cd-ing to the project directory
+```
+
+## Advantages over existing solutions
+
+The obvious question is why should you use it? What are the advantages
+over what you are doing now? See the sections below matching what you use now.
+
+### Advantages over `vendor` (with `dep` as dependency manager)
+
+1. You can pin versions of executable dependencies, such as linting and code
+   generation tools.
+2. It has full isolation by default, so no accidental fallbacks to regular
+   `GOPATH` causing confusion?
+3. No more issues with `go test ./...` running tests in the vendor directory.
+4. You can easily use a dependency from your global `GOPATH` inside your
+   workspace for local testing. For instance when writing a patch for a library
+   that you use and you want to try it out locally in your project without
+   pushing the patch yet.
+5. You don't have problems when using plugins: https://github.com/akutz/gpd
+
+### Advantages over manually managing multiple `GOPATH`s
+
+1. Automatic activation of a `GOPATH` when you `cd` into a directory.
+2. Integration with version management tools such as `dep` and `glide`.
+3. Useful commands to manage installed packages. For instance for uninstalling
+   a package or installing a local package from another `GOPATH`.
 
 
 ## Installation
@@ -197,19 +228,6 @@ As you can see there's two path separated by a colon. If you can set this
 string directly that is fine. For Gogland you have to add the first one (with
 `.virtualgo` in it) first and then the second one.
 
-
-## Comparison to similar tools
-
-The main difference between virtualgo and other similar tools is that it's just
-an easy wrapper around a feature that is already built into `go` itself, having
-multiple `GOPATH`s. Because of this all `go` commands simply keep working as
-they normally do.
-
-- [`gb`](https://github.com/constabulary/gb) requires to use the gb command for
-  everything.
-- [`wgo`](https://github.com/skelterjohn/wgo) uses the
-  `vendor` directory and thus has all the same issues mentioned at the start of the
-  README (e.g, no version pinning of executables).
 
 
 ## License
