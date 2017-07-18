@@ -33,10 +33,11 @@ $ cd $GOPATH/src/github.com/Getstream/example
 
 ## Advantages over existing solutions
 
-The obvious question is why should you use it? What are the advantages
-over doing now? See the sections below matching what you use now.
+The obvious question is: Why should you use `vg`? What advantages does it
+bring over what you're using now? This obviously depends on what you're using
+now:
 
-### Advantages over `vendor` (with `dep` as dependency manager)
+### Advantages over `vendor` directory
 
 1. You can pin versions of executable dependencies, such as linting and code
    generation tools.
@@ -44,15 +45,14 @@ over doing now? See the sections below matching what you use now.
    `GOPATH` causing confusion?
 3. No more issues with `go test ./...` running tests in the vendor directory.
 4. You can easily use a dependency from your global `GOPATH` inside your
-   workspace for local testing. For instance when writing a patch for a library
-   that you use and you want to try it out locally in your project without
-   pushing the patch yet.
+   workspace, without running into confusing import errors.
 5. You don't have problems when using plugins: https://github.com/akutz/gpd
 
 ### Advantages over manually managing multiple `GOPATH`s
 
 1. Automatic activation of a `GOPATH` when you `cd` into a directory.
-2. Integration with version management tools such as `dep` and `glide`.
+2. Integration with version management tools such as `dep` and `glide` allow for
+   reproducible builds.
 3. Useful commands to manage installed packages. For instance for uninstalling
    a package or installing a local package from another `GOPATH`.
 
