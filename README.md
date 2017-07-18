@@ -5,7 +5,7 @@ development for Go. The goals of the project are as follows:
 
 1. Must be extremely easy to use
 2. Shouldn't interfere with other go tools
-3. Must allow full isolation, for both imports and installed executables
+3. Must support full isolation, for both imports and installed executables
 
 It doesn't do dependency resolution or version pinning itself, but it
 integrates well with `dep` and other dependency management tools.
@@ -14,8 +14,8 @@ it's much easier to use.
 
 ## Example usage
 
-This is a basic example showing basic usage of `vg`. See below and `vg help` for
-more information.
+Below is an example showing some basic usage of `vg`. See further down and `vg help`
+for more information and examples.
 
 ```bash
 $ cd $GOPATH/src/github.com/Getstream/example
@@ -34,7 +34,7 @@ $ cd $GOPATH/src/github.com/Getstream/example
 ## Advantages over existing solutions
 
 The obvious question is why should you use it? What are the advantages
-over what you are doing now? See the sections below matching what you use now.
+over doing now? See the sections below matching what you use now.
 
 ### Advantages over `vendor` (with `dep` as dependency manager)
 
