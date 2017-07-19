@@ -21,8 +21,9 @@ import (
 type depConfig struct {
 	Required []string
 	Metadata struct {
-		InstallRequired bool `toml:"install_required"`
-		Install         []string
+		InstallRequiredDeprecated *bool `toml:"install_required"`
+		InstallRequired           bool  `toml:"install-required"`
+		Install                   []string
 	}
 }
 
@@ -124,6 +125,7 @@ This command requires that dep is installed in $PATH. `,
 			return errors.Wrap(err, "Couldn't read Gopkg.toml")
 		}
 		config := depConfig{}
+		config.Metadata.InstallRequired = true // Good default
 
 		_, err = toml.Decode(string(gopkgData), &config)
 		if err != nil {
@@ -135,7 +137,13 @@ This command requires that dep is installed in $PATH. `,
 			return err
 		}
 
-		if config.Metadata.InstallRequired {
+		installRequired := config.Metadata.InstallRequired
+
+		if config.Metadata.InstallRequiredDeprecated != nil {
+			installRequired = *config.Metadata.InstallRequiredDeprecated
+		}
+
+		if installRequired {
 			err := installPackages(srcPath, config.Required)
 			if err != nil {
 				return err
