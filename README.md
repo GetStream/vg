@@ -156,31 +156,40 @@ vg help
 vg ensure
 
 # Pass options to `dep ensure`
-vg ensure -- -update
+vg ensure -- -v -update
 ```
 
-It also extends dep with a way to install executable dependencies. The `vg` repo
-itself uses it to install the go-bindata command. It does this by having the
-following in `Gopkg.toml`
+It also extends `dep` with a way to install executable dependencies. The `vg`
+repo itself uses it to install the `go-bindata` and `cobra` command. It does
+this by adding the following in `Gopkg.toml`:
 
 ```toml
 required = [
-    'github.com/jteeuwen/go-bindata/go-bindata'
+    'github.com/jteeuwen/go-bindata/go-bindata',
+    'github.com/spf13/cobra/cobra'
 ]
+```
+Running `vg ensure` after adding this will install the `go-bindata` and `cobra`
+command in the `GOBIN` of the current workspace.
 
+As you just saw `vg` reuses the
+[`required`](https://github.com/golang/dep/blob/master/FAQ.md#when-should-i-use-constraint-override-required-or-ignored-in-gopkgtoml)
+list from `dep`.
+However, if you don't want to install
+all packages in the `required` list you can achieve that by putting the
+following in `Gopkg.toml`:
+
+```
 [metadata]
-install_required = true
+install-required = false
 ```
 
-Running `vg ensure` after adding this will install the `go-bindata` command in
-the `GOBIN` of the current workspace. If you don't want to install all packages
-in the required list (or install more packages) you can also provide a custom
-list to install:
-
+You can also specify which packages to install without the `required` list:
 ```toml
 [metadata]
 install = [
-    'github.com/jteeuwen/go-bindata/go-bindata'
+    'github.com/jteeuwen/go-bindata/go-bindata',
+    'github.com/golang/mock/...', # supports pkg/... syntax
 ]
 ```
 
@@ -188,7 +197,8 @@ install = [
 
 Even though `dep` is the main tool that virtualgo integrates with. It's also possible
 to use other dependency management tools instead, as long as they create a
-`vendor` directory. Installing executable dependencies is not supported though.
+`vendor` directory. Installing executable dependencies is not supported though
+(PRs for this are welcome).
 
 To use `vg` with `glide` works like this:
 
