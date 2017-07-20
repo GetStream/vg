@@ -117,37 +117,52 @@ vg eval --shell fish | source
 The following commands are the main commands to use `vg`:
 
 ```bash
-# The most used command is to create and activate a workspace named after the
-# current direcory
-vg init
-# In the future each time you cd to this directory it will be activated
+# The first command to use is the one to create and activate a workspace named
+# after the current direcory
+$ cd $GOPATH/src/github.com/Getstream/example
+(example) $
+# This command also links the current directory to the created workspace. This
+# way the next time you cd to this directory the workspace will be activated
 # automatically.
-
-# All go commands in this shell are now executed from within your workspace. The
-# following will install github.com/pkg/errors inside the workspace
-go get github.com/pkg/errors
 # (See below in the README on how to use the workspace from an IDE)
 
+# All go commands in this shell are now executed from within your workspace. The
+# following will install the most recent version of the cobra command and
+# library inside the workspace
+(example) $ go get -u github.com/spf13/cobra/cobra
+(example) $ cobra
+Cobra is a CLI library for Go that empowers applications.
+......
+
 # It's also possible to only activate (and create) a workspace and not link it
-# to the current directory.
-vg activate myProject
+# to the current directory. Activating a new workspace automatically deactivates
+# a previous one:
+(example) $ vg activate example2
+(example2) $ cobra
+bash: cobra: command not found
 
-# You can then link the currently active workspace to the current directory
-vg link
+# To deactivate the workspace simply run:
+(example2) $ vg deactivate
+$ vg activate
+(example) $
 
-# You can also uninstall a package from your workspace
-vg uninstall github.com/pkg/errors
-# If the removed package is installed in your normal GOPATH as well imports will
-# now use that version instead. This can be usefull when patching one of
-# your projects dependencies. This way you can use test the patches directly
-# inside your workspace.
+# When a workspace is active go builds have no access to the packages in your
+# normal GOPATH. This is good for isolation as you can not accidentally import
+# something outside of the GOPATH. However, you can easily install a package from
+# your global GOPATH into the workspace.
+(example) $ vg localInstall github.com/GetStream/utils
+# You can even install a package from a specific path
+(example) $ vg localInstall github.com/GetStream/utils ~/weird/path/utils
 
-# Deactivate the current workspace
-vg deactivate
-# Activating a new workspace automatically deactivates the previous one as well
 
-# For a full overview of all commands
-vg help
+# You can also uninstall a package from your workspace again
+(example) $ vg uninstall github.com/spf13/cobra
+# NOTE: At the moment this only removes the sources and static libs in pkg/, not
+# executables. So the cobra command is still available.
+
+# See the following sections for integration with dependency management tools.
+# And for a full overview of all commands just run:
+(example) $ vg help
 
 ```
 
