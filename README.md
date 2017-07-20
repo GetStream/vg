@@ -1,16 +1,23 @@
 # virtualgo
 
 Virtualgo (or `vg` for short) is a tool which provides workspace based
-development for Go. The goals of the project are as follows:
+development for Go. Its main feature set that makes it better than other
+solutions is as follows:
 
-1. Must be extremely easy to use
-2. Shouldn't interfere with other go tools
-3. Must support full isolation, for both imports and installed executables
+1. Extreme easy of use
+2. No interference with other go tools
+3. Version pinning for imports
+4. Version pinning executables (such as linters and codegen tools)
+5. Full isolation, for both imports and installed executables
+6. Importing a dependency that's locally checked out outside of the workspace
 
-It doesn't do dependency resolution or version pinning itself, but it
-integrates well with `dep` and other dependency management tools.
-For people coming from Python it's very similar to `virtualenv`, except that
-it's much easier to use.
+Virtualgo doesn't do dependency resolution or version pinning itself, because
+this is a hard problem that's already being solved by other tools. Its approach
+is to build on top of these tools, such as `dep`, to provide the features
+features listed above.
+For people coming from Python it's very similar to `virtualenv` that can be used
+in conjunction with `pip`. The main difference is that `vg` is much easier to
+use than `virtualenv`.
 
 ## Example usage
 
