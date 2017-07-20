@@ -16,9 +16,9 @@ this is a hard problem that's already being solved by other tools. Its approach
 is to build on top of these tools, such as
 [`dep`](https://github.com/golang/dep), to provide the features features listed
 above.
-For people coming from Python it's very similar to `virtualenv` that can be used
-in conjunction with `pip`. The main difference is that `vg` is much easier to
-use than `virtualenv`.
+For people coming from Python it's very similar to `virtualenv` in it  that can
+be used in conjunction with `pip`. The main difference is that `vg` is much
+easier to use than `virtualenv`.
 
 ## Example usage
 
