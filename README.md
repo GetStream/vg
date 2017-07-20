@@ -233,9 +233,13 @@ glide install
 vg moveVendor
 ```
 
+## Workspaces with global `GOPATH` fallback
+
+**TODO**
 
 ## How it works
 
+**TODO update/remove this**
 All workspaces are fully isolated from each other. However, package and
 executable resolution will fall back to your regular `GOPATH` and `GOBIN`.
 This is done by using a very simple trick that is not well known: `GOPATH` can
@@ -246,6 +250,7 @@ in the workspace. Running `vg deactivate` undoes these changes again.
 
 ## Using a virtualgo workspace with an IDE (e.g. Gogland)
 
+**TODO update this for non global fallback**
 Because virtualgo is just a usability wrapper around changing your `GOPATH` for
 a specific project it is usually quite easy to use it in combination with an
 IDE. For Gogland you can set multiple `GOPATH`s in the preferences window on a
