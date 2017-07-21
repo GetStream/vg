@@ -147,10 +147,11 @@ bash: cobra: command not found
 $ vg activate
 (example) $
 
-# When a workspace is active go builds have no access to the packages in your
-# normal GOPATH. This is good for isolation as you can not accidentally import
-# something outside of the GOPATH. However, you can easily install a package from
-# your global GOPATH into the workspace.
+# When a workspace is active go builds cannot import packages from your
+# normal GOPATH (you can still use executables though). This is good for
+# isolation as you can not accidentally import something outside of the
+# workspace. However, you can easily install a package from your global GOPATH
+# into the workspace.
 (example) $ vg localInstall github.com/GetStream/utils
 # You can even install a package from a specific path
 (example) $ vg localInstall github.com/GetStream/utils ~/weird/path/utils
@@ -202,7 +203,7 @@ However, if you don't want to install
 all packages in the `required` list you can achieve that by putting the
 following in `Gopkg.toml`:
 
-```
+```toml
 [metadata]
 install-required = false
 ```
@@ -235,37 +236,44 @@ vg moveVendor
 
 ## Workspaces with global `GOPATH` fallback
 
-**TODO**
+It's also possible to create a workspace where you  can still import packages
+from your global `GOPATH`. This is not the recommended way to use `vg`, but in
+some setups this can be useful. This can be done by running:
 
-## How it works
+```bash
+$ vg init --global-fallback
+# To change an existing workspace, you should destroy and recreate it
+$ vg destroy example
+$ vg init example --global-fallback
+```
 
-**TODO update/remove this**
-All workspaces are fully isolated from each other. However, package and
-executable resolution will fall back to your regular `GOPATH` and `GOBIN`.
-This is done by using a very simple trick that is not well known: `GOPATH` can
-contain multiple paths. So, `vg activate` simply prepends the workspace path to
-the `GOPATH`. Furthermore it changes `GOBIN` and `PATH` to use `bin` directory
-in the workspace. Running `vg deactivate` undoes these changes again.
-
+If you create a workspace this way, any imports you do first search in the
+workspace. If a package cannot be found there it will try the original `GOPATH`
+you had before activating the workspace.
 
 ## Using a virtualgo workspace with an IDE (e.g. Gogland)
 
-**TODO update this for non global fallback**
 Because virtualgo is just a usability wrapper around changing your `GOPATH` for
 a specific project it is usually quite easy to use it in combination with an
-IDE. For Gogland you can set multiple `GOPATH`s in the preferences window on a
-per project basis. To find out which `GOPATH`s, activate your desired workspace
-and run:
+IDE. Just check out your `GOPATH` after activating a workspace and configure the
+IDE accordingly.
 
 ```bash
-$ echo $GOPATH
+$ echo $gopath
+/home/stream/.virtualgo/myworkspace
+```
+
+When using a workspace with global `GOPATH` fallback, it's only a little harder
+to configure your `GOPATH`. If you show your `GOPATH` you will see two paths
+separated by a colon:
+
+```bash
+$ echo $gopath
 /home/stream/.virtualgo/myworkspace:/home/stream/go
 ```
 
-As you can see there's two path separated by a colon. If you can set this
-string directly that is fine. For Gogland you have to add the first one (with
-`.virtualgo` in it) first and then the second one.
-
+If you can set this full string directly that is fine. For Gogland you have to
+add the first one first and then the second one.
 
 
 ## License
