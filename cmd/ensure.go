@@ -76,7 +76,9 @@ This command requires that dep is installed in $PATH. `,
 				err = err.(*os.LinkError).Err
 				if err != syscall.ENOENT {
 					// If src doesn't exist it doesn't have to be moved
-					return errors.Wrap(err, "Couldn't move the the sources of the active workspace to vendor")
+					err := errors.Wrap(err, "Couldn't move the the sources of the active workspace to vendor")
+					fmt.Printf("%v\n", err)
+					return err
 				}
 			}
 		}
