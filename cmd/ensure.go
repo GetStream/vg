@@ -64,6 +64,7 @@ This command requires that dep is installed in $PATH. `,
 		}
 		wsdir, _ := utils.CurrentWorkspaceDir()
 		fmt.Println("workspace directory", wsdir)
+		fmt.Println("source path", srcPath)
 
 		err = os.RemoveAll("vendor")
 		if err != nil {
