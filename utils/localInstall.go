@@ -10,7 +10,7 @@ import (
 )
 
 func InstallLocalPackage(workspace string, pkg string, localPath string) error {
-	_, _ = os.Stderr.WriteString(fmt.Sprintf("Installing local sources at %q in workspace as %q\n", localPath, pkg))
+	_, _ = fmt.Fprintf(os.Stderr, "Installing local sources at %q in workspace as %q\n", localPath, pkg)
 	pkgDir := filepath.Join(path.Split(pkg))
 	linkName := filepath.Join(SrcDir(workspace), pkgDir)
 
