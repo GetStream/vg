@@ -83,6 +83,7 @@ var initSettingsCmd = &cobra.Command{
 			pkgComponents := filepath.SplitList(pkgDir)
 			pkg := path.Join(pkgComponents...)
 
+			fmt.Printf("Persisting the local install for %q\n", pkg)
 			settings.LocalInstalls[pkg] = utils.LocalInstall{
 				Path: cwd,
 			}

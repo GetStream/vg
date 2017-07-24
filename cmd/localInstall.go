@@ -4,6 +4,7 @@
 package cmd
 
 import (
+	"fmt"
 	"path/filepath"
 
 	"github.com/GetStream/vg/utils"
@@ -73,6 +74,7 @@ After that a 'vg ensure' will install like normal again.
 			Path: path,
 		}
 
+		fmt.Printf("Persisting the local install for %q\n", pkg)
 		err = utils.SaveCurrentSettings(settings)
 		if err != nil {
 			return err
