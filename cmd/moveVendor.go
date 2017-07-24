@@ -46,12 +46,7 @@ based project in your workspace do this:
 			return errors.Wrap(err, "Couldn't move the vendor directory to the active workspace")
 		}
 
-		err = utils.LinkCurrentLocalInstalls()
-		if err != nil {
-			return err
-		}
-
-		return nil
+		return utils.InstallCurrentPersistentLocalPackages()
 
 	},
 }

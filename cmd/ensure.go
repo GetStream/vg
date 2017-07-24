@@ -132,7 +132,7 @@ This command requires that dep is installed in $PATH. `,
 			return errors.Wrap(err, "Couldn't unmarshal Gopkg.toml")
 		}
 
-		err = utils.LinkCurrentLocalInstalls()
+		err = utils.InstallCurrentPersistentLocalPackages()
 		if err != nil {
 			return err
 		}

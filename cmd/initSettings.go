@@ -99,7 +99,7 @@ var initSettingsCmd = &cobra.Command{
 			return err
 		}
 
-		return utils.LinkLocalInstalls(workspace, settings)
+		return utils.InstallPersistentLocalPackages(workspace, settings)
 	},
 }
 
