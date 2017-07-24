@@ -17,9 +17,10 @@ import (
 
 // initSettingsCmd represents the initSettings command
 var initSettingsCmd = &cobra.Command{
-	Use:   "initSettings [workspaceName]",
-	Short: "This command initializes the settings file for a certain workspace",
-	Long:  ``,
+	Use:    "initSettings [workspaceName]",
+	Hidden: true,
+	Short:  "This command initializes the settings file for a certain workspace",
+	Long:   ``,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) > 1 {
 			return errors.New("Too much arguments specified")

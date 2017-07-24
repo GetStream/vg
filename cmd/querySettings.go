@@ -12,8 +12,9 @@ import (
 
 // querySettingsCmd represents the querySettings command
 var querySettingsCmd = &cobra.Command{
-	Use:   "querySettings",
-	Short: "This can be used to query certain settings for a workspace",
+	Use:    "querySettings",
+	Hidden: true,
+	Short:  "This can be used to query certain settings for a workspace",
 	Long: `WARNING: This command is unstable it is only exposed because it is
 used internally by virtualgo`,
 	RunE: func(cmd *cobra.Command, args []string) error {

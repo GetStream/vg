@@ -16,12 +16,12 @@ __vg_completions() {
     compadd globalExec
     compadd help
     compadd init
-    compadd initSettings
+    # compadd initSettings
     compadd link
     compadd list
     compadd localInstall
     compadd moveVendor
-    compadd querySettings
+    # compadd querySettings
     compadd setup
     compadd status
     compadd uninstall
