@@ -119,6 +119,8 @@ This command requires that dep is installed in $PATH. `,
 
 		err = os.Rename("vendor", srcPath)
 		if err != nil {
+			err := errors.Wrap(err, "Couldn't move the the sources of the active workspace to vendor")
+			fmt.Printf("%v\n", err)
 			return errors.Wrap(err, "Couldn't move the vendor directory to the active workspace")
 		}
 
