@@ -77,7 +77,7 @@ This command requires that dep is installed in $PATH. `,
 				if err != syscall.ENOENT {
 					// If src doesn't exist it doesn't have to be moved
 					err := errors.Wrap(err, "Couldn't move the the sources of the active workspace to vendor")
-					fmt.Printf("%v\n", err)
+					fmt.Printf("%+v\n", err)
 					return err
 				}
 			}
@@ -120,7 +120,7 @@ This command requires that dep is installed in $PATH. `,
 		err = os.Rename("vendor", srcPath)
 		if err != nil {
 			err := errors.Wrap(err, "Couldn't move the the sources of the active workspace to vendor")
-			fmt.Printf("%v\n", err)
+			fmt.Printf("%+v\n", err)
 			return errors.Wrap(err, "Couldn't move the vendor directory to the active workspace")
 		}
 
