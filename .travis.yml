@@ -9,9 +9,7 @@ before_install:
   - go get github.com/GetStream/vg
   - go get github.com/golang/dep/cmd/dep
   - 'eval "$(vg eval --shell bash)"'
-  - vg init vg
-  - echo $GOPATH
-  - ls -al ~/.virtualgo || true
+  - vg init
 
 install:
   - make get-deps
