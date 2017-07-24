@@ -1,4 +1,4 @@
-# virtualgo
+# virtualgo [![Build Status](https://travis-ci.org/GetStream/vg.svg?branch=master)](https://travis-ci.org/GetStream/vg)
 
 Virtualgo (or `vg` for short) is a tool which provides workspace based
 development for Go. Its main feature set that makes it better than other
