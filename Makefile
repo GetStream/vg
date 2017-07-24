@@ -14,6 +14,9 @@ endif
 .PHONY: install
 .PHONY: publish publish-major publish-minor publish-bug update-master
 
+all: install
+get-deps: .installed-deps
+
 install: $(GO_FILES) $(BINDATA) .installed-deps
 	go install
 	@# install vg executable globally as well
