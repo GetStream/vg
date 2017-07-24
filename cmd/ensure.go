@@ -62,6 +62,8 @@ This command requires that dep is installed in $PATH. `,
 		if err != nil {
 			return err
 		}
+		wsdir, _ := utils.CurrentWorkspaceDir()
+		fmt.Println("workspace directory", wsdir)
 
 		err = os.RemoveAll("vendor")
 		if err != nil {
@@ -119,9 +121,9 @@ This command requires that dep is installed in $PATH. `,
 
 		err = os.Rename("vendor", srcPath)
 		if err != nil {
-			err := errors.Wrap(err, "Couldn't move the the sources of the active workspace to vendor")
+			err := errors.Wrap(err, "Couldn't move the vendor directory to the active workspace")
 			fmt.Printf("%+v\n", err)
-			return errors.Wrap(err, "Couldn't move the vendor directory to the active workspace")
+			return err
 		}
 
 		gopkgData, err := ioutil.ReadFile("Gopkg.toml")
