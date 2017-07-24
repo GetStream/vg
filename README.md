@@ -70,7 +70,7 @@ now:
 First install the package:
 
 ```bash
-go get -u github.com/getstream/vg
+go get -u github.com/GetStream/vg
 ```
 
 ### Automatic shell configuration
