@@ -150,7 +150,16 @@ This command requires that dep is installed in $PATH. `,
 			}
 		}
 
-		return installPackages(ws.Src(), config.Metadata.Install)
+		err = installPackages(ws.Src(), config.Metadata.Install)
+		if err != nil {
+			return err
+		}
+
+		f, err := os.OpenFile(filepath.Join(ws.Path(), "last-ensure"), os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		return errors.WithStack(f.Close())
 	},
 }
 
