@@ -6,7 +6,7 @@ package cmd
 import (
 	"os"
 
-	"github.com/GetStream/vg/workspace"
+	"github.com/GetStream/vg/internal/workspace"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )

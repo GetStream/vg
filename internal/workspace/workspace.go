@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/GetStream/vg/utils"
+	"github.com/GetStream/vg/internal/utils"
 )
 
 type Workspace struct {
