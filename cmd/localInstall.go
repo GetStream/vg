@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/GetStream/vg/utils"
+	"github.com/GetStream/vg/workspace"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -56,31 +57,36 @@ After that a 'vg ensure' will install like normal again.
 			)
 		}
 
+		ws, err := workspace.Current()
+		if err != nil {
+			return errors.WithStack(err)
+		}
+
 		persist, err := cmd.Flags().GetBool("persistent")
 		if err != nil {
 			return errors.WithStack(err)
 		}
 
 		if !persist {
-			return utils.InstallCurrentLocalPackage(pkg, path)
+			return ws.InstallLocalPackage(pkg, path)
 		}
 
-		settings, err := utils.CurrentSettings()
+		settings, err := ws.Settings()
 		if err != nil {
 			return err
 		}
 
-		settings.LocalInstalls[pkg] = utils.LocalInstall{
+		settings.LocalInstalls[pkg] = workspace.LocalInstall{
 			Path: path,
 		}
 
 		fmt.Printf("Persisting the local install for %q\n", pkg)
-		err = utils.SaveCurrentSettings(settings)
+		err = ws.SaveSettings(settings)
 		if err != nil {
 			return err
 		}
 
-		return utils.InstallCurrentPersistentLocalPackages()
+		return ws.InstallPersistentLocalPackages()
 	},
 }
 

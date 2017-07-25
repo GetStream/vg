@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/GetStream/vg/utils"
+	"github.com/GetStream/vg/workspace"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -27,21 +28,21 @@ var uninstallCmd = &cobra.Command{
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		workspace := os.Getenv("VIRTUALGO")
-		if workspace == "" {
-			return errors.New("A virtualgo workspace should be activated first by using `vg activate [workspaceName]`")
+		ws, err := workspace.Current()
+		if err != nil {
+			return err
 		}
 
 		for _, pkg := range args {
 			// pkgComponents := strings.Split(pkg, hello
 			pkgDir := utils.PkgToDir(pkg)
 			fmt.Printf("Uninstalling %q from workspace\n", pkg)
-			err := os.RemoveAll(filepath.Join(utils.VirtualgoDir(), workspace, "src", pkgDir))
+			err := os.RemoveAll(filepath.Join(ws.Src(), pkgDir))
 			if err != nil {
-				return errors.Wrapf(err, "Couldn't remove package src '%s'", workspace)
+				return errors.Wrapf(err, "Couldn't remove package src '%s'", ws.Name())
 			}
 
-			pkgInstalledDirs, err := filepath.Glob(filepath.Join(utils.VirtualgoDir(), workspace, "pkg", "*", pkgDir))
+			pkgInstalledDirs, err := filepath.Glob(filepath.Join(ws.Pkg(), "*", pkgDir))
 			if err != nil {
 				return errors.Wrapf(err, "Something went wrong when globbing files for '%s'", pkg)
 			}
@@ -55,7 +56,7 @@ var uninstallCmd = &cobra.Command{
 				}
 			}
 
-			pkgInstalledFiles, err := filepath.Glob(filepath.Join(utils.VirtualgoDir(), workspace, "pkg", "*", pkgDir+".a"))
+			pkgInstalledFiles, err := filepath.Glob(filepath.Join(ws.Pkg(), "*", pkgDir+".a"))
 			if err != nil {
 				return errors.Wrapf(err, "Something went wrong when globbing files for '%s'", pkg)
 			}
@@ -69,15 +70,16 @@ var uninstallCmd = &cobra.Command{
 				}
 			}
 
-			settings, err := utils.CurrentSettings()
+			settings, err := ws.Settings()
 			if err != nil {
 				return err
 			}
+
 			if _, ok := settings.LocalInstalls[pkg]; ok {
 				fmt.Printf("Removing %q from persistent local installs\n", pkg)
 				delete(settings.LocalInstalls, pkg)
 
-				err = utils.SaveCurrentSettings(settings)
+				err = ws.SaveSettings(settings)
 				if err != nil {
 					return err
 				}

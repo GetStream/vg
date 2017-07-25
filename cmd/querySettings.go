@@ -6,7 +6,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/GetStream/vg/utils"
+	"github.com/GetStream/vg/workspace"
 	"github.com/spf13/cobra"
 )
 
@@ -18,7 +18,12 @@ var querySettingsCmd = &cobra.Command{
 	Long: `WARNING: This command is unstable it is only exposed because it is
 used internally by virtualgo`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		settings, err := utils.CurrentSettings()
+		ws, err := workspace.Current()
+		if err != nil {
+			return err
+		}
+
+		settings, err := ws.Settings()
 		if err != nil {
 			return err
 		}

@@ -17,7 +17,7 @@ var listCmd = &cobra.Command{
 	Short: "List all existing workspaces",
 	Long:  ``,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		files, err := ioutil.ReadDir(utils.VirtualgoDir())
+		files, err := ioutil.ReadDir(utils.VirtualgoRoot())
 		if err != nil {
 			return err
 		}

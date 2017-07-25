@@ -13,7 +13,7 @@ import (
 	"syscall"
 
 	"github.com/BurntSushi/toml"
-	"github.com/GetStream/vg/utils"
+	"github.com/GetStream/vg/workspace"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -58,7 +58,7 @@ This command requires that dep is installed in $PATH. `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var err error
 
-		srcPath, err := utils.CurrentSrcDir()
+		ws, err := workspace.Current()
 		if err != nil {
 			return err
 		}
@@ -71,7 +71,7 @@ This command requires that dep is installed in $PATH. `,
 		if false {
 			// TODO: This is causing some errors, packages are not actually
 			// installed. Not sure why, maybe bug in go dep.
-			err = os.Rename(srcPath, "vendor")
+			err = os.Rename(ws.Src(), "vendor")
 			if err != nil {
 				err = err.(*os.LinkError).Err
 				if err != syscall.ENOENT {
@@ -101,7 +101,7 @@ This command requires that dep is installed in $PATH. `,
 
 			// Try to revert move after insuccessful dep
 			// TODO: Uncomment when fixing above todo
-			// _ = os.Rename("vendor", srcPath)
+			// _ = os.Rename("vendor", ws.Src())
 			return errors.Wrap(err, "dep failed to run")
 		}
 
@@ -110,12 +110,12 @@ This command requires that dep is installed in $PATH. `,
 			return errors.WithStack(err)
 		}
 
-		err = os.RemoveAll(srcPath)
+		err = os.RemoveAll(ws.Src())
 		if err != nil {
 			return errors.Wrap(err, "Couldn't clear the src path of the active workspace")
 		}
 
-		err = os.Rename("vendor", srcPath)
+		err = os.Rename("vendor", ws.Src())
 		if err != nil {
 			return errors.Wrap(err, "Couldn't move the vendor directory to the active workspace")
 		}
@@ -132,7 +132,7 @@ This command requires that dep is installed in $PATH. `,
 			return errors.Wrap(err, "Couldn't unmarshal Gopkg.toml")
 		}
 
-		err = utils.InstallCurrentPersistentLocalPackages()
+		err = ws.InstallPersistentLocalPackages()
 		if err != nil {
 			return err
 		}
@@ -144,13 +144,13 @@ This command requires that dep is installed in $PATH. `,
 		}
 
 		if installRequired {
-			err := installPackages(srcPath, config.Required)
+			err := installPackages(ws.Src(), config.Required)
 			if err != nil {
 				return err
 			}
 		}
 
-		return installPackages(srcPath, config.Metadata.Install)
+		return installPackages(ws.Src(), config.Metadata.Install)
 	},
 }
 

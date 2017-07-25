@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/GetStream/vg/utils"
+	"github.com/GetStream/vg/workspace"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -29,26 +30,20 @@ var initSettingsCmd = &cobra.Command{
 	},
 
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
-		workspace := ""
+		name := ""
 		cwd, err := os.Getwd()
 		if err != nil {
 			return errors.WithStack(err)
 		}
 
 		if len(args) == 1 {
-			workspace = args[0]
+			name = args[0]
 		} else {
-			workspace = filepath.Base(cwd)
+			name = filepath.Base(cwd)
 
 		}
-		fmt.Println(workspace)
-
-		settingsPath := utils.SettingsPath(workspace)
-		if err != nil {
-			return errors.WithStack(err)
-		}
-
-		dir := filepath.Dir(settingsPath)
+		fmt.Println(name)
+		ws := workspace.New(name)
 
 		force, err := cmd.Flags().GetBool("force")
 		if err != nil {
@@ -57,7 +52,7 @@ var initSettingsCmd = &cobra.Command{
 
 		// Check if it's a new workspace. Only continue if this is the case or
 		// if force is set.
-		_, err = os.Stat(dir)
+		_, err = os.Stat(ws.Path())
 		if err != nil {
 			if !os.IsNotExist(err) {
 				return errors.WithStack(err)
@@ -66,42 +61,42 @@ var initSettingsCmd = &cobra.Command{
 			return nil
 		}
 
-		settings := utils.NewWorkspaceSettings()
+		settings := workspace.NewSettings()
 		settings.GlobalFallback, err = cmd.Flags().GetBool("global-fallback")
 
 		if err != nil {
 			return errors.WithStack(err)
 		}
 
-		srcpath := filepath.Join(utils.CurrentGopath(), "src") + string(filepath.Separator)
+		originalSrcPath := filepath.Join(utils.OriginalGopath(), "src") + string(filepath.Separator)
 
-		if strings.HasPrefix(cwd, srcpath) && !settings.GlobalFallback {
+		if strings.HasPrefix(cwd, originalSrcPath) && !settings.GlobalFallback {
 			// If current directory is inside the current gopath
 			// add it to the packages that need to be symlinked
-			pkgDir := strings.TrimPrefix(cwd, srcpath)
+			pkgDir := strings.TrimPrefix(cwd, originalSrcPath)
 
 			// Make sure pkg is slash seperated
 			pkgComponents := filepath.SplitList(pkgDir)
 			pkg := path.Join(pkgComponents...)
 
 			_, _ = fmt.Fprintf(os.Stderr, "Persisting the local install for %q\n", pkg)
-			settings.LocalInstalls[pkg] = utils.LocalInstall{
+			settings.LocalInstalls[pkg] = workspace.LocalInstall{
 				Path: cwd,
 			}
 
 		}
 
-		err = os.MkdirAll(dir, 0755)
+		err = os.MkdirAll(ws.Path(), 0755)
 		if err != nil {
 			return errors.WithStack(err)
 		}
 
-		err = utils.SaveSettings(workspace, settings)
+		err = ws.SaveSettings(settings)
 		if err != nil {
 			return err
 		}
 
-		return utils.InstallPersistentLocalPackages(workspace, settings)
+		return ws.InstallPersistentLocalPackages()
 	},
 }
 

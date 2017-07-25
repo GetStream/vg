@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"os/user"
@@ -23,7 +22,7 @@ func ReplaceHomeDir(path string) string {
 	return filepath.Join(homeDir, path[2:])
 }
 
-func VirtualgoDir() string {
+func VirtualgoRoot() string {
 	var err error
 	dir := ReplaceHomeDir("~/.virtualgo")
 
@@ -34,43 +33,15 @@ func VirtualgoDir() string {
 	return dir
 }
 
-func WorkspaceDir(workspace string) string {
-	return filepath.Join(VirtualgoDir(), workspace)
-}
-
-func CurrentWorkspaceDir() (string, error) {
-	path := os.Getenv("VIRTUALGO_PATH")
-	if path == "" {
-		return "", errors.New("A virtualgo workspace should be active first by using `vg activate [workspaceName]`")
-	}
-	return path, nil
-}
-
-func SrcDir(workspace string) string {
-	return filepath.Join(WorkspaceDir(workspace), "src")
-}
-
-func CurrentSrcDir() (string, error) {
-	workspaceDir, err := CurrentWorkspaceDir()
-	if err != nil {
-		return "", err
-	}
-	return filepath.Join(workspaceDir, "src"), nil
-}
-
-func CurrentWorkspace() (string, error) {
-	workspace := os.Getenv("VIRTUALGO")
-	if workspace == "" {
-		return "", errors.New("A virtualgo workspace should be active first by using `vg activate [workspaceName]`")
-	}
-	return workspace, nil
+func PkgToDir(pkg string) string {
+	return filepath.Join(path.Split(pkg))
 
 }
 
 func OriginalGopath() string {
 	gopath := os.Getenv("_VIRTUALGO_OLDGOPATH")
 	if gopath == "" {
-		return defaultGOPATH()
+		return CurrentGopath()
 	}
 
 	return gopath
@@ -103,9 +74,4 @@ func defaultGOPATH() string {
 		return def
 	}
 	return ""
-}
-
-func PkgToDir(pkg string) string {
-	return filepath.Join(path.Split(pkg))
-
 }

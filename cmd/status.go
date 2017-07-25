@@ -7,8 +7,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/GetStream/vg/utils"
-	"github.com/pkg/errors"
+	"github.com/GetStream/vg/workspace"
 	"github.com/spf13/cobra"
 )
 
@@ -23,18 +22,16 @@ var statusCmd = &cobra.Command{
 			fmt.Println("No virtualgo workspace is active")
 			return nil
 		}
-		path := os.Getenv("VIRTUALGO_PATH")
-		if path == "" {
-			return errors.New("Somehow you have an active workspace, but not a path")
-		}
 
-		settings, err := utils.Settings(name)
+		ws := workspace.New(name)
+
+		settings, err := ws.Settings()
 		if err != nil {
 			return err
 		}
 
 		fmt.Println("Active workspace:           ", name)
-		fmt.Println("Workspace path:             ", path)
+		fmt.Println("Workspace path:             ", ws.Path())
 		fmt.Println("Fallback to global packages:", settings.GlobalFallback)
 		return nil
 
