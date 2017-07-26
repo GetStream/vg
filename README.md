@@ -238,7 +238,8 @@ vg moveVendor
 
 It's also possible to create a workspace where you  can still import packages
 from your global `GOPATH`. This is not the recommended way to use `vg`, but in
-some setups this can be useful. This can be done by running:
+some setups this can be useful (e.g. with full isolation `init` functions in the
+project you're working on will be run twice). This can be done by running:
 
 ```bash
 $ vg init --global-fallback
