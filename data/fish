@@ -212,6 +212,8 @@ end
 function __vg_get_packages
     find $argv[1]/src/ -maxdepth 3 -mindepth 3 -type d | sed s=$argv[1]/src/== | grep -v '^google.golang.org/'
     find $argv[1]/src/ -maxdepth 2 -mindepth 2 -type d | sed s=$argv[1]/src/== | grep '^google.golang.org/'
+    find $argv[1]/src/ -maxdepth 3 -mindepth 3 -type l | sed s=$argv[1]/src/== | grep -v '^google.golang.org/'
+    find $argv[1]/src/ -maxdepth 2 -mindepth 2 -type l | sed s=$argv[1]/src/== | grep '^google.golang.org/'
 end
 
 function __vg_get_workspace_packages
