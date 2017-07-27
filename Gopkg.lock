@@ -39,6 +39,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/mitchellh/go-homedir"
+  packages = ["."]
+  revision = "b8bc1bf767474819792c23f32d8286a45736f1c6"
+
+[[projects]]
+  branch = "master"
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
   revision = "d0303fe809921458f417bcf828397a65db30a7e4"
@@ -77,7 +83,7 @@
   branch = "master"
   name = "github.com/spf13/cobra"
   packages = [".","cobra","cobra/cmd"]
-  revision = "7be4beda01ec05d0b93d80b3facd2b6f44080d94"
+  revision = "34594c771f2c18301dc152640ad40ece28795373"
 
 [[projects]]
   branch = "master"
@@ -86,22 +92,22 @@
   revision = "0efa5202c04663c757d84f90f5219c1250baf94f"
 
 [[projects]]
-  branch = "master"
   name = "github.com/spf13/pflag"
   packages = ["."]
-  revision = "9ff6c6923cfffbcd502984b8e0c80539a94968b7"
+  revision = "e57e3eeb33f795204c1ca35f56c44f83227c6e66"
+  version = "v1.0.0"
 
 [[projects]]
   branch = "master"
   name = "github.com/spf13/viper"
   packages = ["."]
-  revision = "c1de95864d73a5465492829d7cb2dd422b19ac96"
+  revision = "25b30aa063fc18e48662b86996252eabdcf2f0c7"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "4cd6d1a821c7175768725b55ca82f14683a29ea4"
+  revision = "02a66801d979d706a4b445e24e03916eeaa2a404"
 
 [[projects]]
   branch = "master"
@@ -113,7 +119,7 @@
   branch = "v2"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "3b4ad1db5b2a649883ff3782f5f9f6fb52be71af"
+  revision = "25c4ec802a7d637f88d584ab26798e94ad14c13b"
 
 [solve-meta]
   analyzer-name = "dep"
