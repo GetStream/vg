@@ -84,13 +84,17 @@ func (ws *Workspace) Uninstall(pkg string, logWriter io.Writer) error {
 		}
 	}
 
+	return nil
+}
+
+func (ws *Workspace) UnpersistLocalInstall(pkg string) error {
 	settings, err := ws.Settings()
 	if err != nil {
 		return err
 	}
 
 	if _, ok := settings.LocalInstalls[pkg]; ok {
-		fmt.Fprintf(logWriter, "Removing %q from persistent local installs\n", pkg)
+		fmt.Printf("Removing %q from persistent local installs\n", pkg)
 		delete(settings.LocalInstalls, pkg)
 
 		err = ws.SaveSettings(settings)

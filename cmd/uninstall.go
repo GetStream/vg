@@ -34,6 +34,7 @@ var uninstallCmd = &cobra.Command{
 		for _, pkg := range args {
 			fmt.Printf("Uninstalling %q from workspace\n", pkg)
 			ws.Uninstall(pkg, os.Stdout)
+			ws.UnpersistLocalInstall(pkg)
 		}
 		return nil
 	},
