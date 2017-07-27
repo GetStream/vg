@@ -17,7 +17,7 @@ endif
 LAST_ENSURE = $(VIRTUALGO_PATH)/last-ensure
 
 all: install
-get-deps: $(LAST_INSTALL)
+get-deps: $(LAST_ENSURE)
 
 install: $(GO_FILES) $(BINDATA) $(LAST_ENSURE)
 	go install
