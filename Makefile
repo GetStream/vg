@@ -19,7 +19,7 @@ LAST_ENSURE = $(VIRTUALGO_PATH)/last-ensure
 all: install
 get-deps: $(LAST_ENSURE)
 
-install: $(GO_FILES) $(BINDATA) $(LAST_ENSURE)
+install: $(LAST_ENSURE) $(GO_FILES) $(BINDATA)
 	go install
 	@# install vg executable globally as well
 	cp $(GOBIN)/vg $(_VIRTUALGO_OLDGOBIN)/vg
