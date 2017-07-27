@@ -13,9 +13,5 @@ before_install:
   - go env
 
 install:
-  - go env
-  - echo $VIRTUALGO_PATH
-  - ls -al --full-time $VIRTUALGO_PATH
-  - ls -al --full-time Gopkg.*
   - make get-deps
   - make all
