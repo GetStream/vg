@@ -53,34 +53,34 @@ func (ws *Workspace) Uninstall(pkg string, logWriter io.Writer) error {
 	pkgDir := utils.PkgToDir(pkg)
 	err := os.RemoveAll(filepath.Join(ws.Src(), pkgDir))
 	if err != nil {
-		return errors.Wrapf(err, "Couldn't remove package src '%s'", ws.Name())
+		return errors.Wrapf(err, "Couldn't remove package src %q", ws.Name())
 	}
 
 	pkgInstalledDirs, err := filepath.Glob(filepath.Join(ws.Pkg(), "*", pkgDir))
 	if err != nil {
-		return errors.Wrapf(err, "Something went wrong when globbing files for '%s'", pkg)
+		return errors.Wrapf(err, "Something went wrong when globbing files for %q", pkg)
 	}
 
 	for _, path := range pkgInstalledDirs {
-		fmt.Fprintln(logWriter, "Removing", path)
+		fmt.Fprintf(logWriter, "Removing %q\n", path)
 
 		err = os.RemoveAll(path)
 		if err != nil {
-			return errors.Wrapf(err, "Couldn't remove installed package files for '%s'", pkg)
+			return errors.Wrapf(err, "Couldn't remove installed package files for %q", pkg)
 		}
 	}
 
 	pkgInstalledFiles, err := filepath.Glob(filepath.Join(ws.Pkg(), "*", pkgDir+".a"))
 	if err != nil {
-		return errors.Wrapf(err, "Something went wrong when globbing files for '%s'", pkg)
+		return errors.Wrapf(err, "Something went wrong when globbing files for %q", pkg)
 	}
 
 	for _, path := range pkgInstalledFiles {
-		fmt.Fprintln(logWriter, "Removing", path)
+		fmt.Fprintf(logWriter, "Removing %q\n", path)
 
 		err = os.RemoveAll(path)
 		if err != nil {
-			return errors.Wrapf(err, "Couldn't remove installed package files for '%s'", pkg)
+			return errors.Wrapf(err, "Couldn't remove installed package files for %q", pkg)
 		}
 	}
 
