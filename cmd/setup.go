@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/GetStream/vg/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -39,10 +40,7 @@ var setupCmd = &cobra.Command{
 
 		// fish
 		fmt.Println("Editing ~/.config/fish/config.fish")
-		fishdir, err := replaceHomeDir("~/.config/fish")
-		if err != nil {
-			return err
-		}
+		fishdir := utils.ReplaceHomeDir("~/.config/fish")
 
 		err = os.MkdirAll(fishdir, 0755)
 		if err != nil {
@@ -55,10 +53,7 @@ var setupCmd = &cobra.Command{
 }
 
 func appendToFile(fileName string, content string) error {
-	fileName, err := replaceHomeDir(fileName)
-	if err != nil {
-		return err
-	}
+	fileName = utils.ReplaceHomeDir(fileName)
 
 	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {

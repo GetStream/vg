@@ -8,13 +8,18 @@ CURRENT_VERSION_BUG = 0
 BINDATA = cmd/bindata.go
 
 ifndef VIRTUALGO
-    $(error No virtualgo workspace is not active)
+    $(error No virtualgo workspace is active)
 endif
 
 .PHONY: install
 .PHONY: publish publish-major publish-minor publish-bug update-master
 
-install: $(GO_FILES) $(BINDATA) .installed-deps
+LAST_ENSURE = $(VIRTUALGO_PATH)/last-ensure
+
+all: install
+get-deps: $(LAST_ENSURE)
+
+install: $(LAST_ENSURE) $(GO_FILES) $(BINDATA)
 	go install
 	@# install vg executable globally as well
 	cp $(GOBIN)/vg $(_VIRTUALGO_OLDGOBIN)/vg
@@ -23,9 +28,8 @@ bindata: $(BINDATA) .installed-deps
 $(BINDATA): data/*
 	go-bindata -o cmd/bindata.go -pkg cmd data/*
 
-.installed-deps: Gopkg.lock Gopkg.toml
-	vg ensure
-	touch .installed-deps
+$(LAST_ENSURE): Gopkg.lock Gopkg.toml
+	vg ensure -- -v
 
 publish: $(BINDATA)
 	@if [ "$(VERSION)" = "" ]; then echo You should define the version like so: make publish VERSION=x.y.z; exit 1; fi
@@ -55,3 +59,5 @@ publish-minor: update-master
 	make publish VERSION=$(CURRENT_VERSION_MAJOR).$$(($(CURRENT_VERSION_MINOR) + 1)).0
 publish-bug: update-master
 	make publish VERSION=$(CURRENT_VERSION_MAJOR).$(CURRENT_VERSION_MINOR).$$(($(CURRENT_VERSION_BUG) + 1))
+
+test: install

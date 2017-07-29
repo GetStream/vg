@@ -72,20 +72,15 @@
 #
 #
 # [metadata]
-# # install_required = true
+# # install-required = true
 # install = [
 #     'github.com/golang/dep/cmd/dep',
 #     'github.com/golang/mock/...',
 # ]
 
 required = [
-    'github.com/jteeuwen/go-bindata/go-bindata'
-]
-
-[metadata]
-install_required = true
-install = [
-  "github.com/spf13/cobra/cobra"
+    'github.com/jteeuwen/go-bindata/go-bindata',
+    'github.com/spf13/cobra/cobra'
 ]
 
 [[constraint]]

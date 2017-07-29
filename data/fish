@@ -48,6 +48,8 @@ function _vg_activate
         set argv[2] (basename $PWD)
     end
 
+    set workspace (vg initSettings $argv[2..-1])
+
     set -gx VIRTUALGO $argv[2]
     echo Activating $VIRTUALGO
     set -gx VIRTUALGO_PATH $HOME/.virtualgo/$VIRTUALGO
@@ -61,7 +63,14 @@ function _vg_activate
 
     set -gx _VIRTUALGO_OLDPATH $PATH
 
-    set -gx GOPATH $VIRTUALGO_PATH:$GOPATH
+    set global_fallback (vg querySettings)
+
+    if [ $global_fallback = true ]
+        set -gx GOPATH $VIRTUALGO_PATH:$GOPATH
+    else
+        set -gx GOPATH $VIRTUALGO_PATH
+    end
+
     set -gx GOBIN $VIRTUALGO_PATH/bin
 
     mkdir -p $VIRTUALGO_PATH/src/
@@ -166,22 +175,27 @@ __vg_auto_activate
 
 complete -c vg --exclusive
 
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa activate    -d "Activate a specific virtualgo workspace"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa cdpackages  -d "Change the working directory to the src directory of the active workspace"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa deactivate  -d "Deactivate the current virtualgo workspace"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa destroy     -d "Removes one or multiple workspace and all their contents"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa ensure      -d "A wrapper for dep that installs the dependencies in the virtualgo workspace instead of vendor"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa eval        -d "Expose the script that should be eval-ed in the current shell"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa globalExec  -d "Execute a command globally (outside the active workspace)"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa help        -d "Help about any command"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa init        -d "Create and enable a workspace and link it to the current directory"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa link        -d "Link the current virtualgo workspace to the this directory"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa list        -d "List all existing workspaces"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa setup       -d "Enables virtualgo in your shell"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa status      -d "Show info about your current workspace"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa uninstall   -d "Uninstall a package from the active workspace"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa unlink      -d "Unlinks the current directory from the workspace it's linked to"
-complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa upgrade     -d "Upgrade the virtualgo binary and reload it in the current shell"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa activate      -d "Activate a specific virtualgo workspace"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa cdpackages    -d "Change the working directory to the src directory of the active workspace"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa deactivate    -d "Deactivate the current virtualgo workspace"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa destroy       -d "Removes one or multiple workspace and all their contents"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa ensure        -d "A wrapper for dep that installs the dependencies in the virtualgo workspace instead of vendor"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa eval          -d "Expose the script that should be eval-ed in the current shell"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa globalExec    -d "Execute a command globally (outside the active workspace)"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa help          -d "Help about any command"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa init          -d "Create and enable a workspace and link it to the current directory"
+# complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa initSettings  -d "This command initializes the settings file for a certain workspace"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa link          -d "Link the current virtualgo workspace to the this directory"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa list          -d "List all existing workspaces"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa localInstall  -d "Installs a package from your filesystem inside the workspace"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa moveVendor    -d "Moves the vendor directory to the workspace"
+# complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa querySettings -d "This can be used to query certain settings for a workspace"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa setup         -d "Enables virtualgo in your shell"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa status        -d "Show info about your current workspace"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa uninstall     -d "Uninstall a package from the active workspace"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa unlink        -d "Unlinks the current directory from the workspace it's linked to"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa upgrade       -d "Upgrade the virtualgo binary and reload it in the current shell"
+complete -c vg -n "test (__fish_number_of_cmd_args_wo_opts) = 1" -xa version       -d "Prints the version of virtualgo that you are using"
 
 function __fish_vg_using_command
     set cmd (commandline -opc)
@@ -196,10 +210,21 @@ function __fish_vg_using_command
 end
 
 function __vg_get_packages
-    find $VIRTUALGO_PATH/src/ -maxdepth 3 -mindepth 3 -type d | sed s=$VIRTUALGO_PATH/src/== | grep -v '^google.golang.org/'
-    find $VIRTUALGO_PATH/src/ -maxdepth 2 -mindepth 2 -type d | sed s=$VIRTUALGO_PATH/src/== | grep '^google.golang.org/'
+    find $argv[1]/src/ -maxdepth 3 -mindepth 3 -type d | sed s=$argv[1]/src/== | grep -v '^google.golang.org/'
+    find $argv[1]/src/ -maxdepth 2 -mindepth 2 -type d | sed s=$argv[1]/src/== | grep '^google.golang.org/'
+    find $argv[1]/src/ -maxdepth 3 -mindepth 3 -type l | sed s=$argv[1]/src/== | grep -v '^google.golang.org/'
+    find $argv[1]/src/ -maxdepth 2 -mindepth 2 -type l | sed s=$argv[1]/src/== | grep '^google.golang.org/'
+end
+
+function __vg_get_workspace_packages
+    __vg_get_packages $VIRTUALGO_PATH
+end
+
+function __vg_get_global_packages
+    __vg_get_packages $_VIRTUALGO_OLDGOPATH
 end
 
 complete -c vg -n "__fish_vg_using_command activate" -xa "(vg list)"
 complete -c vg -n "__fish_vg_using_command destroy" -xa "(vg list)"
-complete -c vg -n "__fish_vg_using_command uninstall" -xa '(__vg_get_packages)'
+complete -c vg -n "__fish_vg_using_command uninstall" -xa '(__vg_get_workspace_packages)'
+complete -c vg -n "__fish_vg_using_command localInstall" -xa '(__vg_get_global_packages)'

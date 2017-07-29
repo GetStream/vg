@@ -5,8 +5,8 @@ package cmd
 
 import (
 	"os"
-	"path/filepath"
 
+	"github.com/GetStream/vg/internal/workspace"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -23,28 +23,26 @@ based project in your workspace do this:
 	vg moveVendor
 	`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		virtualgoPath := os.Getenv("VIRTUALGO_PATH")
-		if virtualgoPath == "" {
-			return errors.New("A virtualgo workspace should be active first by using `vg activate [workspaceName]`")
+		ws, err := workspace.Current()
+		if err != nil {
+			return err
 		}
-
-		virtualgoPath = filepath.Join(virtualgoPath, "src")
-
-		_, err := os.Stat("vendor")
+		_, err = os.Stat("vendor")
 		if err != nil {
 			return errors.Wrap(err, "Something is wrong with the vendor directory")
 		}
 
-		err = os.RemoveAll(virtualgoPath)
+		err = ws.ClearSrc()
 		if err != nil {
-			return errors.Wrap(err, "Couldn't remove the current src directory inside the workspace")
+			return errors.Wrap(err, "Couldn't clear the current src directory inside the workspace")
 		}
 
-		err = os.Rename("vendor", virtualgoPath)
+		err = os.Rename("vendor", ws.Src())
 		if err != nil {
 			return errors.Wrap(err, "Couldn't move the vendor directory to the active workspace")
 		}
-		return nil
+
+		return ws.InstallPersistentLocalPackages()
 
 	},
 }

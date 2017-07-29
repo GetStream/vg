@@ -4,10 +4,9 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
-	"path/filepath"
 
+	"github.com/GetStream/vg/internal/workspace"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -26,47 +25,20 @@ var uninstallCmd = &cobra.Command{
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		workspace := os.Getenv("VIRTUALGO")
-		if workspace == "" {
-			return errors.New("A virtualgo workspace should be activated first by using `vg activate [workspaceName]`")
+		ws, err := workspace.Current()
+		if err != nil {
+			return err
 		}
 
 		for _, pkg := range args {
-			// pkgComponents := strings.Split(pkg, hello
-			fmt.Printf("Uninstalling %s from workspace\n", pkg)
-			err := os.RemoveAll(filepath.Join(virtualgoDir, workspace, "src", pkg))
+			err := ws.UnpersistLocalInstall(pkg)
 			if err != nil {
-				return errors.Wrapf(err, "Couldn't remove package src '%s'", workspace)
+				return err
 			}
-
-			pkgInstalledDirs, err := filepath.Glob(filepath.Join(virtualgoDir, workspace, "pkg", "*", pkg))
+			err = ws.Uninstall(pkg, os.Stdout)
 			if err != nil {
-				return errors.Wrapf(err, "Something went wrong when globbing files for '%s'", pkg)
+				return err
 			}
-
-			for _, path := range pkgInstalledDirs {
-				fmt.Println("Removing", path)
-
-				err = os.RemoveAll(path)
-				if err != nil {
-					return errors.Wrapf(err, "Couldn't remove installed package files for '%s'", pkg)
-				}
-			}
-
-			pkgInstalledFiles, err := filepath.Glob(filepath.Join(virtualgoDir, workspace, "pkg", "*", pkg+".a"))
-			if err != nil {
-				return errors.Wrapf(err, "Something went wrong when globbing files for '%s'", pkg)
-			}
-
-			for _, path := range pkgInstalledFiles {
-				fmt.Println("Removing", path)
-
-				err = os.RemoveAll(path)
-				if err != nil {
-					return errors.Wrapf(err, "Couldn't remove installed package files for '%s'", pkg)
-				}
-			}
-
 		}
 		return nil
 	},

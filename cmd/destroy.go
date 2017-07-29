@@ -5,8 +5,8 @@ package cmd
 
 import (
 	"os"
-	"path/filepath"
 
+	"github.com/GetStream/vg/internal/workspace"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -25,10 +25,16 @@ var destroyCmd = &cobra.Command{
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		for _, workspace := range args {
-			err := os.RemoveAll(filepath.Join(virtualgoDir, workspace))
+		for _, wsName := range args {
+			ws := workspace.New(wsName)
+			err := ws.ClearSrc()
 			if err != nil {
-				return errors.Wrapf(err, "Couldn't remove workspace '%s'", workspace)
+				return err
+			}
+
+			err = os.RemoveAll(workspace.New(wsName).Path())
+			if err != nil {
+				return errors.Wrapf(err, "Couldn't remove workspace %q", wsName)
 			}
 		}
 		return nil

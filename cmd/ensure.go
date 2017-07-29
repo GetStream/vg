@@ -13,6 +13,7 @@ import (
 	"syscall"
 
 	"github.com/BurntSushi/toml"
+	"github.com/GetStream/vg/internal/workspace"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -20,8 +21,9 @@ import (
 type depConfig struct {
 	Required []string
 	Metadata struct {
-		InstallRequired bool `toml:"install_required"`
-		Install         []string
+		InstallRequiredDeprecated *bool `toml:"install_required"`
+		InstallRequired           bool  `toml:"install-required"`
+		Install                   []string
 	}
 }
 
@@ -56,12 +58,10 @@ This command requires that dep is installed in $PATH. `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var err error
 
-		virtualgoPath := os.Getenv("VIRTUALGO_PATH")
-		if virtualgoPath == "" {
-			return errors.New("A virtualgo workspace should be active first by using `vg activate [workspaceName]`")
+		ws, err := workspace.Current()
+		if err != nil {
+			return err
 		}
-
-		virtualgoPath = filepath.Join(virtualgoPath, "src")
 
 		err = os.RemoveAll("vendor")
 		if err != nil {
@@ -71,7 +71,7 @@ This command requires that dep is installed in $PATH. `,
 		if false {
 			// TODO: This is causing some errors, packages are not actually
 			// installed. Not sure why, maybe bug in go dep.
-			err = os.Rename(virtualgoPath, "vendor")
+			err = os.Rename(ws.Src(), "vendor")
 			if err != nil {
 				err = err.(*os.LinkError).Err
 				if err != syscall.ENOENT {
@@ -81,6 +81,11 @@ This command requires that dep is installed in $PATH. `,
 			}
 		}
 
+		gopath := os.Getenv("GOPATH")
+		err = os.Setenv("GOPATH", os.Getenv("_VIRTUALGO_OLDGOPATH"))
+		if err != nil {
+			return errors.WithStack(err)
+		}
 		depCmd := exec.Command("dep", append([]string{"ensure"}, args...)...)
 		depCmd.Stderr = os.Stderr
 		depCmd.Stdout = os.Stdout
@@ -96,16 +101,21 @@ This command requires that dep is installed in $PATH. `,
 
 			// Try to revert move after insuccessful dep
 			// TODO: Uncomment when fixing above todo
-			// _ = os.Rename("vendor", virtualgoPath)
+			// _ = os.Rename("vendor", ws.Src())
 			return errors.Wrap(err, "dep failed to run")
 		}
 
-		err = os.RemoveAll(virtualgoPath)
+		err = os.Setenv("GOPATH", gopath)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+
+		err = ws.ClearSrc()
 		if err != nil {
 			return errors.Wrap(err, "Couldn't clear the src path of the active workspace")
 		}
 
-		err = os.Rename("vendor", virtualgoPath)
+		err = os.Rename("vendor", ws.Src())
 		if err != nil {
 			return errors.Wrap(err, "Couldn't move the vendor directory to the active workspace")
 		}
@@ -115,24 +125,41 @@ This command requires that dep is installed in $PATH. `,
 			return errors.Wrap(err, "Couldn't read Gopkg.toml")
 		}
 		config := depConfig{}
+		config.Metadata.InstallRequired = true // Good default
 
 		_, err = toml.Decode(string(gopkgData), &config)
 		if err != nil {
 			return errors.Wrap(err, "Couldn't unmarshal Gopkg.toml")
 		}
 
-		if config.Metadata.InstallRequired {
-			err := installPackages(virtualgoPath, config.Required)
+		err = ws.InstallPersistentLocalPackages()
+		if err != nil {
+			return err
+		}
+
+		installRequired := config.Metadata.InstallRequired
+
+		if config.Metadata.InstallRequiredDeprecated != nil {
+			installRequired = *config.Metadata.InstallRequiredDeprecated
+		}
+
+		if installRequired {
+			err := installPackages(ws.Src(), config.Required)
 			if err != nil {
 				return err
 			}
 		}
 
-		return installPackages(virtualgoPath, config.Metadata.Install)
+		err = installPackages(ws.Src(), config.Metadata.Install)
+		if err != nil {
+			return err
+		}
+
+		return ws.UpdateEnsureMarker()
 	},
 }
 
-func installPackages(virtualgoPath string, packages []string) error {
+func installPackages(srcPath string, packages []string) error {
 	for _, pkg := range packages {
 		var recursive bool
 		var installCmd *exec.Cmd
@@ -143,7 +170,7 @@ func installPackages(virtualgoPath string, packages []string) error {
 			pkgComponents = pkgComponents[:len(pkgComponents)-2]
 		}
 
-		pkgPath := filepath.Join(append([]string{virtualgoPath}, pkgComponents...)...)
+		pkgPath := filepath.Join(append([]string{srcPath}, pkgComponents...)...)
 		if !recursive {
 			installCmd = exec.Command("go", "install", ".")
 		} else {
