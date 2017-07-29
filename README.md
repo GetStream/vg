@@ -96,19 +96,19 @@ source ~/.config/fish/config.fish  # for fish
 You can also edit your shell config file manually. Afterwards you still have to
 `source` the file like explained above.
 
-For bash put this in your `.bashrc`:
+For bash put this in your `~/.bashrc` file:
 
 ```bash
 command -v vg >/dev/null 2>&1 && eval "$(vg eval --shell bash)"
 ```
 
-Or for zsh, put his in your `.zshrc`:
+Or for zsh, put his in your `~/.zshrc` file:
 
 ```zsh
 command -v vg >/dev/null 2>&1 && eval "$(vg eval --shell zsh)"
 ```
 
-Or for fish, put this in your `config.fish`:
+Or for fish, put this in your `~/.config/fish/config.fish` file:
 
 ```fish
 command -v vg >/dev/null 2>&1; and vg eval --shell fish | source
