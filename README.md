@@ -198,7 +198,7 @@ Running `vg ensure` after adding this will install the `go-bindata` and `cobra`
 command in the `GOBIN` of the current workspace.
 
 As you just saw `vg` reuses the
-[`required`](https://github.com/golang/dep/blob/master/FAQ.md#when-should-i-use-constraint-override-required-or-ignored-in-gopkgtoml)
+[`required`](https://github.com/golang/dep/blob/master/docs/Gopkg.toml.md#required)
 list from `dep`.
 However, if you don't want to install
 all packages in the `required` list you can achieve that by putting the
