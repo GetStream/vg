@@ -7,7 +7,7 @@ solutions is as follows:
 1. Extreme easy of use
 2. No interference with other go tools
 3. Version pinning for imports
-4. Version pinning for executables, such as linters ([`errcheck`](https://github.com/kisielk/errcheck)) and codegen tools ([`protoc-gen-go`](https://github.com/golang/protobuf))
+4. Version pinning for executables, such as linters (e.g. [`errcheck`](https://github.com/kisielk/errcheck)) and codegen tools (e.g. [`protoc-gen-go`](https://github.com/golang/protobuf))
 5. Importing a dependency that's locally checked out outside of the workspace
    (also called multi project workflow)
 6. Optional full isolation, for both imports and installed executables
