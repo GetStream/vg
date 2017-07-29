@@ -4,7 +4,7 @@ Virtualgo (or `vg` for short) is a tool which provides workspace based
 development for Go. Its main feature set that makes it better than other
 solutions is as follows:
 
-1. Extreme easy of use
+1. Extreme ease of use
 2. No interference with other go tools
 3. Version pinning for imports
 4. Version pinning for executables, such as linters (e.g. [`errcheck`](https://github.com/kisielk/errcheck)) and codegen tools (e.g. [`protoc-gen-go`](https://github.com/golang/protobuf))
