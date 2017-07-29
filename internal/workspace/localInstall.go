@@ -164,6 +164,11 @@ func (ws *Workspace) ClearSrc() error {
 		return err
 	}
 
+	err = os.RemoveAll(ws.ensureMarker())
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
 	for pkg := range settings.LocalInstalls {
 		err := ws.Uninstall(pkg, os.Stdout)
 		if err != nil {

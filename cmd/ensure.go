@@ -155,11 +155,7 @@ This command requires that dep is installed in $PATH. `,
 			return err
 		}
 
-		f, err := os.OpenFile(filepath.Join(ws.Path(), "last-ensure"), os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		return errors.WithStack(f.Close())
+		return ws.UpdateEnsureMarker()
 	},
 }
 
