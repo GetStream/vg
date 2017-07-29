@@ -7,9 +7,10 @@ solutions is as follows:
 1. Extreme easy of use
 2. No interference with other go tools
 3. Version pinning for imports
-4. Version pinning executables (such as linters and codegen tools)
-5. Full isolation, for both imports and installed executables
-6. Importing a dependency that's locally checked out outside of the workspace
+4. Version pinning for executables, such as linters ([`errcheck`](https://github.com/kisielk/errcheck)) and codegen tools ([`protoc-gen-go`](https://github.com/golang/protobuf))
+5. Importing a dependency that's locally checked out outside of the workspace
+   (also called multi project workflow)
+6. Optional full isolation, for both imports and installed executables
 
 Virtualgo doesn't do dependency resolution or version pinning itself, because
 this is a hard problem that's already being solved by other tools. Its approach
