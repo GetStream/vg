@@ -26,7 +26,13 @@ var destroyCmd = &cobra.Command{
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		for _, wsName := range args {
-			err := os.RemoveAll(workspace.New(wsName).Path())
+			ws := workspace.New(wsName)
+			err := ws.ClearSrc()
+			if err != nil {
+				return err
+			}
+
+			err = os.RemoveAll(workspace.New(wsName).Path())
 			if err != nil {
 				return errors.Wrapf(err, "Couldn't remove workspace %q", wsName)
 			}

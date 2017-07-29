@@ -6,7 +6,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"path"
 	"path/filepath"
 	"strings"
 
@@ -68,24 +67,6 @@ var initSettingsCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		originalSrcPath := filepath.Join(utils.OriginalGopath(), "src") + string(filepath.Separator)
-
-		if strings.HasPrefix(cwd, originalSrcPath) && !settings.GlobalFallback {
-			// If current directory is inside the current gopath
-			// add it to the packages that need to be symlinked
-			pkgDir := strings.TrimPrefix(cwd, originalSrcPath)
-
-			// Make sure pkg is slash seperated
-			pkgComponents := filepath.SplitList(pkgDir)
-			pkg := path.Join(pkgComponents...)
-
-			_, _ = fmt.Fprintf(os.Stderr, "Persisting the local install for %q\n", pkg)
-			settings.LocalInstalls[pkg] = workspace.LocalInstall{
-				Path: cwd,
-			}
-
-		}
-
 		err = os.MkdirAll(ws.Path(), 0755)
 		if err != nil {
 			return errors.WithStack(err)
@@ -96,7 +77,22 @@ var initSettingsCmd = &cobra.Command{
 			return err
 		}
 
-		return ws.InstallPersistentLocalPackages()
+		originalSrcPath := filepath.Join(utils.OriginalGopath(), "src") + string(filepath.Separator)
+		if settings.GlobalFallback || !strings.HasPrefix(cwd, originalSrcPath) {
+			// Finished no need to do a local install of the current
+			// directory
+
+			return nil
+		}
+
+		// If current directory is inside the current gopath
+		// add it to the packages that need to be symlinked
+		pkgDir := strings.TrimPrefix(cwd, originalSrcPath)
+
+		// Make sure pkg is slash seperated
+		pkg := utils.DirToPkg(pkgDir)
+
+		return ws.InstallLocalPackagePersistently(pkg, cwd)
 	},
 }
 

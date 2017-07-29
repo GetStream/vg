@@ -4,7 +4,6 @@
 package cmd
 
 import (
-	"fmt"
 	"path/filepath"
 
 	"github.com/GetStream/vg/internal/utils"
@@ -71,22 +70,7 @@ After that a 'vg ensure' will install like normal again.
 			return ws.InstallLocalPackage(pkg, path)
 		}
 
-		settings, err := ws.Settings()
-		if err != nil {
-			return err
-		}
-
-		settings.LocalInstalls[pkg] = workspace.LocalInstall{
-			Path: path,
-		}
-
-		fmt.Printf("Persisting the local install for %q\n", pkg)
-		err = ws.SaveSettings(settings)
-		if err != nil {
-			return err
-		}
-
-		return ws.InstallPersistentLocalPackages()
+		return ws.InstallLocalPackagePersistently(pkg, path)
 	},
 }
 

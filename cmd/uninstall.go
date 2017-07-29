@@ -4,7 +4,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/GetStream/vg/internal/workspace"
@@ -32,9 +31,14 @@ var uninstallCmd = &cobra.Command{
 		}
 
 		for _, pkg := range args {
-			fmt.Printf("Uninstalling %q from workspace\n", pkg)
-			ws.Uninstall(pkg, os.Stdout)
-			ws.UnpersistLocalInstall(pkg)
+			err := ws.UnpersistLocalInstall(pkg)
+			if err != nil {
+				return err
+			}
+			err = ws.Uninstall(pkg, os.Stdout)
+			if err != nil {
+				return err
+			}
 		}
 		return nil
 	},

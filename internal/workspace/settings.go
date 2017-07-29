@@ -10,17 +10,19 @@ import (
 )
 
 type Settings struct {
-	GlobalFallback bool                    `toml:"global-fallback"`
-	LocalInstalls  map[string]LocalInstall `toml:"local-install"`
+	GlobalFallback bool                     `toml:"global-fallback"`
+	LocalInstalls  map[string]*localInstall `toml:"local-install"`
 }
 
-type LocalInstall struct {
-	Path string `toml:"path"`
+type localInstall struct {
+	Path       string `toml:"path"`
+	Persistent bool   `toml:"persistent"`
+	Successful bool   `toml:"successful"`
 }
 
 func NewSettings() *Settings {
 	return &Settings{
-		LocalInstalls: make(map[string]LocalInstall),
+		LocalInstalls: make(map[string]*localInstall),
 	}
 }
 
@@ -58,6 +60,8 @@ func (ws *Workspace) LoadSettings() (*Settings, error) {
 }
 
 func (ws *Workspace) SaveSettings(settings *Settings) error {
+	ws.settings = settings
+
 	file, err := os.OpenFile(ws.SettingsPath(), os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		return errors.WithStack(err)

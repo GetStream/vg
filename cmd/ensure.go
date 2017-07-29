@@ -110,7 +110,7 @@ This command requires that dep is installed in $PATH. `,
 			return errors.WithStack(err)
 		}
 
-		err = os.RemoveAll(ws.Src())
+		err = ws.ClearSrc()
 		if err != nil {
 			return errors.Wrap(err, "Couldn't clear the src path of the active workspace")
 		}

@@ -7,6 +7,7 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 )
 
 func ReplaceHomeDir(path string) string {
@@ -34,8 +35,12 @@ func VirtualgoRoot() string {
 }
 
 func PkgToDir(pkg string) string {
-	return filepath.Join(path.Split(pkg))
+	return filepath.Join(strings.Split(pkg, "/")...)
 
+}
+
+func DirToPkg(dir string) string {
+	return path.Join(strings.Split(dir, string(os.PathSeparator))...)
 }
 
 func OriginalGopath() string {
