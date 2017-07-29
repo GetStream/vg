@@ -99,19 +99,19 @@ You can also edit your shell config file manually. Afterwards you still have to
 For bash put this in your `.bashrc`:
 
 ```bash
-eval "$(vg eval --shell bash)"
+command -v vg >/dev/null 2>&1 && eval "$(vg eval --shell bash)"
 ```
 
 Or for zsh, put his in your `.zshrc`:
 
 ```zsh
-eval "$(vg eval --shell zsh)"
+command -v vg >/dev/null 2>&1 && eval "$(vg eval --shell zsh)"
 ```
 
 Or for fish, put this in your `config.fish`:
 
 ```fish
-vg eval --shell fish | source
+command -v vg >/dev/null 2>&1; and vg eval --shell fish | source
 ```
 
 ## Usage
