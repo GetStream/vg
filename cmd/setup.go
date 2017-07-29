@@ -24,16 +24,18 @@ var setupCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var err error
 
+		vgExistCheck := "command -v vg >/dev/null 2>&1"
+
 		// bash
 		fmt.Println("Editing ~/.bashrc")
-		err = appendToFile("~/.bashrc", "\neval \"$(vg eval --shell bash)\"\n")
+		err = appendToFile("~/.bashrc", "\n"+vgExistCheck+" && eval \"$(vg eval --shell bash)\"\n")
 		if err != nil {
 			return err
 		}
 
 		// zsh
 		fmt.Println("Editing ~/.zshrc")
-		err = appendToFile("~/.zshrc", "\neval \"$(vg eval --shell zsh)\"\n")
+		err = appendToFile("~/.zshrc", "\n"+vgExistCheck+" && eval \"$(vg eval --shell zsh)\"\n")
 		if err != nil {
 			return err
 		}
@@ -47,7 +49,7 @@ var setupCmd = &cobra.Command{
 			return err
 		}
 
-		err = appendToFile("~/.config/fish/config.fish", "\nvg eval --shell fish | source\n")
+		err = appendToFile("~/.config/fish/config.fish", "\n"+vgExistCheck+"; and vg eval --shell fish | source\n")
 		return err
 	},
 }
