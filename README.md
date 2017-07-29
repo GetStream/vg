@@ -83,7 +83,7 @@ automatically:
 vg setup
 ```
 
-After this you have to reload (`source`) your config:
+After this you have to reload (`source`) your shell configuration file:
 
 ```sh
 source ~/.bashrc                   # for bash
