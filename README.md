@@ -51,7 +51,7 @@ now:
 1. You can pin versions of executable dependencies, such as linting and code
    generation tools.
 2. It has full isolation by default, so no accidental fallbacks to regular
-   `GOPATH` causing confusion?
+   `GOPATH` causing confusion about what version you're using.
 3. No more issues with `go test ./...` running tests in the vendor directory.
 4. You can easily use a dependency from your global `GOPATH` inside your
    workspace, without running into confusing import errors.
