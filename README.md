@@ -236,10 +236,25 @@ vg moveVendor
 
 ## Workspaces with global `GOPATH` fallback
 
-It's also possible to create a workspace where you  can still import packages
-from your global `GOPATH`. This is not the recommended way to use `vg`, but in
-some setups this can be useful (e.g. with full isolation `init` functions in the
-project you're working on will be run twice). This can be done by running:
+There's one downside to full isolation of a workspace. The project you're
+actually working on is not inside your `GOPATH` by default, so normally go
+would not be able to find any imports to it. This is worked around by locally
+installing the project into your workspace. This works quite well, but the
+current implementation of this uses symbolic links and these are not supported
+incredibly well by the go tooling. Commands such as `go list` will not list your
+package because of it.
+
+Also you can get some weird behaviour if you run a command such as `go test
+./...`. The go package names that are shown will contain the full path of the
+package with an underscore in front. This is because `.` is not in your
+`GOPATH`. Usually this is not an issue  and everything compiles fine, but there
+are cases where an `init` function will be executed twice.
+
+These problems can all be solved by using `vg` in "global fallback" mode. In
+this mode it's possible to import packages from your global `GOPATH`.
+This is not the recommended way to use `vg`, because you won't have full
+isolation anymore. However, if you are running into these problems this should
+be an easy fix. You can create workspace in "global fallback" mode by running:
 
 ```bash
 $ vg init --global-fallback
