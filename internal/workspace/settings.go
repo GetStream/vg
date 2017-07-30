@@ -18,6 +18,7 @@ type localInstall struct {
 	Path       string `toml:"path"`
 	Persistent bool   `toml:"persistent"`
 	Successful bool   `toml:"successful"`
+	Bindfs     bool   `toml:"bindfs"`
 }
 
 func NewSettings() *Settings {

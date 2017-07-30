@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 
@@ -51,7 +52,24 @@ func (ws *Workspace) InstallLocalPackage(pkg string, localPath string) error {
 		return err
 	}
 
-	err = ws.installLocalPackageWithSymlink(pkg, localPath, target)
+	hasBindfs := true
+
+	_, err = exec.LookPath("bindfs")
+	if err != nil {
+		execErr, ok := err.(*exec.Error)
+		if !ok || execErr.Err != exec.ErrNotFound {
+			return err
+		}
+
+		hasBindfs = false
+	}
+
+	if hasBindfs {
+		err = ws.installLocalPackageWithBindfs(pkg, localPath, target)
+	} else {
+		err = ws.installLocalPackageWithSymlink(pkg, localPath, target)
+	}
+
 	if err != nil {
 		return err
 	}
@@ -61,8 +79,39 @@ func (ws *Workspace) InstallLocalPackage(pkg string, localPath string) error {
 
 }
 
+func (ws *Workspace) installLocalPackageWithBindfs(pkg, src, target string) error {
+	_, _ = fmt.Fprintf(os.Stderr, "Installing local sources at %q in workspace as %q using bindfs\n", src, pkg)
+
+	settings, err := ws.Settings()
+	if err != nil {
+		return err
+	}
+
+	settings.LocalInstalls[pkg].Bindfs = true
+
+	err = ws.SaveSettings(settings)
+	if err != nil {
+		return err
+	}
+
+	err = os.MkdirAll(target, 0755)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	cmd := exec.Command("bindfs")
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stderr
+	err = cmd.Run()
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
 func (ws *Workspace) installLocalPackageWithSymlink(pkg, src, target string) error {
-	_, _ = fmt.Fprintf(os.Stderr, "Installing local sources at %q in workspace as %q\n", src, pkg)
+	_, _ = fmt.Fprintf(os.Stderr, "Installing local sources at %q in workspace as %q using symbolic links\n", src, pkg)
 
 	err := os.MkdirAll(filepath.Dir(target), 0755)
 	if err != nil {
