@@ -1,12 +1,14 @@
 package workspace
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/GetStream/vg/internal/utils"
 	"github.com/pkg/errors"
@@ -99,15 +101,10 @@ func (ws *Workspace) installLocalPackageWithBindfs(pkg, src, target string) erro
 		return errors.WithStack(err)
 	}
 
-	cmd := exec.Command("bindfs")
+	cmd := exec.Command("bindfs", "-r", "--no-allow-other", src, target)
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stderr
-	err = cmd.Run()
-	if err != nil {
-		return errors.WithStack(err)
-	}
-
-	return nil
+	return errors.WithStack(cmd.Run())
 }
 
 func (ws *Workspace) installLocalPackageWithSymlink(pkg, src, target string) error {
@@ -156,27 +153,54 @@ func (ws *Workspace) Uninstall(pkg string, logWriter io.Writer) error {
 	}
 
 	fmt.Fprintf(logWriter, "Uninstalling %q from workspace\n", pkg)
-	fmt.Fprintf(logWriter, "  Removing sources at %q\n", pkgSrc)
-	err = os.RemoveAll(pkgSrc)
-	if err != nil {
-		return errors.Wrapf(err, "Couldn't remove package src %q", ws.Name())
-	}
-
-	// Remove possible LocalInstall entry
+	// Check if locally installed
 	settings, err := ws.Settings()
 	if err != nil {
 		return err
 	}
-	install, ok := settings.LocalInstalls[pkg]
-	if ok && !install.Persistent {
-		fmt.Fprintf(logWriter, "  Removing %q from locally installed packages\n", pkg)
-		delete(settings.LocalInstalls, pkg)
+
+	install, localInstalled := settings.LocalInstalls[pkg]
+
+	if localInstalled && install.Bindfs {
+		fmt.Fprintf(logWriter, "  Unmounting bindfs mount at %q\n", pkgSrc)
+		stderrBuff := &bytes.Buffer{}
+		outputBuff := &bytes.Buffer{}
+
+		cmd := exec.Command("fusermount", "-u", pkgSrc)
+		cmd.Stderr = io.MultiWriter(stderrBuff, outputBuff)
+		cmd.Stdout = outputBuff
+
+		err := cmd.Run()
+		if err != nil {
+			notMountedOutput := fmt.Sprintf("fusermount: entry for %s not found", pkgSrc)
+			if !strings.HasPrefix(stderrBuff.String(), notMountedOutput) {
+				io.Copy(outputBuff, os.Stderr)
+				return errors.WithStack(err)
+			}
+		}
+
 	}
 
 	err = ws.SaveSettings(settings)
 	if err != nil {
 		return err
 	}
+
+	fmt.Fprintf(logWriter, "  Removing sources at %q\n", pkgSrc)
+	err = os.RemoveAll(pkgSrc)
+	if err != nil {
+		return errors.Wrapf(err, "Couldn't remove package src %q", ws.Name())
+	}
+
+	if localInstalled && !install.Persistent {
+		fmt.Fprintf(logWriter, "  Removing %q from locally installed packages\n", pkg)
+		delete(settings.LocalInstalls, pkg)
+		err = ws.SaveSettings(settings)
+		if err != nil {
+			return err
+		}
+	}
+
 	pkgInstalledDirs, err := filepath.Glob(filepath.Join(ws.Pkg(), "*", pkgDir))
 	if err != nil {
 		return errors.Wrapf(err, "Something went wrong when globbing files for %q", pkg)
