@@ -42,7 +42,7 @@ based project in your workspace do this:
 			return errors.Wrap(err, "Couldn't move the vendor directory to the active workspace")
 		}
 
-		return ws.InstallPersistentLocalPackages()
+		return ws.InstallSavedLocalPackages()
 
 	},
 }

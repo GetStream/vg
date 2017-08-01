@@ -101,7 +101,7 @@ func (ws *Workspace) installLocalPackageWithBindfs(pkg, src, target string) erro
 		return errors.WithStack(err)
 	}
 
-	cmd := exec.Command("bindfs", "-r", "--no-allow-other", src, target)
+	cmd := exec.Command("bindfs", "--no-allow-other", src, target)
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stderr
 	return errors.WithStack(cmd.Run())
@@ -123,17 +123,19 @@ func (ws *Workspace) installLocalPackageWithSymlink(pkg, src, target string) err
 	return errors.WithStack(os.Symlink(src, target))
 }
 
-func (ws *Workspace) InstallPersistentLocalPackages() error {
+func (ws *Workspace) InstallSavedLocalPackages() error {
 	settings, err := ws.Settings()
 	if err != nil {
 		return err
 	}
 
 	for pkg, install := range settings.LocalInstalls {
-		if !install.Persistent {
-			continue
+		if install.Persistent {
+			err = ws.InstallLocalPackagePersistently(pkg, install.Path)
+		} else {
+			err = ws.InstallLocalPackage(pkg, install.Path)
 		}
-		err := ws.InstallLocalPackagePersistently(pkg, install.Path)
+
 		if err != nil {
 			return err
 		}

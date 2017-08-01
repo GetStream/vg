@@ -78,6 +78,8 @@ __vg_activate() {
 
     mkdir -p $VIRTUALGO_PATH/src/
     mkdir -p $GOBIN
+
+    vg activateReal
 }
 
 __vg_deactivate() {

@@ -85,6 +85,7 @@ function _vg_activate
             _old_fish_prompt
         end
     end
+    vg activateReal
 end
 
 function _vg_deactivate
