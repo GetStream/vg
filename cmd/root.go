@@ -14,13 +14,36 @@ var cfgFile string
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "vg",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "Easy and powerful workspace based development for go",
+	Long: `
+Virtualgo (or vg for short) is a tool which provides easy and powerful
+workspace based development for Go. The vendor directory provides something
+similar. However, virtualgo adds features features that are either broken or
+fully missing when using a vendor directory.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Below is an example of the 'vg' command in action. For more info see detailed
+command info at 'vg help <command>' or look at the README on Github:
+https://github.com/GetStream/vg/blob/master/README.md
+
+To start using virtualgo for a project run the following:
+
+	$ cd $GOPATH/src/github.com/Getstream/example
+	$ vg init  # initial creation of workspace
+
+Now all commands will be executed from within the example workspace
+
+	(example) $ go get github.com/pkg/errors # package only present in workspace
+	(example) $ vg ensure  # installs the dependencies of the example project using dep
+	(example) $ vg deactivate
+
+If you cd back into the project the workspace is now activated automatically
+
+	$ cd ~
+	$ cd $GOPATH/src/github.com/Getstream/example
+	(example) $ 
+
+See the README on Github for more info
+`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
