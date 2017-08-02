@@ -145,10 +145,12 @@ __vg_globalExec() {
     fi
 
     eval $@
+    return_code=$?
 
     if [ -n "$old_virtualgo" -a "$VIRTUALGO" != "$old_virtualgo" ]; then
         vg activate $old_virtualgo
     fi
+    return $return_code
 }
 
 
