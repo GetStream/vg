@@ -146,10 +146,12 @@ function _vg_globalExec
     end
 
     eval $argv[2..-1]
+    set status_code $status
 
     if [ -n "$old_virtualgo" -a "$VIRTUALGO" != "$old_virtualgo" ]
         vg activate $old_virtualgo
     end
+    return $status_code
 end
 
 function __vg_auto_activate --on-variable PWD
