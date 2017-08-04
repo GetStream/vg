@@ -122,6 +122,7 @@ The following commands are the main commands to use `vg`:
 # The first command to use is the one to create and activate a workspace named
 # after the current direcory
 $ cd $GOPATH/src/github.com/Getstream/example
+$ vg init
 (example) $
 # This command also links the current directory to the created workspace. This
 # way the next time you cd to this directory the workspace will be activated
