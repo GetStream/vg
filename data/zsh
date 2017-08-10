@@ -34,7 +34,7 @@ __vg_completions() {
     # compadd -X "Expose the script that should be eval-ed in the current shell" eval
     # compadd -X "Help about any command" help
     # compadd -X "Create and enable a workspace and link it to the current directory" init
-    # compadd -X "Link the current virtualgo workspace to the this directory" link
+    # compadd -X "Link the current virtualgo workspace to this directory" link
     # compadd -X "Unlinks the current directory from the workspace it's linked to" unlink
 
 }
