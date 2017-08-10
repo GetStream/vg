@@ -15,7 +15,7 @@ import (
 // linkCmd represents the link command
 var linkCmd = &cobra.Command{
 	Use:   "link",
-	Short: "Link the current virtualgo workspace to the this directory",
+	Short: "Link the current virtualgo workspace to this directory",
 	Long:  ``,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		name := os.Getenv("VIRTUALGO")
