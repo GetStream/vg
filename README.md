@@ -55,7 +55,10 @@ now:
 3. No more issues with `go test ./...` running tests in the vendor directory.
 4. You can easily use a dependency from your global `GOPATH` inside your
    workspace, without running into confusing import errors.
-5. You don't have problems when using plugins: https://github.com/akutz/gpd
+5. When using full isolation, tools such as IDEs can spend much less time on
+   indexing. This is simply because they don't have to index the libraries
+   outside the workspace.
+6. You don't have problems when using plugins: https://github.com/akutz/gpd
 
 ### Advantages over manually managing multiple `GOPATH`s
 

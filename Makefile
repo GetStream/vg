@@ -3,7 +3,7 @@ GO_FILES = $(shell find . -name "*.go" | grep -v "^./vendor/" |grep -v "_test.go
 
 CURRENT_VERSION_MAJOR = 0
 CURRENT_VERSION_MINOR = 6
-CURRENT_VERSION_BUG = 1
+CURRENT_VERSION_BUG = 2
 
 BINDATA = cmd/bindata.go
 
