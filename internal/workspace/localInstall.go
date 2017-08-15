@@ -172,6 +172,13 @@ func (ws *Workspace) uninstall(pkg string, logWriter io.Writer, indent string) e
 	}
 	indent += "  "
 
+	// Uninstall all locally installed subpackages
+	for localPkg := range settings.LocalInstalls {
+		if strings.HasPrefix(pkg, localPkg) && localPkg != pkg {
+			return errors.Errorf("Cannot uninstall %q, because it's a subpackage of the locally installed %q", pkg, localPkg)
+		}
+	}
+
 	install, localInstalled := settings.LocalInstalls[pkg]
 
 	if localInstalled && install.Bindfs {
