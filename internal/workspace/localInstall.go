@@ -31,6 +31,19 @@ func (ws *Workspace) InstallLocalPackagePersistently(pkg string, localPath strin
 	return ws.SaveSettings(settings)
 }
 
+func commandExists(command string) (bool, error) {
+	_, err := exec.LookPath("bindfs")
+	if err != nil {
+		execErr, ok := err.(*exec.Error)
+		if !ok || execErr.Err != exec.ErrNotFound {
+			return false, errors.WithStack(err)
+		}
+		// Command doesn't exist
+		return false, nil
+	}
+	return true, nil
+}
+
 func (ws *Workspace) InstallLocalPackage(pkg string, localPath string) error {
 	pkgDir := filepath.Join(path.Split(pkg))
 	target := filepath.Join(ws.Src(), pkgDir)
@@ -54,16 +67,9 @@ func (ws *Workspace) InstallLocalPackage(pkg string, localPath string) error {
 		return err
 	}
 
-	hasBindfs := true
-
-	_, err = exec.LookPath("bindfs")
+	hasBindfs, err := commandExists("bindfs")
 	if err != nil {
-		execErr, ok := err.(*exec.Error)
-		if !ok || execErr.Err != exec.ErrNotFound {
-			return err
-		}
-
-		hasBindfs = false
+		return err
 	}
 
 	if hasBindfs {
@@ -168,13 +174,29 @@ func (ws *Workspace) Uninstall(pkg string, logWriter io.Writer) error {
 		stderrBuff := &bytes.Buffer{}
 		outputBuff := &bytes.Buffer{}
 
-		cmd := exec.Command("fusermount", "-u", pkgSrc)
+		var cmd *exec.Cmd
+		var notMountedOutput string
+
+		hasFusermount, err := commandExists("fusermount")
+		if err != nil {
+			return err
+		}
+
+		if !hasFusermount {
+			// Use fusermount if that exists
+			cmd = exec.Command("fusermount", "-u", pkgSrc)
+			notMountedOutput = fmt.Sprintf("fusermount: entry for %s not found", pkgSrc)
+		} else {
+			// Otherwise fallback to umount
+			cmd = exec.Command("sudo", "umount", pkgSrc)
+			notMountedOutput = fmt.Sprintf("umount: %s: not mounted", pkgSrc)
+		}
+
 		cmd.Stderr = io.MultiWriter(stderrBuff, outputBuff)
 		cmd.Stdout = outputBuff
 
-		err := cmd.Run()
+		err = cmd.Run()
 		if err != nil {
-			notMountedOutput := fmt.Sprintf("fusermount: entry for %s not found", pkgSrc)
 			if !strings.HasPrefix(stderrBuff.String(), notMountedOutput) {
 				// We don't care if the write to stderr failed
 				_, _ = io.Copy(os.Stderr, outputBuff)
