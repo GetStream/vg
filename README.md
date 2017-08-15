@@ -77,6 +77,22 @@ First install the package:
 go get -u github.com/GetStream/vg
 ```
 
+Although not required, it is recommended to install
+[`bindfs`](http://bindfs.org/) as well. This gives the best experience when
+using full isolation and when using `vg localInstall`. If you do this, DON'T
+remove things manually from `~/.virtualgo`. Only use `vg destroy`/`vg
+uninstall`, otherwise you can very well lose data.
+
+```bash
+# OSX
+brew install bindfs
+# Ubuntu
+apt install bindfs
+# Arch Linux
+pacaur -S bindfs  # or yaourt or whatever tool you use for AUR
+```
+
+
 ### Automatic shell configuration
 
 You can run the following command to configure all supported shells
