@@ -182,13 +182,13 @@ func (ws *Workspace) Uninstall(pkg string, logWriter io.Writer) error {
 			return err
 		}
 
-		if !hasFusermount {
+		if hasFusermount {
 			// Use fusermount if that exists
 			cmd = exec.Command("fusermount", "-u", pkgSrc)
 			notMountedOutput = fmt.Sprintf("fusermount: entry for %s not found", pkgSrc)
 		} else {
 			// Otherwise fallback to umount
-			cmd = exec.Command("sudo", "umount", pkgSrc)
+			cmd = exec.Command("umount", pkgSrc)
 			notMountedOutput = fmt.Sprintf("umount: %s: not mounted", pkgSrc)
 		}
 
