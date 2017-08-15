@@ -150,6 +150,10 @@ func (ws *Workspace) InstallSavedLocalPackages() error {
 }
 
 func (ws *Workspace) Uninstall(pkg string, logWriter io.Writer) error {
+	return ws.uninstall(pkg, logWriter, "")
+}
+
+func (ws *Workspace) uninstall(pkg string, logWriter io.Writer, indent string) error {
 	pkgDir := utils.PkgToDir(pkg)
 	pkgSrc := filepath.Join(ws.Src(), pkgDir)
 	_, err := os.Stat(pkgSrc)
@@ -160,17 +164,18 @@ func (ws *Workspace) Uninstall(pkg string, logWriter io.Writer) error {
 		return errors.WithStack(err)
 	}
 
-	fmt.Fprintf(logWriter, "Uninstalling %q from workspace\n", pkg)
+	fmt.Fprintf(logWriter, indent+"Uninstalling %q from workspace\n", pkg)
 	// Check if locally installed
 	settings, err := ws.Settings()
 	if err != nil {
 		return err
 	}
+	indent += "  "
 
 	install, localInstalled := settings.LocalInstalls[pkg]
 
 	if localInstalled && install.Bindfs {
-		fmt.Fprintf(logWriter, "  Unmounting bindfs mount at %q\n", pkgSrc)
+		fmt.Fprintf(logWriter, indent+"Unmounting bindfs mount at %q\n", pkgSrc)
 		stderrBuff := &bytes.Buffer{}
 		outputBuff := &bytes.Buffer{}
 
@@ -207,19 +212,24 @@ func (ws *Workspace) Uninstall(pkg string, logWriter io.Writer) error {
 
 	}
 
-	err = ws.SaveSettings(settings)
-	if err != nil {
-		return err
+	// Uninstall all locally installed subpackages
+	for localPkg := range settings.LocalInstalls {
+		if strings.HasPrefix(localPkg, pkg) && localPkg != pkg {
+			err := ws.uninstall(localPkg, logWriter, indent)
+			if err != nil {
+				return err
+			}
+		}
 	}
 
-	fmt.Fprintf(logWriter, "  Removing sources at %q\n", pkgSrc)
+	fmt.Fprintf(logWriter, indent+"Removing sources at %q\n", pkgSrc)
 	err = os.RemoveAll(pkgSrc)
 	if err != nil {
 		return errors.Wrapf(err, "Couldn't remove package src %q", ws.Name())
 	}
 
 	if localInstalled && !install.Persistent {
-		fmt.Fprintf(logWriter, "  Removing %q from locally installed packages\n", pkg)
+		fmt.Fprintf(logWriter, indent+"Removing %q from locally installed packages\n", pkg)
 		delete(settings.LocalInstalls, pkg)
 		err = ws.SaveSettings(settings)
 		if err != nil {
@@ -233,7 +243,7 @@ func (ws *Workspace) Uninstall(pkg string, logWriter io.Writer) error {
 	}
 
 	for _, path := range pkgInstalledDirs {
-		fmt.Fprintf(logWriter, "  Removing %q\n", path)
+		fmt.Fprintf(logWriter, indent+"Removing %q\n", path)
 
 		err = os.RemoveAll(path)
 		if err != nil {
@@ -247,7 +257,7 @@ func (ws *Workspace) Uninstall(pkg string, logWriter io.Writer) error {
 	}
 
 	for _, path := range pkgInstalledFiles {
-		fmt.Fprintf(logWriter, "  Removing %q\n", path)
+		fmt.Fprintf(logWriter, indent+"Removing %q\n", path)
 
 		err = os.RemoveAll(path)
 		if err != nil {
