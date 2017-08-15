@@ -176,7 +176,9 @@ func (ws *Workspace) Uninstall(pkg string, logWriter io.Writer) error {
 		if err != nil {
 			notMountedOutput := fmt.Sprintf("fusermount: entry for %s not found", pkgSrc)
 			if !strings.HasPrefix(stderrBuff.String(), notMountedOutput) {
-				io.Copy(outputBuff, os.Stderr)
+				// We don't care if the write to stderr failed
+				_, _ = io.Copy(os.Stderr, outputBuff)
+
 				return errors.WithStack(err)
 			}
 		}
