@@ -10,7 +10,8 @@ solutions is as follows:
 4. Version pinning for executables, such as linters (e.g. [`errcheck`](https://github.com/kisielk/errcheck)) and codegen tools (e.g. [`protoc-gen-go`](https://github.com/golang/protobuf))
 5. Importing a dependency that's locally checked out outside of the workspace
    (also called multi project workflow)
-6. Optional full isolation for imports
+6. Optional full isolation for imports, see the section on [import
+   modes](#workspace-import-modes) for details.
 
 Virtualgo doesn't do dependency resolution or version pinning itself, because
 this is a hard problem that's already being solved by other tools. Its approach
@@ -255,15 +256,37 @@ glide install
 vg moveVendor
 ```
 
-## Workspaces with global `GOPATH` fallback
+## Workspace import modes
 
-There's one downside to full isolation of a workspace. The project you're
-actually working on is not inside your `GOPATH` by default, so normally go
-would not be able to find any imports to it. This is worked around by locally
-installing the project into your workspace. This works quite well, but the
-current implementation of this uses symbolic links and these are not supported
-incredibly well by the go tooling. Commands such as `go list` will not list your
-package because of it.
+A workspace can be set up in two different import modes, global fallback or full
+isolation.
+The import mode for a workspace is chosen when it is created.
+
+### Global fallback
+In global fallback mode, packages are imported from the original `GOPATH` when
+they are not found in the workspace.
+This is the default import mode for newly created workspaces, as this interferes
+the least with existing go tools.
+
+### Full isolation
+
+In full isolation mode, package imports will only search in the packages that
+are installed inside the workspace.
+This has some advantages:
+
+1. Tools such as IDE's don't have to search the global GOPATH for imports, which
+   can result in a significant speedup for operations such as indexing.
+2. You always know the location of an imported package.
+3. No accidental imports of a package that is not managed by your vendoring tool
+   of choice.
+
+However, there's also some downsides to full isolation of a workspace. These are
+all caused by the fact that the project you're actually working on is not inside
+your `GOPATH` anymore. So normally go would not be able to find any imports
+to it. This is worked around by locally installing the project into your
+workspace. This works quite well, but the current implementation of this uses
+symbolic links and these are not supported incredibly well by the go tooling.
+Commands such as `go list` will not list your package because of it.
 
 Also you can get some weird behaviour if you run a command such as `go test
 ./...`. The go package names that are shown will contain the full path of the
