@@ -260,7 +260,8 @@ vg moveVendor
 
 A workspace can be set up in two different import modes, global fallback or full
 isolation.
-The import mode for a workspace is chosen when it is created.
+The import mode of a workspace determines how imports from code behave and it is
+chosen when the workspace is created.
 
 ### Global fallback
 In global fallback mode, packages are imported from the original `GOPATH` when
@@ -277,39 +278,54 @@ This has some advantages:
 1. Tools such as IDE's don't have to search the global GOPATH for imports, which
    can result in a significant speedup for operations such as indexing.
 2. You always know the location of an imported package.
-3. No accidental imports of a package that is not managed by your vendoring tool
-   of choice.
+3. It's not possible to accidentally import of a package that is not managed by
+   your vendoring tool of choice.
 
 However, there's also some downsides to full isolation of a workspace. These are
 all caused by the fact that the project you're actually working on is not inside
 your `GOPATH` anymore. So normally go would not be able to find any imports
-to it. This is worked around by locally installing the project into your
-workspace. This works quite well, but the current implementation of this uses
-symbolic links and these are not supported incredibly well by the go tooling.
-Commands such as `go list` will not list your package because of it.
+to it. This is partially worked around by locally installing the project into
+your workspace, but it does not fix all issues.
 
-Also you can get some weird behaviour if you run a command such as `go test
-./...`. The go package names that are shown will contain the full path of the
-package with an underscore in front. This is because `.` is not in your
-`GOPATH`. Usually this is not an issue  and everything compiles fine, but there
-are cases where an `init` function will be executed twice.
-
-These problems can all be solved by using `vg` in "global fallback" mode. In
-this mode it's possible to import packages from your global `GOPATH`.
-This is not the recommended way to use `vg`, because you won't have full
-isolation anymore. However, if you are running into these problems this should
-be an easy fix. You can create workspace in "global fallback" mode by running:
+In the sections below the remaining issues are described and you can decide for
+yourself if the above advantages are worth the disadvantages. If you want to try
+out full isolation you can create a new workspace using the `--full-isolation`
+flag:
 
 ```bash
-$ vg init --global-fallback
-# To change an existing workspace, you should destroy and recreate it
+$ vg init --full-isolation
+# To change an existing workspace, you have to destroy and recreate it
 $ vg destroy example
-$ vg init example --global-fallback
+$ vg activate example --full-isolation
 ```
 
-If you create a workspace this way, any imports you do first search in the
-workspace. If a package cannot be found there it will try the original `GOPATH`
-you had before activating the workspace.
+#### With `bindfs` installed
+If you have [`bindfs`](http://bindfs.org/) installed the issues you will run
+into are only a slight inconvenience. They only happen when using relative
+references to packages. However not only in imports, but also when using go
+commands.
+
+For instance `go list ./...` will return weirdly formatted paths. Also, when
+running `go test ./...`, an `init` function might be executed twice. This can
+all easily be worked around by using absolute package paths for these commands.
+So for the `vg` repo you would have to run `go test github.com/GetStream/vg/...`
+instead of `go test ./...`.
+
+If you run into any other issues than the ones mentioned here, please report
+them.
+
+#### Without `bindfs` installed
+If `bindfs` is not installed, symbolic links will be used to do the local
+install.
+This has the same issues as described for `bindfs`, but there's also some extra
+ones that cannot be worked around as easily.
+The reason for this is tat go tooling does not like symbolic links in `GOPATH`
+(https://github.com/golang/go/issues/15507, https://github.com/golang/go/issues/17451).
+
+Compiling will still work, but `go list github.com/...` will not list your
+package. Other than that there are also issues when using `delve`
+(https://github.com/GetStream/vg/issues/11). Because of these issues it is not
+recommended to use virtualgo in full isolation mode without `bindfs` installed.
 
 ## Using a virtualgo workspace with an IDE (e.g. Gogland)
 
@@ -343,4 +359,3 @@ MIT
 ## Careers @ Stream
 
 Would you like to work on cool projects like this? We are currently hiring for talented Gophers in Amsterdam and Boulder, get in touch with us if you are interested! tommaso@getstream.io
-
