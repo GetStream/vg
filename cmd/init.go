@@ -26,6 +26,14 @@ usually a good name. If you want to use a different name, just specify it:
 
 	vg init myCoolWorkspace
 
+To create a workspace in full isolation mode, you should run:
+
+	vg init --full-isolation
+
+A fully isolated workspace has some upsides, but some go commands will not work
+as expected anymore. If bindfs is installed it works much better, but relative
+arguments still might not work as expected. See the README on Github for full
+details on advantages and disadvantages.
 	`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return errors.New("You haven't eval-ed `vg eval` yet.")
@@ -34,6 +42,9 @@ usually a good name. If you want to use a different name, just specify it:
 
 func init() {
 	RootCmd.AddCommand(initCmd)
+	initCmd.PersistentFlags().Bool("global-fallback", false, `Fallback to global packages when they are not present in workspace. 
+			  This is the default mode if both --full-isolation and --global-fallback are not provided.`)
+	initCmd.PersistentFlags().Bool("full-isolation", false, "Create a fully isolated workspace, see project README for advantages and disadvantages")
 
 	// Here you will define your flags and configuration settings.
 

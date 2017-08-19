@@ -61,10 +61,25 @@ var initSettingsCmd = &cobra.Command{
 		}
 
 		settings := workspace.NewSettings()
-		settings.GlobalFallback, err = cmd.Flags().GetBool("global-fallback")
+
+		globalFallback, err := cmd.Flags().GetBool("global-fallback")
+		if err != nil {
+			return errors.WithStack(err)
+		}
+
+		fullIsolation, err := cmd.Flags().GetBool("full-isolation")
 
 		if err != nil {
 			return errors.WithStack(err)
+		}
+
+		if fullIsolation && globalFallback {
+			return errors.New("You cannot both specify --full-isolation and --global-fallback")
+		}
+		if fullIsolation {
+			settings.GlobalFallback = false
+		} else {
+			settings.GlobalFallback = true
 		}
 
 		err = os.MkdirAll(ws.Path(), 0755)
@@ -98,7 +113,9 @@ var initSettingsCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(initSettingsCmd)
-	initSettingsCmd.PersistentFlags().Bool("global-fallback", false, "Fallback to global packages when they are not present in workspace")
+	initSettingsCmd.PersistentFlags().Bool("global-fallback", false, `Fallback to global packages when they are not present in workspace. 
+			  This is the default mode if both --full-isolation and --global-fallback are not provided.`)
+	initSettingsCmd.PersistentFlags().Bool("full-isolation", false, "Create a fully isolated workspace, see project README for downsides")
 	initSettingsCmd.PersistentFlags().BoolP("force", "f", false, "")
 
 	// Here you will define your flags and configuration settings.
