@@ -50,7 +50,7 @@ function _vg_activate
 
     set workspace (vg initSettings $argv[2..-1])
 
-    set -gx VIRTUALGO $argv[2]
+    set -gx VIRTUALGO $workspace
     echo Activating $VIRTUALGO
     set -gx VIRTUALGO_PATH $HOME/.virtualgo/$VIRTUALGO
 
