@@ -169,15 +169,15 @@ bash: cobra: command not found
 $ vg activate
 (example) $
 
-# When a workspace is active go builds cannot import packages from your
-# normal GOPATH (you can still use executables though). This is good for
-# isolation as you can not accidentally import something outside of the
-# workspace. However, you can easily install a package from your global GOPATH
-# into the workspace.
+# When a workspace is active, a go compilation will try to import packages
+# installed from the workspace first. In some cases you might want to use the
+# version of a package that is installed in your global GOPATH though. For
+# instance when you are fixing a bug in a dependency and want to test the fix.
+# In these cases you can easily install a package from your global GOPATH
+# into the workspace:
 (example) $ vg localInstall github.com/GetStream/utils
-# You can even install a package from a specific path
+# You can even install a package from a specific path:
 (example) $ vg localInstall github.com/GetStream/utils ~/weird/path/utils
-
 
 # You can also uninstall a package from your workspace again
 (example) $ vg uninstall github.com/spf13/cobra
@@ -187,6 +187,8 @@ $ vg activate
 # See the following sections for integration with dependency management tools.
 # And for a full overview of all commands just run:
 (example) $ vg help
+# For detailed help of a specific command run:
+(example) $ vg help <command>
 
 ```
 
