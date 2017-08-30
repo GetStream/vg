@@ -20,7 +20,7 @@ is to build on top of these tools, such as
 above.
 For people coming from Python `vg` is very similar to `virtualenv`, with `dep`
 being respective to `pip`. The main difference is that `vg` is much easier to
-use than `virtualenv`.
+use than `virtualenv`, because there's almost no mental overhead in using `vg`.
 
 ## Example usage
 
