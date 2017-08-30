@@ -15,6 +15,8 @@ function vg
             _vg_deactivate
         case cdpackages
             _vg_cdpackages
+        case destroy
+            _vg_destroy $argv[1..-1]
         case globalExec
             _vg_globalExec $argv[1..-1]
         case upgrade
@@ -112,6 +114,23 @@ function _vg_deactivate
     set -e _VIRTUALGO_OLDPATH
     set -e _VIRTUALGO_OLDGOBIN
     set -e _VIRTUALGO_OLDGOPATH
+end
+
+function _vg_destroy
+    if [ (count $argv) -lt 2 ]
+        if [ -z "$VIRTUALGO" ]
+            echo Error: No virtualgo workspace is active at the moment
+            vg help destroy
+            return 1
+        end
+        set argv[2] $VIRTUALGO
+    end
+
+    command vg destroy $argv[2..-1]
+
+    if [ -n "$VIRTUALGO" ]; and vg list | not grep "^$VIRTUALGO\$" > /dev/null
+        vg deactivate
+    end
 end
 
 function _vg_upgrade

@@ -14,6 +14,9 @@ vg() {
         cdpackages)
             __vg_cdpackages "${@:2}"
             ;;
+        destroy)
+            __vg_destroy "${@:2}"
+            ;;
         globalExec)
             __vg_globalExec "${@:2}"
             ;;
@@ -98,6 +101,25 @@ __vg_deactivate() {
 
     unset VIRTUALGO _VIRTUALGO_OLDPS1 _VIRTUALGO_OLDPATH _VIRTUALGO_OLDGOBIN _VIRTUALGO_OLDGOPATH VIRTUALGO_PATH
 }
+
+__vg_destroy() {
+    argv=$@
+    if [ -z "$1" ]; then
+        if [ -z "$VIRTUALGO" ]; then
+            echo Error: No virtualgo workspace is active at the moment
+            vg help destroy
+            return 1
+        fi
+        argv=$VIRTUALGO
+    fi
+
+    command vg destroy $argv
+
+    if [ -n "$VIRTUALGO" ] && ! { vg list | grep "^$VIRTUALGO\$" > /dev/null; }; then
+        vg deactivate
+    fi
+}
+
 
 __vg_auto_activate() {
     activation_root=$PWD
