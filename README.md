@@ -51,13 +51,15 @@ now:
 
 1. You can pin versions of executable dependencies, such as linting and code
    generation tools.
-2. It has full isolation by default, so no accidental fallbacks to regular
-   `GOPATH` causing confusion about what version you're using.
-3. No more issues with `go test ./...` running tests in the vendor directory.
-4. You can easily use a dependency from your global `GOPATH` inside your
+2. No more issues with `go test ./...` running tests in the `vendor` directory
+   when using `go` 1.8 and below.
+3. You can easily use a dependency from your global `GOPATH` inside your
    workspace, without running into confusing import errors.
+4. It has optional [full isolation](#workspace-import-modes). If enabled there's
+   no accidental fallbacks to regular `GOPATH` causing confusion about what
+   version of a package you're using.
 5. When using full isolation, tools such as IDEs can spend much less time on
-   indexing. This is simply because they don't have to index the libraries
+   indexing. This is simply because they don't have to index the packages
    outside the workspace.
 6. You don't have problems when using plugins: https://github.com/akutz/gpd
 
@@ -80,9 +82,10 @@ go get -u github.com/GetStream/vg
 
 Although not required, it is recommended to install
 [`bindfs`](http://bindfs.org/) as well. This gives the best experience when
-using full isolation and when using `vg localInstall`. If you do this, DON'T
-remove things manually from `~/.virtualgo`. Only use `vg destroy`/`vg
-uninstall`, otherwise you can very well lose data.
+using [full isolation](#workspace-import-modes) and when using
+`vg localInstall`. If you do this, DON'T remove things manually from
+`~/.virtualgo`. Only use `vg destroy`/`vg uninstall`, otherwise you can very
+well lose data.
 
 ```bash
 # OSX
@@ -113,8 +116,8 @@ source ~/.config/fish/config.fish  # for fish
 
 ### Manual shell configuration
 
-You can also edit your shell config file manually. Afterwards you still have to
-`source` the file like explained above.
+You can also edit your shell configuration file manually. Afterwards you still
+have to `source` the file like explained above.
 
 For bash put this in your `~/.bashrc` file:
 
@@ -334,15 +337,7 @@ recommended to use virtualgo in full isolation mode without `bindfs` installed.
 Because virtualgo is just a usability wrapper around changing your `GOPATH` for
 a specific project it is usually quite easy to use it in combination with an
 IDE. Just check out your `GOPATH` after activating a workspace and configure the
-IDE accordingly.
-
-```bash
-$ echo $gopath
-/home/stream/.virtualgo/myworkspace
-```
-
-When using a workspace with global `GOPATH` fallback, it's only a little harder
-to configure your `GOPATH`. If you show your `GOPATH` you will see two paths
+IDE accordingly. Usually if you show your `GOPATH` you will see two paths
 separated by a colon:
 
 ```bash
@@ -350,9 +345,17 @@ $ echo $gopath
 /home/stream/.virtualgo/myworkspace:/home/stream/go
 ```
 
-If you can set this full string directly that is fine. For Gogland you have to
-add the first one first and then the second one.
+If you can set this full string directly that is fine. For
+[Gogland](https://www.jetbrains.com/go/) you have to add the first one first and
+then the second one.
 
+When using a workspace in full isolation mode it's even easier to set up as
+there's only one `GOPATH` set.
+
+```bash
+$ echo $gopath
+/home/stream/.virtualgo/myworkspace
+```
 
 ## License
 
@@ -360,4 +363,6 @@ MIT
 
 ## Careers @ Stream
 
-Would you like to work on cool projects like this? We are currently hiring for talented Gophers in Amsterdam and Boulder, get in touch with us if you are interested! tommaso@getstream.io
+Would you like to work on cool projects like this? We are currently hiring for
+talented Gophers in Amsterdam and Boulder, get in touch with us if you are
+interested! tommaso@getstream.io
