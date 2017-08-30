@@ -325,12 +325,13 @@ install.
 This has the same issues as described for `bindfs`, but there's also some extra
 ones that cannot be worked around as easily.
 The reason for this is tat go tooling does not like symbolic links in `GOPATH`
-(https://github.com/golang/go/issues/15507, https://github.com/golang/go/issues/17451).
+([golang/go#15507](https://github.com/golang/go/issues/15507), [golang/go#17451](https://github.com/golang/go/issues/17451)).
 
 Compiling will still work, but `go list github.com/...` will not list your
 package. Other than that there are also issues when using `delve`
-(https://github.com/GetStream/vg/issues/11). Because of these issues it is not
-recommended to use virtualgo in full isolation mode without `bindfs` installed.
+([#11](https://github.com/GetStream/vg/issues/11)). Because of these issues it
+is not recommended to use virtualgo in full isolation mode without `bindfs`
+installed.
 
 ## Using a virtualgo workspace with an IDE (e.g. Gogland)
 
