@@ -324,7 +324,7 @@ If `bindfs` is not installed, symbolic links will be used to do the local
 install.
 This has the same issues as described for `bindfs`, but there's also some extra
 ones that cannot be worked around as easily.
-The reason for this is tat go tooling does not like symbolic links in `GOPATH`
+The reason for this is that go tooling does not like symbolic links in `GOPATH`
 ([golang/go#15507](https://github.com/golang/go/issues/15507), [golang/go#17451](https://github.com/golang/go/issues/17451)).
 
 Compiling will still work, but `go list github.com/...` will not list your
