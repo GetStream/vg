@@ -341,7 +341,7 @@ IDE accordingly. Usually if you show your `GOPATH` you will see two paths
 separated by a colon:
 
 ```bash
-$ echo $gopath
+$ echo $GOPATH
 /home/stream/.virtualgo/myworkspace:/home/stream/go
 ```
 
@@ -353,7 +353,7 @@ When using a workspace in full isolation mode it's even easier to set up as
 there's only one `GOPATH` set.
 
 ```bash
-$ echo $gopath
+$ echo $GOPATH
 /home/stream/.virtualgo/myworkspace
 ```
 
