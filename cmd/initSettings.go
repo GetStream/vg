@@ -76,10 +76,13 @@ var initSettingsCmd = &cobra.Command{
 		if fullIsolation && globalFallback {
 			return errors.New("You cannot both specify --full-isolation and --global-fallback")
 		}
-		if fullIsolation {
-			settings.GlobalFallback = false
+
+		settings.GlobalFallback = !fullIsolation
+
+		if settings.GlobalFallback {
+			fmt.Fprintf(os.Stderr, "Creating workspace %q with global fallback import mode\n", ws.Name())
 		} else {
-			settings.GlobalFallback = true
+			fmt.Fprintf(os.Stderr, "Creating workspace %q with full isolation import mode\n", ws.Name())
 		}
 
 		err = os.MkdirAll(ws.Path(), 0755)
