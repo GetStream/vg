@@ -6,6 +6,7 @@ package cmd
 import (
 	"os"
 
+	"github.com/GetStream/vg/internal/utils"
 	"github.com/GetStream/vg/internal/workspace"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -27,9 +28,13 @@ based project in your workspace do this:
 		if err != nil {
 			return err
 		}
-		_, err = os.Stat("vendor")
+
+		exist, err := utils.VendorExists()
 		if err != nil {
-			return errors.Wrap(err, "Something is wrong with the vendor directory")
+			return err
+		}
+		if !exist {
+			return errors.New("No vendor directory is present")
 		}
 
 		err = ws.ClearSrc()
