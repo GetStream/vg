@@ -8,8 +8,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-
-	"github.com/pkg/errors"
 )
 
 func ReplaceHomeDir(path string) string {
@@ -52,25 +50,6 @@ func OriginalGopath() string {
 	}
 
 	return gopath
-}
-
-// exists returns whether the given file or directory exists or not
-func DirExists(path string) (bool, error) {
-	info, err := os.Stat(path)
-	if err == nil {
-		if info.IsDir() {
-			return false, errors.Errorf("%q is not a directory", path)
-		}
-		return true, nil
-	}
-	if os.IsNotExist(err) {
-		return false, nil
-	}
-	return false, errors.Wrapf(err, "error occured when checking if directory %q exists", path)
-}
-
-func VendorExists() (bool, error) {
-	return DirExists("vendor")
 }
 
 func CurrentGopath() string {
