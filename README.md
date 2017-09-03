@@ -160,8 +160,9 @@ $ vg init
 Cobra is a CLI library for Go that empowers applications.
 ......
 
-# It's also possible to only activate (and create) a workspace and not link it
-# to the current directory. Activating a new workspace automatically deactivates
+# It's also possible to only activate a workspace and not link it to the
+# current directory. If the workspace doesn't exist it will also be
+# created on the fly. Activating a new workspace automatically deactivates
 # a previous one:
 (example) $ vg activate example2
 (example2) $ cobra
