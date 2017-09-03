@@ -307,15 +307,28 @@ $ vg activate example --full-isolation
 #### With `bindfs` installed
 
 If you have [`bindfs`](http://bindfs.org/) installed the issues you will run
-into are only a slight inconvenience. They only happen when using relative
-references to packages. However not only in imports, but also when using go
-commands.
+into are only a slight inconvenience, for which easy workarounds exist. However,
+it is important that you know about them, because they will probably cause
+confusion otherwise. If you run into any other issues than the ones mentioned
+here, [please report them](https://github.com/GetStream/vg/issues/new).
 
-For instance `go list ./...` will return weirdly formatted paths. Also, when
-running `go test ./...`, an `init` function might be executed twice. This can
+##### Relative packages in commands
+
+The first set of issues happen when using relative reference to packages in
+commands. For instance `go list ./...` will return weirdly formatted paths, such
+as `_/home/stream/go/src/github.com/GetStream/vg`. Also, running
+`go test ./...`, might cause an `init` function to be executed twice. This can
 all easily be worked around by using absolute package paths for these commands.
-So for the `vg` repo you would have to run `go test github.com/GetStream/vg/...`
-instead of `go test ./...`.
+So for the `vg` repo you would use the following alternatives:
+
+```bash
+# go list ./...
+go list github.com/GetStream/vg/...
+# go test ./...
+go test github.com/GetStream/vg/...`
+```
+
+##### `dep` commands
 
 Another issue that pops up is that `dep` doesn't allow it's commands to be
 executed outside of the `GOPATH`. This is not a problem for `dep ensure`, since
@@ -329,9 +342,6 @@ vg globalExec -- vg init
 vg globalExec -- vg status
 ```
 
-If you run into any other issues than the ones mentioned here, please report
-them.
-
 #### Without `bindfs` installed
 
 If `bindfs` is not installed, symbolic links will be used to do the local
@@ -344,7 +354,7 @@ The reason for this is that go tooling does not like symbolic links in `GOPATH`
 Compiling will still work, but `go list github.com/...` will not list your
 package. Other than that there are also issues when using `delve`
 ([#11](https://github.com/GetStream/vg/issues/11)). Because of these issues it
-is not recommended to use virtualgo in full isolation mode without `bindfs`
+is NOT RECOMMENDED to use virtualgo in full isolation mode without `bindfs`
 installed.
 
 ## Using a virtualgo workspace with an IDE (e.g. Gogland)
