@@ -28,7 +28,7 @@ Below is an example showing some basic usage of `vg`. See further down and `vg h
 for more information and examples.
 
 ```bash
-$ cd $GOPATH/src/github.com/Getstream/example
+$ cd $GOPATH/src/github.com/GetStream/example
 $ vg init  # initial creation of workspace
 
 # Now all commands will be executed from within the example workspace
@@ -37,7 +37,7 @@ $ vg init  # initial creation of workspace
 (example) $ vg deactivate
 
 $ cd ~
-$ cd $GOPATH/src/github.com/Getstream/example
+$ cd $GOPATH/src/github.com/GetStream/example
 (example) $ # The workspace is now activated automatically after cd-ing to the project directory
 ```
 
@@ -144,7 +144,7 @@ The following commands are the main commands to use `vg`:
 ```bash
 # The first command to use is the one to create and activate a workspace named
 # after the current direcory
-$ cd $GOPATH/src/github.com/Getstream/example
+$ cd $GOPATH/src/github.com/GetStream/example
 $ vg init
 (example) $
 # This command also links the current directory to the created workspace. This
@@ -305,6 +305,7 @@ $ vg activate example --full-isolation
 ```
 
 #### With `bindfs` installed
+
 If you have [`bindfs`](http://bindfs.org/) installed the issues you will run
 into are only a slight inconvenience. They only happen when using relative
 references to packages. However not only in imports, but also when using go
@@ -316,10 +317,23 @@ all easily be worked around by using absolute package paths for these commands.
 So for the `vg` repo you would have to run `go test github.com/GetStream/vg/...`
 instead of `go test ./...`.
 
+Another issue that pops up is that `dep` doesn't allow it's commands to be
+executed outside of the `GOPATH`. This is not a problem for `dep ensure`, since
+you usually use `vg ensure`, which handles this automatically. However, this is
+an issue for other commands, such as `dep status` and `dep init`. Luckily
+there's an easy workaround for this as well. You can simply use `vg globalExec`,
+to execute commands from your regular `GOPATH`, which fixes the issue:
+
+```bash
+vg globalExec -- vg init
+vg globalExec -- vg status
+```
+
 If you run into any other issues than the ones mentioned here, please report
 them.
 
 #### Without `bindfs` installed
+
 If `bindfs` is not installed, symbolic links will be used to do the local
 install.
 This has the same issues as described for `bindfs`, but there's also some extra
