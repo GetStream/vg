@@ -58,7 +58,7 @@ func OriginalGopath() string {
 func DirExists(path string) (bool, error) {
 	info, err := os.Stat(path)
 	if err == nil {
-		if info.IsDir() {
+		if !info.IsDir() {
 			return false, errors.Errorf("%q is not a directory", path)
 		}
 		return true, nil
