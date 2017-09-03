@@ -13,6 +13,7 @@ import (
 	"syscall"
 
 	"github.com/BurntSushi/toml"
+	"github.com/GetStream/vg/internal/utils"
 	"github.com/GetStream/vg/internal/workspace"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -108,6 +109,17 @@ This command requires that dep is installed in $PATH. `,
 		err = os.Setenv("GOPATH", gopath)
 		if err != nil {
 			return errors.WithStack(err)
+		}
+
+		exists, err := utils.VendorExists()
+		if err != nil {
+			return err
+		}
+
+		if !exists {
+			fmt.Fprintln(os.Stderr, "ERROR: The vendor directory was not created by the dep ensure command.")
+			fmt.Fprintln(os.Stderr, "ERROR: This means the workspace content won't be changed")
+			os.Exit(1)
 		}
 
 		err = ws.ClearSrc()

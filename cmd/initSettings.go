@@ -49,14 +49,8 @@ var initSettingsCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		// Check if it's a new workspace. Only continue if this is the case or
-		// if force is set.
-		_, err = os.Stat(ws.Path())
-		if err != nil {
-			if !os.IsNotExist(err) {
-				return errors.WithStack(err)
-			}
-		} else if !force {
+		exists, err := utils.DirExists(ws.Path())
+		if !exists && !force {
 			return nil
 		}
 
