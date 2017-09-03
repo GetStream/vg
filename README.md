@@ -304,6 +304,10 @@ $ vg destroy example
 $ vg activate example --full-isolation
 ```
 
+This will cause the workspace to use full isolation import mode each time it is
+activated in the future. So there's no need to specify the
+`--full-isolation` flag on each activation afterwards.
+
 #### With `bindfs` installed
 
 If you have [`bindfs`](http://bindfs.org/) installed the issues you will run
