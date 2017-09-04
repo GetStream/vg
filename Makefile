@@ -2,8 +2,8 @@ SHELL=/bin/bash
 GO_FILES = $(shell find . -name "*.go" | grep -v "^./vendor/" |grep -v "_test.go$$" |  xargs)
 
 CURRENT_VERSION_MAJOR = 0
-CURRENT_VERSION_MINOR = 6
-CURRENT_VERSION_BUG = 7
+CURRENT_VERSION_MINOR = 7
+CURRENT_VERSION_BUG = 0
 
 BINDATA = cmd/bindata.go
 
