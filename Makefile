@@ -20,7 +20,7 @@ all: install
 get-deps: $(LAST_ENSURE)
 
 install: $(LAST_ENSURE) $(GO_FILES) $(BINDATA)
-	go install
+	go install github.com/GetStream/vg
 	@# install vg executable globally as well
 	cp $(GOBIN)/vg $(_VIRTUALGO_OLDGOBIN)/vg
 
