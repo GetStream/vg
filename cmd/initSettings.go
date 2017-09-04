@@ -50,7 +50,7 @@ var initSettingsCmd = &cobra.Command{
 		}
 
 		exists, err := utils.DirExists(ws.Path())
-		if !exists && !force {
+		if exists && !force {
 			return nil
 		}
 
