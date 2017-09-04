@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	Version string = "0.6.6"
+	Version string = "0.6.7"
 )
 
 // versionCmd represents the version command
