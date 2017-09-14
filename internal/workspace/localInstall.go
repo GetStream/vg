@@ -32,7 +32,7 @@ func (ws *Workspace) InstallLocalPackagePersistently(pkg string, localPath strin
 }
 
 func commandExists(command string) (bool, error) {
-	_, err := exec.LookPath("bindfs")
+	_, err := exec.LookPath(command)
 	if err != nil {
 		execErr, ok := err.(*exec.Error)
 		if !ok || execErr.Err != exec.ErrNotFound {
