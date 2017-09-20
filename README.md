@@ -1,3 +1,7 @@
+<p align="center"><img src="docs/img/logo.png" width="430"></p>
+
+
+
 # virtualgo [![Build Status](https://travis-ci.org/GetStream/vg.svg?branch=master)](https://travis-ci.org/GetStream/vg)
 
 Virtualgo (or `vg` for short) is a tool which provides workspace based
