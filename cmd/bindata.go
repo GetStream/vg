@@ -86,7 +86,7 @@ func dataBash() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "data/bash", size: 405, mode: os.FileMode(420), modTime: time.Unix(1506352061, 0)}
+	info := bindataFileInfo{name: "data/bash", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -106,7 +106,7 @@ func dataFish() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "data/fish", size: 8739, mode: os.FileMode(420), modTime: time.Unix(1506352061, 0)}
+	info := bindataFileInfo{name: "data/fish", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -126,7 +126,7 @@ func dataSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "data/sh", size: 4058, mode: os.FileMode(420), modTime: time.Unix(1506354265, 0)}
+	info := bindataFileInfo{name: "data/sh", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -146,7 +146,7 @@ func dataZsh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "data/zsh", size: 1269, mode: os.FileMode(420), modTime: time.Unix(1506352061, 0)}
+	info := bindataFileInfo{name: "data/zsh", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

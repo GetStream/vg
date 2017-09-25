@@ -26,7 +26,7 @@ install: $(LAST_ENSURE) $(GO_FILES) $(BINDATA)
 
 bindata: $(BINDATA) .installed-deps
 $(BINDATA): data/*
-	go-bindata -o cmd/bindata.go -pkg cmd data/*
+	go-bindata -nometadata -o cmd/bindata.go -pkg cmd data/*
 
 $(LAST_ENSURE): Gopkg.lock Gopkg.toml
 	vg ensure -- -v
