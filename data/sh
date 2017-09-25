@@ -24,13 +24,13 @@ vg() {
             __vg_upgrade "${@:2}"
             ;;
         *)
-            command vg $@
+            command vg "$@"
     esac
 
 }
 
 __vg_init() {
-    vg activate $@
+    vg activate "$@"
     vg link
 }
 
@@ -40,7 +40,7 @@ __vg_cdpackages() {
         vg help cdpackages
         return 1
     fi
-    cd $VIRTUALGO_PATH/src/
+    cd "$VIRTUALGO_PATH/src/"
 }
 
 
@@ -49,9 +49,9 @@ __vg_activate() {
         vg deactivate
     fi
 
-    export VIRTUALGO=$(vg initSettings $@)
+    export VIRTUALGO=$(vg initSettings "$@")
 
-    echo Activating $VIRTUALGO
+    echo "Activating $VIRTUALGO"
 
     export VIRTUALGO_PATH=$HOME/.virtualgo/$VIRTUALGO
 
@@ -79,8 +79,8 @@ __vg_activate() {
         export PS1="($VIRTUALGO) $PS1"
     fi
 
-    mkdir -p $VIRTUALGO_PATH/src/
-    mkdir -p $GOBIN
+    mkdir -p "$VIRTUALGO_PATH/src/"
+    mkdir -p "$GOBIN"
 
     vg activateReal
 }
@@ -92,7 +92,7 @@ __vg_deactivate() {
         return 1
     fi
 
-    echo Deactivating $VIRTUALGO
+    echo "Deactivating $VIRTUALGO"
 
     export PS1=$_VIRTUALGO_OLDPS1
     export GOBIN=$_VIRTUALGO_OLDGOBIN
@@ -103,17 +103,16 @@ __vg_deactivate() {
 }
 
 __vg_destroy() {
-    argv=$@
     if [ -z "$1" ]; then
         if [ -z "$VIRTUALGO" ]; then
             echo Error: No virtualgo workspace is active at the moment
             vg help destroy
             return 1
         fi
-        argv=$VIRTUALGO
+        command vg destroy "$VIRTUALGO"
+    else
+      command vg destroy "$@"
     fi
-
-    command vg destroy $argv
 
     if [ -n "$VIRTUALGO" ] && ! { vg list | grep "^$VIRTUALGO\$" > /dev/null; }; then
         vg deactivate
@@ -126,13 +125,13 @@ __vg_auto_activate() {
     while [ "$activation_root" != "" ]; do
         if [ -f "$activation_root/.virtualgo" ]; then
             new_virtualgo_name=$(cat "$activation_root/.virtualgo")
-            if [ "" = "$VIRTUALGO" -o "$new_virtualgo_name" != "$VIRTUALGO" ]; then
-                vg activate $new_virtualgo_name
+            if [ "" = "$VIRTUALGO" ] || [ "$new_virtualgo_name" != "$VIRTUALGO" ]; then
+                vg activate "$new_virtualgo_name"
             fi
             return
         fi
         # this strips the last path component from the path.
-        activation_root=$(echo $activation_root | sed 's|/[^/]*$||')
+        activation_root=$(echo "$activation_root" | sed 's|/[^/]*$||')
     done
 }
 
@@ -149,9 +148,9 @@ __vg_upgrade() {
     go get -u github.com/GetStream/vg
     __vg_reload
 
-    if [ -n "$old_virtualgo" -a "$VIRTUALGO" != "$old_virtualgo" ]; then
-        echo Reactivating $old_virtualgo
-        vg activate $old_virtualgo
+    if [ -n "$old_virtualgo" ] && [ "$VIRTUALGO" != "$old_virtualgo" ]; then
+        echo "Reactivating $old_virtualgo"
+        vg activate "$old_virtualgo"
     fi
 }
 
@@ -168,11 +167,11 @@ __vg_globalExec() {
         __vg_deactivate
     fi
 
-    eval $@
+    "$@"
     return_code=$?
 
-    if [ -n "$old_virtualgo" -a "$VIRTUALGO" != "$old_virtualgo" ]; then
-        vg activate $old_virtualgo
+    if [ -n "$old_virtualgo" ] && [ "$VIRTUALGO" != "$old_virtualgo" ]; then
+        vg activate "$old_virtualgo"
     fi
     return $return_code
 }
