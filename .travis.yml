@@ -14,4 +14,6 @@ before_install:
 
 install:
   - make get-deps
+  - make clean
   - make all
+  - git diff --exit-code # Check if bindata file is up to date
