@@ -54,7 +54,8 @@ function _vg_activate
 
     set -gx VIRTUALGO $workspace
     echo Activating $VIRTUALGO
-    set -gx VIRTUALGO_PATH $HOME/.virtualgo/$VIRTUALGO
+    set vgr $VIRTUALGO_ROOT $HOME/virtualgo
+    set -gx VIRTUALGO_PATH $vgr[1]/$VIRTUALGO
 
     set -gx _VIRTUALGO_OLDGOPATH $GOPATH
     if [ -n "$GOBIN" ]
