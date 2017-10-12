@@ -20,6 +20,7 @@ bash -c 'which vg'
 
 ! bash -c 'vg activate'
 ! bash -c 'vg deactivate'
+! bash -c 'vg cdpackages'
 
 set +x
 eval "$(vg eval --shell bash)"
@@ -32,3 +33,5 @@ vg destroy testWS
 
 vg activate testWS
 vg destroy
+
+vg version
