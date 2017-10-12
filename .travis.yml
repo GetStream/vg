@@ -17,3 +17,9 @@ install:
   - make clean
   - make all
   - git diff --exit-code # Check if bindata file is up to date
+
+script:
+  - make cover
+
+after_success:
+ - bash <(curl -s https://codecov.io/bash)

@@ -1,6 +1,8 @@
 SHELL=/bin/bash
 GO_FILES = $(shell find . -name "*.go" | grep -v "^./vendor/" |grep -v "_test.go$$" |  xargs)
 
+REPO=github.com/GetStream/vg
+
 CURRENT_VERSION_MAJOR = 0
 CURRENT_VERSION_MINOR = 7
 CURRENT_VERSION_BUG = 2
@@ -20,7 +22,7 @@ all: install
 get-deps: $(LAST_ENSURE)
 
 install: $(LAST_ENSURE) $(GO_FILES) $(BINDATA)
-	go install github.com/GetStream/vg
+	go install $(REPO)
 	@# install vg executable globally as well
 	cp $(GOBIN)/vg $(_VIRTUALGO_OLDGOBIN)/vg
 
@@ -60,7 +62,11 @@ publish-minor: update-master
 publish-bug: update-master
 	make publish VERSION=$(CURRENT_VERSION_MAJOR).$(CURRENT_VERSION_MINOR).$$(($(CURRENT_VERSION_BUG) + 1))
 
-test: install
+test:
+	go test $(REPO)/...
+
+cover: $(DEPS)
+	goverage -covermode=count -coverprofile=coverage.out $(REPO)/...
 
 clean:
 	rm $(BINDATA)
