@@ -38,7 +38,6 @@ func VirtualgoRoot() string {
 
 func PkgToDir(pkg string) string {
 	return filepath.Join(strings.Split(pkg, "/")...)
-
 }
 
 func DirToPkg(dir string) string {
