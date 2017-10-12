@@ -1,9 +1,9 @@
 #!/bin/bash
 
 vg() {
-    local USE_X
-    local USE_U
     {
+        local USE_X;
+        local USE_U;
         USE_X=`case "$-" in *x*) echo "yes" ;; esac`
         USE_U=`case "$-" in *u*) echo "yes" ;; esac`
         set +x ;
@@ -12,8 +12,8 @@ vg() {
 
     __vg "$@"
 
-    [ "$USE_X" != "yes" ] || set -x
     [ "$USE_U" != "yes" ] || set -u
+    [ "$USE_X" != "yes" ] || set -x
 }
 
 __vg_reload() {
@@ -24,9 +24,9 @@ __vg_reload() {
 _PREV_VIRTUALGO_PWD=""
 
 __vg_prompt_command() {
-    local USE_X
-    local USE_U
     {
+        local USE_X
+        local USE_U
         USE_X=`case "$-" in *x*) echo "yes" ;; esac`
         USE_U=`case "$-" in *u*) echo "yes" ;; esac`
         set +x ;
@@ -39,8 +39,8 @@ __vg_prompt_command() {
         __vg_auto_activate
     fi
 
-    [ "$USE_X" != "yes" ] || set -x
     [ "$USE_U" != "yes" ] || set -u
+    [ "$USE_X" != "yes" ] || set -x
 }
 
 _VIRTUALGO_ORIGINAL_PROMPT_COMMAND=$PROMPT_COMMAND
