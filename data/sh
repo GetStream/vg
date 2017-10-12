@@ -131,7 +131,6 @@ __vg_auto_activate() {
         if [ -f "$activation_root/.virtualgo" ]; then
             new_virtualgo_name=$(cat "$activation_root/.virtualgo")
             if [ "" = "$VIRTUALGO" ] || [ "$new_virtualgo_name" != "$VIRTUALGO" ]; then
-                echo auto activating $new_virtualgo_name
                 vg activate "$new_virtualgo_name"
             fi
             return

@@ -23,6 +23,7 @@ bash -c 'which vg'
 ! bash -c 'vg activate'
 ! bash -c 'vg deactivate'
 ! bash -c 'vg cdpackages'
+! bash -c 'vg init'
 
 set +x
 eval "$(vg eval --shell bash)"
@@ -57,4 +58,5 @@ vg destroy
 
 cd testbins
 vg init
+vg link
 vg destroy
