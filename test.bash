@@ -54,3 +54,7 @@ vg destroy
 
 vg activate testWS --global-fallback
 vg destroy
+
+cd testbins
+vg init
+vg destroy
