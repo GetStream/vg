@@ -56,7 +56,16 @@ vg activate testWS --global-fallback
 vg destroy
 
 cd testbins
+echo "PATH"
+which vg
+which testvg
 vg init
+which vg
+which testvg
 vg link
+which vg
+which testvg
 vg unlink
+which vg
+which testvg
 vg destroy
