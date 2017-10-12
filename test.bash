@@ -4,7 +4,7 @@ eval "$(vg eval --shell bash)"
 rm -rf coverages
 
 set -uex -o pipefail
-go test -coverprofile=coverage.out -coverpkg=github.com/GetStream/vg,github.com/GetStream/vg/cmd -c main.go main_test.go -o testbins/testvg
+go test -coverprofile=coverage.out -coverpkg=github.com/GetStream/vg,github.com/GetStream/vg/cmd -c github.com/GetStream/vg -o testbins/testvg
 
 go build -i -o testbins/vg github.com/GetStream/vg/internal/testwrapper/vg
 
