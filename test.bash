@@ -10,7 +10,7 @@ go build -i -o testbins/vg github.com/GetStream/vg/internal/testwrapper/vg
 
 
 set +u
-vg deactivate
+vg deactivate || true
 
 export PATH=testbins:$PATH
 
