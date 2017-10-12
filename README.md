@@ -2,7 +2,7 @@
 
 
 
-# virtualgo [![Build Status](https://travis-ci.org/GetStream/vg.svg?branch=master)](https://travis-ci.org/GetStream/vg) [![codecov](https://codecov.io/gh/GetStream/vg/branch/master/graph/badge.svg)](https://codecov.io/gh/GetStream/vg)
+# virtualgo [![Build Status](https://travis-ci.org/GetStream/vg.svg?branch=master)](https://travis-ci.org/GetStream/vg) [![codecov](https://codecov.io/gh/GetStream/vg/branch/master/graph/badge.svg)](https://codecov.io/gh/GetStream/vg) [![Go Report Card](https://goreportcard.com/badge/github.com/GetStream/vg)](https://goreportcard.com/report/github.com/GetStream/vg)
 
 Virtualgo (or `vg` for short) is a tool which provides workspace based
 development for Go. Its main feature set that makes it better than other
