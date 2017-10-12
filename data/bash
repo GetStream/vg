@@ -1,5 +1,12 @@
 #!/bin/bash
 
+vg() {
+    {
+        local -; set +x ;
+    } 2> /dev/null
+    __vg "$@"
+}
+
 __vg_reload() {
     PROMPT_COMMAND=$_VIRTUALGO_ORIGINAL_PROMPT_COMMAND
     eval "$(vg eval --shell bash)"
@@ -8,12 +15,15 @@ __vg_reload() {
 _PREV_VIRTUALGO_PWD=""
 
 __vg_prompt_command() {
-    if [ "$PWD" = "$_PREV_VIRTUALGO_PWD" ]; then
-        return
-    fi
-    _PREV_VIRTUALGO_PWD="$PWD"
+    {
+        local -; set +x ;
+    } 2> /dev/null
 
-    __vg_auto_activate
+    if [ "$PWD" != "$_PREV_VIRTUALGO_PWD" ]; then
+        _PREV_VIRTUALGO_PWD="$PWD"
+
+        __vg_auto_activate
+    fi
 }
 
 _VIRTUALGO_ORIGINAL_PROMPT_COMMAND=$PROMPT_COMMAND
