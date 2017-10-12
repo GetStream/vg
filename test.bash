@@ -1,15 +1,14 @@
 #!/bin/bash
 eval "$(vg eval --shell bash)"
+set -uex -o pipefail
 
 rm -rf coverages
 
-set -uex -o pipefail
 go test -covermode=count -coverpkg="$(go list ./... | paste -sd ',' -)" -c github.com/GetStream/vg -o testbins/testvg
 
 go build -i -o testbins/vg github.com/GetStream/vg/internal/testwrapper/vg
 
 
-set +u
 vg deactivate || true
 
 go get github.com/pkg/errors
@@ -25,9 +24,9 @@ bash -c 'which vg'
 ! bash -c 'vg cdpackages'
 ! bash -c 'vg init'
 
-set +x
+set +xu
 eval "$(vg eval --shell bash)"
-set -x
+set -xu
 
 vg version
 vg status
