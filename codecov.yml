@@ -1,2 +1,3 @@
 ignore:
   - internal/testwrapper/*
+  - cmd/bindata.go
