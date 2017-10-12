@@ -58,4 +58,5 @@ vg destroy
 cd testbins
 vg init
 vg link
+vg unlink
 vg destroy
