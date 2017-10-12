@@ -35,7 +35,7 @@ func main() {
 		fmt.Sprintf("-test.coverprofile=%04d.out", n),
 		"-test.outputdir=coverages",
 	}
-	cmd := exec.Command("testvg", append(os.Args[1:], args...)...)
+	cmd := exec.Command("testvg", append(args, os.Args[1:]...)...)
 	stdout := new(bytes.Buffer)
 	stderr := new(bytes.Buffer)
 	cmd.Stdout = stdout
