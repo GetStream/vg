@@ -14,6 +14,8 @@ vg deactivate || true
 
 export PATH=testbins:$PATH
 
+echo PATH="$PATH"
+
 bash -c 'which vg'
 
 ! bash -c 'vg activate'
