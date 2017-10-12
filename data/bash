@@ -1,6 +1,7 @@
 #!/bin/bash
 
 vg() {
+    local USE_X
     {
         USE_X=`case "$-" in *x*) echo "yes" ;; esac`
         set +x ;
@@ -19,6 +20,7 @@ __vg_reload() {
 _PREV_VIRTUALGO_PWD=""
 
 __vg_prompt_command() {
+    local USE_X
     {
         USE_X=`case "$-" in *x*) echo "yes" ;; esac`
         set +x ;
