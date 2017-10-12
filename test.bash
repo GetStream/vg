@@ -29,8 +29,10 @@ eval "$(vg eval --shell bash)"
 set -x
 
 vg version
+vg status
 
 vg activate testWS
+vg status
 vg deactivate testWS
 vg destroy testWS
 
