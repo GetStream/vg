@@ -12,6 +12,8 @@ go build -i -o testbins/vg github.com/GetStream/vg/internal/testwrapper/vg
 set +u
 vg deactivate || true
 
+go get github.com/pkg/errors
+
 export PATH=$PWD/testbins:$PATH
 
 echo PATH="$PATH"
@@ -26,12 +28,21 @@ set +x
 eval "$(vg eval --shell bash)"
 set -x
 
+vg version
+
 vg activate testWS
 vg deactivate testWS
-
 vg destroy testWS
 
 vg activate testWS
+vg ensure -- -v
+vg uninstall github.com/pkg/errors
+vg localInstall github.com/pkg/errors
+vg uninstall github.com/pkg/errors
 vg destroy
 
-vg version
+vg activate testWS
+vg globalExec dep ensure -v
+vg moveVendor
+vg destroy
+
