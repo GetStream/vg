@@ -55,7 +55,6 @@ __vg_activate() {
     export VIRTUALGO
     VIRTUALGO=$(vg initSettings "$@")
     export VIRTUALGO
-    echo "my virtualgo='$VIRTUALGO'"
 
     echo "Activating $VIRTUALGO"
 
