@@ -46,3 +46,9 @@ vg globalExec dep ensure -v
 vg moveVendor
 vg destroy
 
+
+vg activate testWS --full-isolation
+vg destroy
+
+vg activate testWS --global-fallback
+vg destroy
