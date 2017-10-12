@@ -130,6 +130,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/wadey/gocovmerge"
+  packages = ["."]
+  revision = "b5bfa59ec0adc420475f97f89b58045c721d761c"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
   revision = "02a66801d979d706a4b445e24e03916eeaa2a404"
@@ -155,6 +161,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d0c11c84c6963d715e4e01fcaa9fc31a54940a9511e7dd4ffa6fa57ff0fda434"
+  inputs-digest = "a01d518782cc87c6b3bb43028679016181304784545b112bf96dd70486506190"
   solver-name = "gps-cdcl"
   solver-version = 1

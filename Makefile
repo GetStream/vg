@@ -67,8 +67,12 @@ test:
 	./test.bash
 
 cover: $(DEPS)
-	goverage -covermode=count -coverprofile=coverage.out $(REPO)/internal/...
+	goverage -covermode=count -coverprofile=coverage-unit-tests.out $(REPO)/internal/...
 	./test.bash
+	gocovmerge coverages/*.out coverage-unit-tests.out > coverage.out
+	rm coverage-unit-tests.out
+	rm -r coverages
+
 
 clean:
 	rm $(BINDATA)
