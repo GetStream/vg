@@ -3,7 +3,7 @@
 vg() {
     {
         local -; set +x ;
-    } 2> /dev/null
+    }
     __vg "$@"
 }
 
@@ -17,7 +17,7 @@ _PREV_VIRTUALGO_PWD=""
 __vg_prompt_command() {
     {
         local -; set +x ;
-    } 2> /dev/null
+    }
 
     if [ "$PWD" != "$_PREV_VIRTUALGO_PWD" ]; then
         _PREV_VIRTUALGO_PWD="$PWD"
