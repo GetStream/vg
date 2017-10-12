@@ -33,14 +33,14 @@ __vg() {
 }
 
 __vg_init() {
-    __vg activate "$@"
-    __vg link
+    vg activate "$@"
+    vg link
 }
 
 __vg_cdpackages() {
     if [ -z "$VIRTUALGO" ]; then
         echo Error: No virtualgo workspace is active at the moment
-        __vg help cdpackages
+        vg help cdpackages
         return 1
     fi
     cd "$VIRTUALGO_PATH/src/"
@@ -49,11 +49,11 @@ __vg_cdpackages() {
 
 __vg_activate() {
     if [ -n "$VIRTUALGO" ]; then
-        __vg deactivate
+        vg deactivate
     fi
 
     export VIRTUALGO
-    VIRTUALGO=$(__vg initSettings "$@")
+    VIRTUALGO=$(vg initSettings "$@")
     export VIRTUALGO
 
     echo "Activating $VIRTUALGO"
@@ -70,7 +70,7 @@ __vg_activate() {
         export _VIRTUALGO_OLDGOBIN=$_VIRTUALGO_OLDGOPATH/bin
     fi
 
-    global_fallback=$(__vg querySettings)
+    global_fallback=$(vg querySettings)
 
     if [ "$global_fallback" = "true" ]; then
         export GOPATH=$VIRTUALGO_PATH:$GOPATH
@@ -87,13 +87,13 @@ __vg_activate() {
     mkdir -p "$VIRTUALGO_PATH/src/"
     mkdir -p "$GOBIN"
 
-    __vg activateReal
+    vg activateReal
 }
 
 __vg_deactivate() {
     if [ -z "$VIRTUALGO" ]; then
         echo Error: No go workspace is active at the moment
-        __vg help deactivate
+        vg help deactivate
         return 1
     fi
 
@@ -111,16 +111,16 @@ __vg_destroy() {
     if [ -z "$1" ]; then
         if [ -z "$VIRTUALGO" ]; then
             echo Error: No virtualgo workspace is active at the moment
-            __vg help destroy
+            vg help destroy
             return 1
         fi
-        command __vg destroy "$VIRTUALGO"
+        command vg destroy "$VIRTUALGO"
     else
-      command __vg destroy "$@"
+      command vg destroy "$@"
     fi
 
-    if [ -n "$VIRTUALGO" ] && ! { __vg list | grep "^$VIRTUALGO\$" > /dev/null; }; then
-        __vg deactivate
+    if [ -n "$VIRTUALGO" ] && ! { vg list | grep "^$VIRTUALGO\$" > /dev/null; }; then
+        vg deactivate
     fi
 }
 
@@ -132,7 +132,7 @@ __vg_auto_activate() {
             new_virtualgo_name=$(cat "$activation_root/.virtualgo")
             if [ "" = "$VIRTUALGO" ] || [ "$new_virtualgo_name" != "$VIRTUALGO" ]; then
                 echo auto activating $new_virtualgo_name
-                __vg activate "$new_virtualgo_name"
+                vg activate "$new_virtualgo_name"
             fi
             return
         fi
@@ -156,14 +156,14 @@ __vg_upgrade() {
 
     if [ -n "$old_virtualgo" ] && [ "$VIRTUALGO" != "$old_virtualgo" ]; then
         echo "Reactivating $old_virtualgo"
-        __vg activate "$old_virtualgo"
+        vg activate "$old_virtualgo"
     fi
 }
 
 __vg_globalExec() {
     if [ -z "$1" ]; then
         echo Error: You should specify a command that should be executed
-        __vg help globalExec
+        vg help globalExec
         return 1
     fi
 
@@ -177,7 +177,7 @@ __vg_globalExec() {
     return_code=$?
 
     if [ -n "$old_virtualgo" ] && [ "$VIRTUALGO" != "$old_virtualgo" ]; then
-        __vg activate "$old_virtualgo"
+        vg activate "$old_virtualgo"
     fi
     return $return_code
 }
