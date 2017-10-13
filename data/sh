@@ -1,6 +1,10 @@
 #!/bin/sh
 
 vg() {
+    __vg "$@"
+}
+
+__vg() {
     case "$1" in
         init)
             __vg_init "${@:2}"
@@ -26,7 +30,6 @@ vg() {
         *)
             command vg "$@"
     esac
-
 }
 
 __vg_init() {
@@ -49,7 +52,9 @@ __vg_activate() {
         vg deactivate
     fi
 
-    export VIRTUALGO=$(vg initSettings "$@")
+    export VIRTUALGO
+    VIRTUALGO=$(vg initSettings "$@")
+    export VIRTUALGO
 
     echo "Activating $VIRTUALGO"
 
@@ -57,7 +62,7 @@ __vg_activate() {
 
     export _VIRTUALGO_OLDPS1=$PS1
     export _VIRTUALGO_OLDGOPATH=$GOPATH
-    export _VIRTUALGO_OLDPATH=$PATH
+    export _VIRTUALGO_OLDPATH_SH=$PATH
 
     if [ -n "$GOBIN" ]; then
         export _VIRTUALGO_OLDGOBIN=$GOBIN
@@ -97,9 +102,9 @@ __vg_deactivate() {
     export PS1=$_VIRTUALGO_OLDPS1
     export GOBIN=$_VIRTUALGO_OLDGOBIN
     export GOPATH=$_VIRTUALGO_OLDGOPATH
-    export PATH=$_VIRTUALGO_OLDPATH
+    export PATH=$_VIRTUALGO_OLDPATH_SH
 
-    unset VIRTUALGO _VIRTUALGO_OLDPS1 _VIRTUALGO_OLDPATH _VIRTUALGO_OLDGOBIN _VIRTUALGO_OLDGOPATH VIRTUALGO_PATH
+    unset VIRTUALGO _VIRTUALGO_OLDPS1 _VIRTUALGO_OLDPATH_SH _VIRTUALGO_OLDGOBIN _VIRTUALGO_OLDGOPATH VIRTUALGO_PATH
 }
 
 __vg_destroy() {

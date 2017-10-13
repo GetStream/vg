@@ -63,7 +63,8 @@ function _vg_activate
         set -gx _VIRTUALGO_OLDGOBIN $_VIRTUALGO_OLDGOPATH/bin
     end
 
-    set -gx _VIRTUALGO_OLDPATH $PATH
+    set -gx _VIRTUALGO_OLDPATH_FISH $PATH
+    set -gx _VIRTUALGO_OLDPATH_SH (echo -s :$PATH | cut -b 2-)
 
     set global_fallback (vg querySettings)
 
@@ -101,7 +102,7 @@ function _vg_deactivate
 
     set -x GOBIN $_VIRTUALGO_OLDGOBIN
     set -x GOPATH $_VIRTUALGO_OLDGOPATH
-    set -x PATH $_VIRTUALGO_OLDPATH
+    set -x PATH $_VIRTUALGO_OLDPATH_FISH
 
     if [ -z "$VIRTUALGO_DISABLE_PROMPT" ]
         functions -e fish_prompt
@@ -111,7 +112,8 @@ function _vg_deactivate
 
     set -e VIRTUALGO
     set -e VIRTUALGO_PATH
-    set -e _VIRTUALGO_OLDPATH
+    set -e _VIRTUALGO_OLDPATH_FISH
+    set -e _VIRTUALGO_OLDPATH_SH
     set -e _VIRTUALGO_OLDGOBIN
     set -e _VIRTUALGO_OLDGOPATH
 end

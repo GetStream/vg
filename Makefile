@@ -63,10 +63,16 @@ publish-bug: update-master
 	make publish VERSION=$(CURRENT_VERSION_MAJOR).$(CURRENT_VERSION_MINOR).$$(($(CURRENT_VERSION_BUG) + 1))
 
 test:
-	go test $(REPO)/...
+	go test $(REPO)/internal/...
+	./test.bash
 
 cover: $(DEPS)
-	goverage -covermode=count -coverprofile=coverage.out $(REPO)/...
+	goverage -covermode=count -coverprofile=coverage-unit-tests.out $(REPO)/internal/...
+	./test.bash
+	gocovmerge coverages/*.out coverage-unit-tests.out > coverage.out
+	rm coverage-unit-tests.out
+	rm -r coverages
+
 
 clean:
 	rm $(BINDATA)

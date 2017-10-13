@@ -29,7 +29,7 @@ var initSettingsCmd = &cobra.Command{
 	},
 
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
-		name := ""
+		var name string
 		cwd, err := os.Getwd()
 		if err != nil {
 			return errors.WithStack(err)
@@ -50,6 +50,9 @@ var initSettingsCmd = &cobra.Command{
 		}
 
 		exists, err := utils.DirExists(ws.Path())
+		if err != nil {
+			return err
+		}
 		if exists && !force {
 			return nil
 		}
