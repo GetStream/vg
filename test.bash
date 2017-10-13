@@ -30,6 +30,13 @@ set +xu
 eval "$(vg eval --shell bash)"
 set -xu
 
+vg version
+vg status
+
+if [ "$TRAVIS" = true ] ; then
+    vg setup
+fi
+
 vg activate testWS
 vg status
 vg deactivate testWS
@@ -68,6 +75,3 @@ vg unlink
 which vg
 which testvg
 vg destroy
-
-vg version
-vg status
