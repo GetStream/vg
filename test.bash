@@ -15,6 +15,8 @@ go get github.com/pkg/errors
 
 export PATH=$PWD/testbins:$PATH
 
+export COVERDIR=$PWD/coverages
+
 echo PATH="$PATH"
 
 bash -c 'which vg'
@@ -28,30 +30,11 @@ set +xu
 eval "$(vg eval --shell bash)"
 set -xu
 
-cd testbins
-echo "PATH"
-which vg
-which testvg
-vg init
-which vg
-which testvg
-vg link
-which vg
-which testvg
-vg unlink
-which vg
-which testvg
-vg destroy
-
-vg version
-vg status
-
 vg activate testWS
 vg status
 vg deactivate testWS
 vg destroy testWS
 
-cd ../
 vg activate testWS
 vg ensure -- -v
 vg uninstall github.com/pkg/errors
@@ -71,3 +54,20 @@ vg destroy
 vg activate testWS --global-fallback
 vg destroy
 
+cd testbins
+echo "PATH"
+which vg
+which testvg
+vg init
+which vg
+which testvg
+vg link
+which vg
+which testvg
+vg unlink
+which vg
+which testvg
+vg destroy
+
+vg version
+vg status

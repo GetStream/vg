@@ -11,11 +11,15 @@ import (
 )
 
 func main() {
-	err := os.MkdirAll("coverages", 0755)
+	coverdir := os.Getenv("COVERDIR")
+	if coverdir == "" {
+		log.Fatalln("COVERDIR environment variable was not specified")
+	}
+	err := os.MkdirAll(coverdir, 0755)
 	if err != nil {
 		log.Fatalln("could not create coverages directory: ", err.Error())
 	}
-	files, err := ioutil.ReadDir("coverages")
+	files, err := ioutil.ReadDir(coverdir)
 	if err != nil {
 		log.Fatalln("could not read coverage directory: ", err.Error())
 		return
@@ -33,7 +37,7 @@ func main() {
 	}
 	args := []string{
 		fmt.Sprintf("-test.coverprofile=%04d.out", n),
-		"-test.outputdir=coverages",
+		fmt.Sprintf("-test.outputdir=%s", coverdir),
 	}
 	cmd := exec.Command("testvg", append(args, os.Args[1:]...)...)
 	stdout := new(bytes.Buffer)
