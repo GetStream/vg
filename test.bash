@@ -33,9 +33,11 @@ set -xu
 vg version
 vg status
 
-if [ "$TRAVIS" = true ] ; then
+set +u
+if [ "$TRAVIS" = "true" ] ; then
     vg setup
 fi
+set -u
 
 vg activate testWS
 vg status
@@ -62,16 +64,7 @@ vg activate testWS --global-fallback
 vg destroy
 
 cd testbins
-echo "PATH"
-which vg
-which testvg
 vg init
-which vg
-which testvg
 vg link
-which vg
-which testvg
 vg unlink
-which vg
-which testvg
 vg destroy
