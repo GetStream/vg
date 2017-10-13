@@ -51,6 +51,7 @@ vg status
 vg deactivate testWS
 vg destroy testWS
 
+cd ../
 vg activate testWS
 vg ensure -- -v
 vg uninstall github.com/pkg/errors
