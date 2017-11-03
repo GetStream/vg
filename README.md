@@ -366,7 +366,7 @@ package. Other than that there are also issues when using `delve`
 is NOT RECOMMENDED to use virtualgo in full isolation mode without `bindfs`
 installed.
 
-## Using a virtualgo workspace with an IDE (e.g. Gogland)
+## Using a virtualgo workspace with an IDE (e.g. GoLand)
 
 Because virtualgo is just a usability wrapper around changing your `GOPATH` for
 a specific project it is usually quite easy to use it in combination with an
@@ -380,7 +380,7 @@ $ echo $GOPATH
 ```
 
 If you can set this full string directly that is fine. For
-[Gogland](https://www.jetbrains.com/go/) you have to add the first one first and
+[GoLand](https://www.jetbrains.com/go/) you have to add the first one first and
 then the second one.
 
 When using a workspace in full isolation mode it's even easier to set up as
