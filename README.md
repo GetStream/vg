@@ -347,8 +347,8 @@ there's an easy workaround for this as well. You can simply use `vg globalExec`,
 to execute commands from your regular `GOPATH`, which fixes the issue:
 
 ```bash
-vg globalExec -- vg init
-vg globalExec -- vg status
+vg globalExec dep init
+vg globalExec dep status
 ```
 
 #### Without `bindfs` installed
