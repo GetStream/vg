@@ -324,10 +324,17 @@ here, [please report them](https://github.com/GetStream/vg/issues/new).
 ##### Relative packages in commands
 
 The first set of issues happen when using relative reference to packages in
-commands. For instance `go list ./...` will return weirdly formatted paths, such
-as `_/home/stream/go/src/github.com/GetStream/vg`. Also, running
-`go test ./...`, might cause an `init` function to be executed twice. This can
-all easily be worked around by using absolute package paths for these commands.
+commands. Some examples of this are:
+
+- `go list ./...` will return weirdly formatted paths, such
+  as `_/home/stream/go/src/github.com/GetStream/vg`.
+- `go test ./...`, might cause an `init` function to be executed twice.
+- `go build ./...` won't work when an `internal` package is present in the
+  directory. Here you can expect an error saying `use of internal package not
+  allowed`.
+
+Luckily, this can all easily be worked around by using absolute package paths
+for these commands.
 So for the `vg` repo you would use the following alternatives:
 
 ```bash
@@ -335,6 +342,8 @@ So for the `vg` repo you would use the following alternatives:
 go list github.com/GetStream/vg/...
 # go test ./...
 go test github.com/GetStream/vg/...`
+# go build ./...
+go build github.com/GetStream/vg/...`
 ```
 
 ##### `dep` commands
