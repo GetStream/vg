@@ -13,14 +13,15 @@ var cfgFile string
 
 const noEvalError = `You haven't eval-ed "vg eval" yet.
 
-Usually this is caused by one :
+Usually this is caused by one of the following two options:
 - You have not run "vg setup" yet.
 - You have not restarted your terminal/IDE after running "vg setup"
 
 If you have done both it probably means that your "~/.bashrc" file is not being
-executed on startup by bash. This usually caused by your terminal running "~/.profile" at
-startup instead of running "~/.bashrc". The easiest way to fix this is by
-placing the following at the top of your "~/.profile" file:
+executed on startup by bash. This usually caused by your terminal running
+"~/.profile" at startup instead of running "~/.bashrc". The easiest way to fix
+this is by placing the following at the top of your "~/.profile" file (if
+"~/.profile does not exist you should add this in "~/.bash_profile"):
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
