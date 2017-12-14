@@ -31,19 +31,6 @@ func (ws *Workspace) InstallLocalPackagePersistently(pkg string, localPath strin
 	return ws.SaveSettings(settings)
 }
 
-func commandExists(command string) (bool, error) {
-	_, err := exec.LookPath(command)
-	if err != nil {
-		execErr, ok := err.(*exec.Error)
-		if !ok || execErr.Err != exec.ErrNotFound {
-			return false, errors.WithStack(err)
-		}
-		// Command doesn't exist
-		return false, nil
-	}
-	return true, nil
-}
-
 func (ws *Workspace) InstallLocalPackage(pkg string, localPath string) error {
 	pkgDir := filepath.Join(path.Split(pkg))
 	target := filepath.Join(ws.Src(), pkgDir)
@@ -67,7 +54,7 @@ func (ws *Workspace) InstallLocalPackage(pkg string, localPath string) error {
 		return err
 	}
 
-	hasBindfs, err := commandExists("bindfs")
+	hasBindfs, err := utils.CommandExists("bindfs")
 	if err != nil {
 		return err
 	}
@@ -189,7 +176,7 @@ func (ws *Workspace) uninstall(pkg string, logWriter io.Writer, indent string) e
 		var cmd *exec.Cmd
 		var notMountedOutput string
 
-		hasFusermount, err := commandExists("fusermount")
+		hasFusermount, err := utils.CommandExists("fusermount")
 		if err != nil {
 			return err
 		}
