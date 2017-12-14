@@ -11,6 +11,26 @@ import (
 
 var cfgFile string
 
+const noEvalError = `You haven't eval-ed "vg eval" yet.
+
+Usually this is caused by one :
+- You have not run "vg setup" yet.
+- You have not restarted your terminal/IDE after running "vg setup"
+
+If you have done both it probably means that your "~/.bashrc" file is not being
+executed on startup by bash. This usually caused by your terminal running "~/.profile" at
+startup instead of running "~/.bashrc". The easiest way to fix this is by
+placing the following at the top of your "~/.profile" file:
+
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+	. "$HOME/.bashrc"
+    fi
+fi
+`
+
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "vg",
