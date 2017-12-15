@@ -18,6 +18,7 @@ export PATH=$PWD/testbins:$PATH
 export COVERDIR=$PWD/coverages
 
 echo PATH="$PATH"
+vg setup
 
 bash -c 'which vg'
 
@@ -26,16 +27,15 @@ bash -c 'which vg'
 ! bash -c 'vg cdpackages'
 ! bash -c 'vg init'
 
-set +xu
-eval "$(vg eval --shell bash)"
-set -xu
-
+vg setup
+vg setup
 vg version
 vg status
 
-set +u
-vg setup
-set -u
+
+set +xu
+eval "$(vg eval --shell bash)"
+set -xu
 
 vg activate testWS
 vg status
