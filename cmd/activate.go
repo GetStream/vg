@@ -24,7 +24,7 @@ optional argument like this:
 	vg activate my-personal-env
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return errors.New("You haven't eval-ed `vg eval` yet")
+		return errors.New(noEvalError)
 	},
 }
 

@@ -12,9 +12,12 @@ import (
 var upgradeCmd = &cobra.Command{
 	Use:   "upgrade",
 	Short: "Upgrade the virtualgo binary and reload it in the current shell",
-	Long:  ``,
+	Long: `Upgrade the virtualgo binary and reload it in the current shell
+
+NOTE: This does not always work. 
+NOTE: If you encounter issues please restart your terminal.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return errors.New("You haven't eval-ed `vg eval` yet")
+		return errors.New(noEvalError)
 	},
 }
 
