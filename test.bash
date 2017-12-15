@@ -34,9 +34,7 @@ vg version
 vg status
 
 set +u
-if [ "$TRAVIS" = "true" ] ; then
-    vg setup
-fi
+vg setup
 set -u
 
 vg activate testWS
