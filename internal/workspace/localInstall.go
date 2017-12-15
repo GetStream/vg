@@ -276,7 +276,8 @@ func (ws *Workspace) uninstall(pkg string, logWriter io.Writer, indent string) e
 }
 
 func umountNotMounted(output, pkgSrc string) bool {
-	return strings.HasPrefix(output, fmt.Sprintf("umount: %s: not currently mounted", pkgSrc)) || strings.HasPrefix(output, fmt.Sprintf("umount: %s: not mounted", pkgSrc))
+	return strings.HasPrefix(output, fmt.Sprintf("umount: %s: not currently mounted", pkgSrc)) ||
+		strings.HasPrefix(output, fmt.Sprintf("umount: %s: not mounted", pkgSrc))
 }
 
 func fusermountNotMounted(output, pkgSrc string) bool {
