@@ -69,6 +69,14 @@ publish-minor: update-master
 publish-bug: update-master
 	make publish VERSION=$(CURRENT_VERSION_MAJOR).$(CURRENT_VERSION_MINOR).$$(($(CURRENT_VERSION_BUG) + 1))
 
+publish-staging: $(DEPS)
+	@if [ "$(SUFFIX)" = "" ]; then echo You should define the version like so: make publish SUFFIX=test-ratelimit; exit 1; fi
+	@git diff --exit-code --cached || { git status; echo You have changes that are staged but not committed ; false ; };
+	@git diff --exit-code || { git status; echo You have changes that are not committed ; false ; };
+	$(eval VERSION := $(CURRENT_VERSION_MAJOR).$(CURRENT_VERSION_MINOR).$(CURRENT_VERSION_BUG)-$(SUFFIX))
+	git tag -a -m "RELEASED BY: $$(git config user.name)" v$(VERSION)
+	git push --follow-tags
+
 test:
 	go test $(REPO)/internal/...
 	./test.bash
