@@ -23,3 +23,11 @@ script:
 
 after_success:
  - bash <(curl -s https://codecov.io/bash)
+
+deploy:
+  provider: releases
+  api_key:
+    secure: k20D3kkJWVd6EgZpIviTD5qkeAd2ZBURY5Q0mMqStEdEpX85rSvcDmBP/84RW6DX8VYwz0mEgeLrIZwOhvS1UFu6yrQoM+s1ariOGqefMVYxWLkP7obDoojGTEcveZqDP9MgBWAEZFqmWuQdIdWhItQf4Z6Z6/LBH1ejG20nF0420StS3/gZ+ocwjb5qaAwB+Odld52zjGBeLGo56gLGNUl6O4envNo79DV1P9rzAwxvcXyGjUIOK7KHNalFsI0rBSJcNXiyUA/fkmIPZI6O14mqjXQDrnI8HlBKUiT8cADZCNlym8Gbijv+ymX3nFWrW6Aj5iO2QP1lEtCPad4ITU9bwJc9CStVvmgZA+lYsILype6Al84MjF7pHNchff/54Mnlj4Kyvsdamm+xH87N7vUYtt0ELHtrn6ElZBTSg2blz5/cuHn3uOjNovK5LtD0W2JQdoPvuP3W5EzeO9RZKozl4eoZZC8dlhlyX6CdGTNl4aCK7SwVWWCrRRmWRH9r+WXOAdA8E7wZDHjR06Ga2RbqW2B0+CAkK1awzI2+fQGFTv68KLfj+7tTf6Vq9sltM6iLIqtjzmQGfO6n0KKdBJWWvflH62/H6QgCmdwEISVpXS3PLpIpN7tQmhggi+wRT0VPrNBeroCbL5IeO7psxa1GgLxwJY/An1VoTWtzalI=
+  file: releases/*
+  on:
+    repo: GetStream/vg
