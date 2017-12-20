@@ -88,7 +88,7 @@ cover: $(DEPS)
 	rm coverage-unit-tests.out
 	rm -r coverages
 
-all-releases: $(DEPS)
+release-all: $(DEPS)
 	GOOS=linux GOARCH=amd64 make release
 	GOOS=windows GOARCH=amd64 make release
 	GOOS=darwin GOARCH=amd64 make release
