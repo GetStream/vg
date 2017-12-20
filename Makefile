@@ -1,7 +1,12 @@
 SHELL=/bin/bash
 GO_FILES = $(shell find . -name "*.go" | grep -v "^./vendor/" |grep -v "_test.go$$" |  xargs)
 
+BIN ?= vg
+BIN_PACKAGE = .
+
 REPO=github.com/GetStream/vg
+
+RELEASE_DIR = releases
 
 CURRENT_VERSION_MAJOR = 0
 CURRENT_VERSION_MINOR = 7
@@ -18,10 +23,12 @@ endif
 
 LAST_ENSURE = $(VIRTUALGO_PATH)/last-ensure
 
+DEPS = $(LAST_ENSURE) $(GO_FILES) $(BINDATA)
+
 all: install
 get-deps: $(LAST_ENSURE)
 
-install: $(LAST_ENSURE) $(GO_FILES) $(BINDATA)
+install: $(DEPS)
 	go install $(REPO)
 	@# install vg executable globally as well
 	cp $(GOBIN)/vg $(_VIRTUALGO_OLDGOBIN)/vg
@@ -41,7 +48,7 @@ publish: $(BINDATA)
 	$(eval new_major = $(word 1, $(dots)))
 	$(eval new_minor = $(word 2, $(dots)))
 	$(eval new_bug = $(word 3, $(dots)))
-	sed -i.bak -e 's/\(\tVersion string = \).*/\1"$(VERSION)"/g' cmd/version.go
+	sed -i.bak -e 's/\(\tVersion string = \).*/\1"$(VERSION)-dev"/g' cmd/version.go
 	sed -i.bak -e 's/^\(CURRENT_VERSION_MAJOR = \).*/\1$(new_major)/g' Makefile
 	sed -i.bak -e 's/^\(CURRENT_VERSION_MINOR = \).*/\1$(new_minor)/g' Makefile
 	sed -i.bak -e 's/^\(CURRENT_VERSION_BUG = \).*/\1$(new_bug)/g' Makefile
@@ -73,6 +80,14 @@ cover: $(DEPS)
 	rm coverage-unit-tests.out
 	rm -r coverages
 
+all-releases: $(DEPS)
+	GOOS=linux GOARCH=amd64 make release
+	GOOS=windows GOARCH=amd64 make release
+	GOOS=darwin GOARCH=amd64 make release
+
+release: $(DEPS)
+	mkdir -p $(RELEASE_DIR)
+	go build $(BUILD_FLAGS) -ldflags="-w -s -X github.com/GetStream/vg/cmd.Version=`git describe`" -o "$(RELEASE_DIR)/$(BIN)-`go env GOOS`-`go env GOARCH`" $(BIN_PACKAGE)
 
 clean:
 	rm $(BINDATA)

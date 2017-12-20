@@ -9,7 +9,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
+var (
+	// Version is the version of vg, this is changed by the Makefile
+	// automatically. So don't change it manually.
 	Version string = "0.7.2"
 )
 
