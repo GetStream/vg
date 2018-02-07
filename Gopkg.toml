@@ -87,6 +87,7 @@ required = [
 
 [[constraint]]
   branch = "master"
+  source = "github.com/GetStream/go-bindata"
   name = "github.com/jteeuwen/go-bindata"
 
 [[constraint]]

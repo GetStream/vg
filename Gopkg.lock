@@ -22,7 +22,17 @@
 [[projects]]
   branch = "master"
   name = "github.com/hashicorp/hcl"
-  packages = [".","hcl/ast","hcl/parser","hcl/scanner","hcl/strconv","hcl/token","json/parser","json/scanner","json/token"]
+  packages = [
+    ".",
+    "hcl/ast",
+    "hcl/parser",
+    "hcl/scanner",
+    "hcl/strconv",
+    "hcl/token",
+    "json/parser",
+    "json/scanner",
+    "json/token"
+  ]
   revision = "392dba7d905ed5d04a5794ba89f558b27e2ba1ca"
 
 [[projects]]
@@ -40,8 +50,12 @@
 [[projects]]
   branch = "master"
   name = "github.com/jteeuwen/go-bindata"
-  packages = [".","go-bindata"]
+  packages = [
+    ".",
+    "go-bindata"
+  ]
   revision = "a0ff2567cfb70903282db057e799fd826784d41d"
+  source = "github.com/GetStream/go-bindata"
 
 [[projects]]
   name = "github.com/magiconair/properties"
@@ -88,7 +102,10 @@
 [[projects]]
   branch = "master"
   name = "github.com/spf13/afero"
-  packages = [".","mem"]
+  packages = [
+    ".",
+    "mem"
+  ]
   revision = "9be650865eab0c12963d8753212f4f9c66cdcf12"
 
 [[projects]]
@@ -100,7 +117,11 @@
 [[projects]]
   branch = "master"
   name = "github.com/spf13/cobra"
-  packages = [".","cobra","cobra/cmd"]
+  packages = [
+    ".",
+    "cobra",
+    "cobra/cmd"
+  ]
   revision = "34594c771f2c18301dc152640ad40ece28795373"
 
 [[projects]]
@@ -124,7 +145,11 @@
 [[projects]]
   branch = "subtest-helper"
   name = "github.com/stretchr/testify"
-  packages = ["assert","require","suite"]
+  packages = [
+    "assert",
+    "require",
+    "suite"
+  ]
   revision = "eccae071a38f965151ef2aebec8784b60e2a6c7b"
   source = "github.com/GetStream/testify"
 
@@ -143,7 +168,14 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/text"
-  packages = ["internal/gen","internal/triegen","internal/ucd","transform","unicode/cldr","unicode/norm"]
+  packages = [
+    "internal/gen",
+    "internal/triegen",
+    "internal/ucd",
+    "transform",
+    "unicode/cldr",
+    "unicode/norm"
+  ]
   revision = "836efe42bb4aa16aaa17b9c155d8813d336ed720"
 
 [[projects]]
@@ -161,6 +193,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6ea252477314ecca1e32421ef298cedf3a427481cc2cb69d88d88eeae61fd778"
+  inputs-digest = "42fa49f709df3547aae5d4d7d9fe66b6732b56a3ec4b1e58aeb74c832dcabc60"
   solver-name = "gps-cdcl"
   solver-version = 1
