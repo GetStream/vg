@@ -39,7 +39,7 @@ var RootCmd = &cobra.Command{
 	Long: `
 Virtualgo (or vg for short) is a tool which provides easy and powerful
 workspace based development for Go. The vendor directory provides something
-similar. However, virtualgo adds features features that are either broken or
+similar. However, virtualgo adds features that are either broken or
 fully missing when using a vendor directory.
 
 Below is an example of the 'vg' command in action. For more info see detailed
