@@ -31,19 +31,6 @@ func (ws *Workspace) InstallLocalPackagePersistently(pkg string, localPath strin
 	return ws.SaveSettings(settings)
 }
 
-func commandExists(command string) (bool, error) {
-	_, err := exec.LookPath(command)
-	if err != nil {
-		execErr, ok := err.(*exec.Error)
-		if !ok || execErr.Err != exec.ErrNotFound {
-			return false, errors.WithStack(err)
-		}
-		// Command doesn't exist
-		return false, nil
-	}
-	return true, nil
-}
-
 func (ws *Workspace) InstallLocalPackage(pkg string, localPath string) error {
 	pkgDir := filepath.Join(path.Split(pkg))
 	target := filepath.Join(ws.Src(), pkgDir)
@@ -67,7 +54,7 @@ func (ws *Workspace) InstallLocalPackage(pkg string, localPath string) error {
 		return err
 	}
 
-	hasBindfs, err := commandExists("bindfs")
+	hasBindfs, err := utils.CommandExists("bindfs")
 	if err != nil {
 		return err
 	}
@@ -187,9 +174,9 @@ func (ws *Workspace) uninstall(pkg string, logWriter io.Writer, indent string) e
 		outputBuff := &bytes.Buffer{}
 
 		var cmd *exec.Cmd
-		var notMountedOutput string
+		var notMounted func(output, pkgSrc string) bool
 
-		hasFusermount, err := commandExists("fusermount")
+		hasFusermount, err := utils.CommandExists("fusermount")
 		if err != nil {
 			return err
 		}
@@ -197,19 +184,20 @@ func (ws *Workspace) uninstall(pkg string, logWriter io.Writer, indent string) e
 		if hasFusermount {
 			// Use fusermount if that exists
 			cmd = exec.Command("fusermount", "-u", pkgSrc)
-			notMountedOutput = fmt.Sprintf("fusermount: entry for %s not found", pkgSrc)
+			notMounted = fusermountNotMounted
 		} else {
 			// Otherwise fallback to umount
 			cmd = exec.Command("umount", pkgSrc)
-			notMountedOutput = fmt.Sprintf("umount: %s: not mounted", pkgSrc)
+			notMounted = umountNotMounted
 		}
 
 		cmd.Stderr = io.MultiWriter(stderrBuff, outputBuff)
 		cmd.Stdout = outputBuff
 
 		err = cmd.Run()
+
 		if err != nil {
-			if !strings.HasPrefix(stderrBuff.String(), notMountedOutput) {
+			if !notMounted(stderrBuff.String(), pkgSrc) {
 				// We don't care if the write to stderr failed
 				_, _ = io.Copy(os.Stderr, outputBuff)
 
@@ -272,6 +260,15 @@ func (ws *Workspace) uninstall(pkg string, logWriter io.Writer, indent string) e
 		}
 	}
 	return nil
+}
+
+func umountNotMounted(output, pkgSrc string) bool {
+	return strings.HasPrefix(output, fmt.Sprintf("umount: %s: not currently mounted", pkgSrc)) ||
+		strings.HasPrefix(output, fmt.Sprintf("umount: %s: not mounted", pkgSrc))
+}
+
+func fusermountNotMounted(output, pkgSrc string) bool {
+	return strings.HasPrefix(output, fmt.Sprintf("fusermount: entry for %s not found", pkgSrc))
 }
 
 func (ws *Workspace) ClearSrc() error {

@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"os/user"
 	"path"
 	"path/filepath"
@@ -39,7 +40,6 @@ func VirtualgoRoot() string {
 
 func PkgToDir(pkg string) string {
 	return filepath.Join(strings.Split(pkg, "/")...)
-
 }
 
 func DirToPkg(dir string) string {
@@ -55,7 +55,8 @@ func OriginalGopath() string {
 	return gopath
 }
 
-// exists returns whether the given file or directory exists or not
+// DirExists returns whether the given directory exists or not. If the path
+// exists, but isn't a directory it returns an error.
 func DirExists(path string) (bool, error) {
 	info, err := os.Stat(path)
 	if err == nil {
@@ -101,4 +102,18 @@ func defaultGOPATH() string {
 		return def
 	}
 	return ""
+}
+
+// CommandExists checks if a specific command exists on the system
+func CommandExists(command string) (bool, error) {
+	_, err := exec.LookPath(command)
+	if err != nil {
+		execErr, ok := err.(*exec.Error)
+		if !ok || execErr.Err != exec.ErrNotFound {
+			return false, errors.WithStack(err)
+		}
+		// Command doesn't exist
+		return false, nil
+	}
+	return true, nil
 }

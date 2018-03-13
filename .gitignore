@@ -17,3 +17,5 @@
 
 /vendor/
 /.installed-deps
+/testbins
+/releases/

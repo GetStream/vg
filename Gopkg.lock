@@ -8,6 +8,12 @@
   revision = "a368813c5e648fee92e5f6c30e3944ff9d5e8895"
 
 [[projects]]
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  revision = "346938d642f2ec3594ed81d874461961cd0faa76"
+  version = "v1.1.0"
+
+[[projects]]
   name = "github.com/fsnotify/fsnotify"
   packages = ["."]
   revision = "629574ca2a5df945712d3079857300b5e4da0236"
@@ -16,8 +22,24 @@
 [[projects]]
   branch = "master"
   name = "github.com/hashicorp/hcl"
-  packages = [".","hcl/ast","hcl/parser","hcl/scanner","hcl/strconv","hcl/token","json/parser","json/scanner","json/token"]
+  packages = [
+    ".",
+    "hcl/ast",
+    "hcl/parser",
+    "hcl/scanner",
+    "hcl/strconv",
+    "hcl/token",
+    "json/parser",
+    "json/scanner",
+    "json/token"
+  ]
   revision = "392dba7d905ed5d04a5794ba89f558b27e2ba1ca"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/haya14busa/goverage"
+  packages = ["."]
+  revision = "80d9697d6427c5d0b9dea3e2ecce2e067e5df7cf"
 
 [[projects]]
   branch = "master"
@@ -28,8 +50,12 @@
 [[projects]]
   branch = "master"
   name = "github.com/jteeuwen/go-bindata"
-  packages = [".","go-bindata"]
+  packages = [
+    ".",
+    "go-bindata"
+  ]
   revision = "a0ff2567cfb70903282db057e799fd826784d41d"
+  source = "github.com/GetStream/go-bindata"
 
 [[projects]]
   name = "github.com/magiconair/properties"
@@ -68,9 +94,18 @@
   version = "v0.8.0"
 
 [[projects]]
+  name = "github.com/pmezard/go-difflib"
+  packages = ["difflib"]
+  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
+  version = "v1.0.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/spf13/afero"
-  packages = [".","mem"]
+  packages = [
+    ".",
+    "mem"
+  ]
   revision = "9be650865eab0c12963d8753212f4f9c66cdcf12"
 
 [[projects]]
@@ -82,7 +117,11 @@
 [[projects]]
   branch = "master"
   name = "github.com/spf13/cobra"
-  packages = [".","cobra","cobra/cmd"]
+  packages = [
+    ".",
+    "cobra",
+    "cobra/cmd"
+  ]
   revision = "34594c771f2c18301dc152640ad40ece28795373"
 
 [[projects]]
@@ -104,6 +143,23 @@
   revision = "25b30aa063fc18e48662b86996252eabdcf2f0c7"
 
 [[projects]]
+  branch = "subtest-helper"
+  name = "github.com/stretchr/testify"
+  packages = [
+    "assert",
+    "require",
+    "suite"
+  ]
+  revision = "eccae071a38f965151ef2aebec8784b60e2a6c7b"
+  source = "github.com/GetStream/testify"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/wadey/gocovmerge"
+  packages = ["."]
+  revision = "b5bfa59ec0adc420475f97f89b58045c721d761c"
+
+[[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
@@ -112,8 +168,21 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/text"
-  packages = ["internal/gen","internal/triegen","internal/ucd","transform","unicode/cldr","unicode/norm"]
+  packages = [
+    "internal/gen",
+    "internal/triegen",
+    "internal/ucd",
+    "transform",
+    "unicode/cldr",
+    "unicode/norm"
+  ]
   revision = "836efe42bb4aa16aaa17b9c155d8813d336ed720"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/tools"
+  packages = ["cover"]
+  revision = "e4b401d06e5ee9f990011dc4f24cd24162131565"
 
 [[projects]]
   branch = "v2"
@@ -124,6 +193,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3a75b5639eb424187a6d20302b6da7b4cab72b58a4eb91eacb985eac6e1773a0"
+  inputs-digest = "42fa49f709df3547aae5d4d7d9fe66b6732b56a3ec4b1e58aeb74c832dcabc60"
   solver-name = "gps-cdcl"
   solver-version = 1

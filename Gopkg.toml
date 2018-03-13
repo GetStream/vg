@@ -80,11 +80,14 @@
 
 required = [
     'github.com/jteeuwen/go-bindata/go-bindata',
-    'github.com/spf13/cobra/cobra'
+    'github.com/spf13/cobra/cobra',
+    'github.com/haya14busa/goverage',
+    'github.com/wadey/gocovmerge',
 ]
 
 [[constraint]]
   branch = "master"
+  source = "github.com/GetStream/go-bindata"
   name = "github.com/jteeuwen/go-bindata"
 
 [[constraint]]
@@ -106,3 +109,13 @@ required = [
 [[constraint]]
   branch = "master"
   name = "github.com/spf13/cobra"
+
+[[constraint]]
+  branch = "subtest-helper"
+  name = "github.com/stretchr/testify"
+  source = "github.com/GetStream/testify"
+
+[[override]]
+  branch = "subtest-helper"
+  name = "github.com/stretchr/testify"
+  source = "github.com/GetStream/testify"

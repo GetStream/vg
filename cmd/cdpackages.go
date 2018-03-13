@@ -21,7 +21,7 @@ var cdpackagesCmd = &cobra.Command{
 	/home/user/.virtualgo/test/src
 	`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return errors.New("You haven't eval-ed `vg eval` yet")
+		return errors.New(noEvalError)
 	},
 }
 

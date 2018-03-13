@@ -11,6 +11,27 @@ import (
 
 var cfgFile string
 
+const noEvalError = `You haven't eval-ed "vg eval" yet.
+
+Usually this is caused by one of the following two options:
+- You have not run "vg setup" yet.
+- You have not restarted your terminal/IDE after running "vg setup"
+
+If you have done both it probably means that your "~/.bashrc" file is not being
+executed on startup by bash. This usually caused by your terminal running
+"~/.profile" at startup instead of running "~/.bashrc". The easiest way to fix
+this is by placing the following at the top of your "~/.profile" file (if
+"~/.profile does not exist you should add this in "~/.bash_profile"):
+
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+	. "$HOME/.bashrc"
+    fi
+fi
+`
+
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "vg",
@@ -18,7 +39,7 @@ var RootCmd = &cobra.Command{
 	Long: `
 Virtualgo (or vg for short) is a tool which provides easy and powerful
 workspace based development for Go. The vendor directory provides something
-similar. However, virtualgo adds features features that are either broken or
+similar. However, virtualgo adds features that are either broken or
 fully missing when using a vendor directory.
 
 Below is an example of the 'vg' command in action. For more info see detailed
@@ -61,5 +82,5 @@ func Execute() {
 func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

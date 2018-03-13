@@ -2,7 +2,7 @@
 
 
 
-# virtualgo [![Build Status](https://travis-ci.org/GetStream/vg.svg?branch=master)](https://travis-ci.org/GetStream/vg)
+# virtualgo [![Build Status](https://travis-ci.org/GetStream/vg.svg?branch=master)](https://travis-ci.org/GetStream/vg) [![codecov](https://codecov.io/gh/GetStream/vg/branch/master/graph/badge.svg)](https://codecov.io/gh/GetStream/vg) [![Go Report Card](https://goreportcard.com/badge/github.com/GetStream/vg)](https://goreportcard.com/report/github.com/GetStream/vg)
 
 Virtualgo (or `vg` for short) is a tool which provides workspace based
 development for Go. Its main feature set that makes it better than other
@@ -324,17 +324,26 @@ here, [please report them](https://github.com/GetStream/vg/issues/new).
 ##### Relative packages in commands
 
 The first set of issues happen when using relative reference to packages in
-commands. For instance `go list ./...` will return weirdly formatted paths, such
-as `_/home/stream/go/src/github.com/GetStream/vg`. Also, running
-`go test ./...`, might cause an `init` function to be executed twice. This can
-all easily be worked around by using absolute package paths for these commands.
+commands. Some examples of this are:
+
+- `go list ./...` will return weirdly formatted paths, such
+  as `_/home/stream/go/src/github.com/GetStream/vg`.
+- `go test ./...`, might cause an `init` function to be executed twice.
+- `go build ./...` won't work when an `internal` package is present in the
+  directory. Here you can expect an error saying `use of internal package not
+  allowed`.
+
+Luckily, this can all easily be worked around by using absolute package paths
+for these commands.
 So for the `vg` repo you would use the following alternatives:
 
 ```bash
 # go list ./...
 go list github.com/GetStream/vg/...
 # go test ./...
-go test github.com/GetStream/vg/...`
+go test github.com/GetStream/vg/...
+# go build ./...
+go build github.com/GetStream/vg/...
 ```
 
 ##### `dep` commands
@@ -347,8 +356,8 @@ there's an easy workaround for this as well. You can simply use `vg globalExec`,
 to execute commands from your regular `GOPATH`, which fixes the issue:
 
 ```bash
-vg globalExec -- vg init
-vg globalExec -- vg status
+vg globalExec dep init
+vg globalExec dep status
 ```
 
 #### Without `bindfs` installed
@@ -366,7 +375,7 @@ package. Other than that there are also issues when using `delve`
 is NOT RECOMMENDED to use virtualgo in full isolation mode without `bindfs`
 installed.
 
-## Using a virtualgo workspace with an IDE (e.g. Gogland)
+## Using a virtualgo workspace with an IDE (e.g. GoLand)
 
 Because virtualgo is just a usability wrapper around changing your `GOPATH` for
 a specific project it is usually quite easy to use it in combination with an
@@ -380,7 +389,7 @@ $ echo $GOPATH
 ```
 
 If you can set this full string directly that is fine. For
-[Gogland](https://www.jetbrains.com/go/) you have to add the first one first and
+[GoLand](https://www.jetbrains.com/go/) you have to add the first one first and
 then the second one.
 
 When using a workspace in full isolation mode it's even easier to set up as

@@ -36,7 +36,7 @@ arguments still might not work as expected. See the README on Github for full
 details on advantages and disadvantages.
 	`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return errors.New("You haven't eval-ed `vg eval` yet.")
+		return errors.New(noEvalError)
 	},
 }
 

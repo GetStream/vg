@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"os/signal"
 	"path/filepath"
 	"strings"
 	"syscall"
@@ -95,7 +96,19 @@ This command requires that dep is installed in $PATH. `,
 		if len(args) > 0 {
 			argsString = " " + strings.Join(args, " ")
 		}
+
 		fmt.Printf("Running %q\n", "dep ensure"+argsString)
+		exitSignals := make(chan os.Signal, 1)
+		signal.Notify(exitSignals, os.Interrupt, syscall.SIGTERM, syscall.SIGQUIT)
+		go func() {
+			sig := <-exitSignals
+			p := depCmd.Process
+			if p != nil {
+				p.Signal(sig)
+				p.Wait()
+			}
+			os.Exit(1)
+		}()
 
 		err = depCmd.Run()
 		if err != nil {
