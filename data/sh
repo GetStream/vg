@@ -61,7 +61,7 @@ __vg_activate() {
     export VIRTUALGO_PATH=${VIRTUALGO_ROOT:-$HOME/.virtualgo}/$VIRTUALGO
 
     export _VIRTUALGO_OLDPS1=$PS1
-    export _VIRTUALGO_OLDGOPATH=$GOPATH
+    export _VIRTUALGO_OLDGOPATH=${GOPATH:-$HOME/go}
     export _VIRTUALGO_OLDPATH_SH=$PATH
 
     if [ -n "$GOBIN" ]; then
@@ -73,7 +73,7 @@ __vg_activate() {
     global_fallback=$(vg querySettings)
 
     if [ "$global_fallback" = "true" ]; then
-        export GOPATH=$VIRTUALGO_PATH:$GOPATH
+        export GOPATH=$VIRTUALGO_PATH:$_VIRTUALGO_OLDGOPATH
     else
         export GOPATH=$VIRTUALGO_PATH
     fi
