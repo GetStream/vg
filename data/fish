@@ -69,7 +69,7 @@ function _vg_activate
     set global_fallback (vg querySettings)
 
     if [ $global_fallback = true ]
-        set -gx GOPATH $VIRTUALGO_PATH:$GOPATH
+        set -gx GOPATH $VIRTUALGO_PATH${GOPATH:+:${GOPATH}}
     else
         set -gx GOPATH $VIRTUALGO_PATH
     end

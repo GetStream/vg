@@ -73,7 +73,8 @@ __vg_activate() {
     global_fallback=$(vg querySettings)
 
     if [ "$global_fallback" = "true" ]; then
-        export GOPATH=$VIRTUALGO_PATH:$GOPATH
+        # only append the GOPATH if it's not empty
+        export GOPATH=$VIRTUALGO_PATH${GOPATH:+:${GOPATH}}
     else
         export GOPATH=$VIRTUALGO_PATH
     fi
