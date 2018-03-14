@@ -56,7 +56,9 @@ function _vg_activate
     echo Activating $VIRTUALGO
     set -gx VIRTUALGO_PATH $HOME/.virtualgo/$VIRTUALGO
 
-    set -gx _VIRTUALGO_OLDGOPATH $GOPATH
+    set old_gopath $GOPATH $HOME/go
+
+    set -gx _VIRTUALGO_OLDGOPATH $old_gopath[1]
     if [ -n "$GOBIN" ]
         set -gx _VIRTUALGO_OLDGOBIN $GOBIN
     else
@@ -69,7 +71,7 @@ function _vg_activate
     set global_fallback (vg querySettings)
 
     if [ $global_fallback = true ]
-        set -gx GOPATH $VIRTUALGO_PATH:$GOPATH
+        set -gx GOPATH $VIRTUALGO_PATH:$_VIRTUALGO_OLDGOPATH
     else
         set -gx GOPATH $VIRTUALGO_PATH
     end
