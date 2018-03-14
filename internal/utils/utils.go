@@ -27,11 +27,12 @@ func ReplaceHomeDir(path string) string {
 }
 
 func VirtualgoRoot() string {
-	var err error
-	dir := ReplaceHomeDir("~/.virtualgo")
+	dir := os.Getenv("VIRTUALGO_ROOT")
+	if dir == "" {
+		dir = ReplaceHomeDir("~/.virtualgo")
+	}
 
-	err = os.MkdirAll(dir, 0755)
-	if err != nil {
+	if err := os.MkdirAll(dir, 0755); err != nil {
 		panic(fmt.Sprintf("Couldn't create virtualgo directory: %v", err))
 	}
 	return dir
