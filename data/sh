@@ -58,7 +58,7 @@ __vg_activate() {
 
     echo "Activating $VIRTUALGO"
 
-    export VIRTUALGO_PATH=$HOME/.virtualgo/$VIRTUALGO
+    export VIRTUALGO_PATH=${VIRTUALGO_ROOT:-$HOME/.virtualgo}/$VIRTUALGO
 
     export _VIRTUALGO_OLDPS1=$PS1
     export _VIRTUALGO_OLDGOPATH=$GOPATH
