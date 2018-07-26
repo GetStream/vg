@@ -92,15 +92,8 @@ required = [
 
 [[constraint]]
   branch = "master"
-  name = "github.com/golang/dep"
-
-[[constraint]]
-  branch = "master"
   name = "github.com/BurntSushi/toml"
 
-[[constraint]]
-  branch = "master"
-  name = "github.com/inconshreveable/mousetrap"
 
 [[constraint]]
   version = "^0.8.0"

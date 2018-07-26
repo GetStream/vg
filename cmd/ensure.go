@@ -70,9 +70,17 @@ This command requires that dep is installed in $PATH. `,
 			return errors.Wrap(err, "Couldn't remove the current vendor directory")
 		}
 
-		if false {
-			// TODO: This is causing some errors, packages are not actually
-			// installed. Not sure why, maybe bug in go dep.
+		err = ws.UninstallAllLocalInstalls()
+		if err != nil {
+			return err
+		}
+
+		exists, err := utils.DirExists(ws.Src())
+		if err != nil {
+			return err
+		}
+
+		if exists {
 			err = os.Rename(ws.Src(), "vendor")
 			if err != nil {
 				err = err.(*os.LinkError).Err
@@ -124,7 +132,7 @@ This command requires that dep is installed in $PATH. `,
 			return errors.WithStack(err)
 		}
 
-		exists, err := utils.VendorExists()
+		exists, err = utils.VendorExists()
 		if err != nil {
 			return err
 		}
@@ -133,11 +141,6 @@ This command requires that dep is installed in $PATH. `,
 			fmt.Fprintln(os.Stderr, "ERROR: The vendor directory was not created by the dep ensure command.")
 			fmt.Fprintln(os.Stderr, "ERROR: This means the workspace content won't be changed")
 			os.Exit(1)
-		}
-
-		err = ws.ClearSrc()
-		if err != nil {
-			return errors.Wrap(err, "Couldn't clear the src path of the active workspace")
 		}
 
 		err = os.Rename("vendor", ws.Src())

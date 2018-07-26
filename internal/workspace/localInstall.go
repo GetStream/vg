@@ -272,6 +272,21 @@ func fusermountNotMounted(output, pkgSrc string) bool {
 }
 
 func (ws *Workspace) ClearSrc() error {
+	err := os.RemoveAll(ws.ensureMarker())
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	err = ws.UninstallAllLocalInstalls()
+	if err != nil {
+		return err
+	}
+
+	return errors.WithStack(os.RemoveAll(ws.Src()))
+
+}
+
+func (ws *Workspace) UninstallAllLocalInstalls() error {
 	settings, err := ws.Settings()
 	if err != nil {
 		return err
@@ -288,9 +303,7 @@ func (ws *Workspace) ClearSrc() error {
 			return err
 		}
 	}
-
-	return errors.WithStack(os.RemoveAll(ws.Src()))
-
+	return nil
 }
 
 func (ws *Workspace) UnpersistLocalInstall(pkg string) error {
