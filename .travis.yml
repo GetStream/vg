@@ -3,9 +3,6 @@ go:
   - 1.9.x
   - 1.10rc1
 
-dist: trusty
-sudo: false
-
 before_install:
   - go get github.com/GetStream/vg
   - go get github.com/golang/dep/cmd/dep
