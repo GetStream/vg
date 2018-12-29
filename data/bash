@@ -24,6 +24,8 @@ __vg_reload() {
 _PREV_VIRTUALGO_PWD=""
 
 __vg_prompt_command() {
+    local last_exit=$?
+
     {
         local USE_X
         local USE_U
@@ -41,7 +43,11 @@ __vg_prompt_command() {
 
     [ "$USE_U" != "yes" ] || set -u
     [ "$USE_X" != "yes" ] || set -x
+
+    return $last_exit
 }
 
-_VIRTUALGO_ORIGINAL_PROMPT_COMMAND=$PROMPT_COMMAND
-PROMPT_COMMAND="__vg_prompt_command ; $PROMPT_COMMAND"
+if [[ ! "$PROMPT_COMMAND" =~ __vg_prompt_command ]]; then
+    _VIRTUALGO_ORIGINAL_PROMPT_COMMAND=$PROMPT_COMMAND
+    PROMPT_COMMAND="__vg_prompt_command ; $PROMPT_COMMAND"
+fi
