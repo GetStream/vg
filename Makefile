@@ -82,7 +82,7 @@ test:
 	./test.bash
 
 cover: $(DEPS)
-	goverage -covermode=count -coverprofile=coverage-unit-tests.out $(REPO)/internal/...
+	go test -cover -coverpkg=./... -covermode=count -coverprofile=coverage-unit-tests.out $(REPO)/internal/...
 	./test.bash
 	gocovmerge coverages/*.out coverage-unit-tests.out > coverage.out
 	rm coverage-unit-tests.out
