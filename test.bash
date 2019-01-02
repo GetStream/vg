@@ -4,7 +4,7 @@ set -uex -o pipefail
 
 rm -rf coverages
 
-go test -covermode=count -coverpkg="$(go list ./... | paste -sd ',' -)" -c github.com/GetStream/vg -o testbins/testvg
+go test -covermode=count -coverpkg=./... -c github.com/GetStream/vg -o testbins/testvg
 
 go build -i -o testbins/vg github.com/GetStream/vg/internal/testwrapper/vg
 

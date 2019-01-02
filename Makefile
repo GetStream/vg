@@ -84,7 +84,7 @@ test:
 cover: $(DEPS)
 	go test -cover -coverpkg=./... -covermode=count -coverprofile=coverage-unit-tests.out $(REPO)/internal/...
 	./test.bash
-	gocovmerge coverages/*.out coverage-unit-tests.out > coverage.out
+	gocovmerge coverage-unit-tests.out coverages/*.out > coverage.out
 	rm coverage-unit-tests.out
 	rm -r coverages
 
