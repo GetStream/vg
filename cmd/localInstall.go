@@ -4,7 +4,10 @@
 package cmd
 
 import (
+	"fmt"
+	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/GetStream/vg/internal/utils"
 	"github.com/GetStream/vg/internal/workspace"
@@ -48,12 +51,20 @@ After that a 'vg ensure' will install like normal again.
 		if len(args) == 2 {
 			path = args[1]
 		} else {
+			for _, gopath := range strings.Split(utils.OriginalGopath(), ":") {
+				pkgPath := filepath.Join(gopath, "src", utils.PkgToDir(pkg))
+				_, err := os.Stat(pkgPath)
+				if err == os.ErrNotExist {
+					continue
+				}
+				if err == nil {
+					path = pkgPath
+				}
+			}
 
-			path = filepath.Join(
-				utils.OriginalGopath(),
-				"src",
-				utils.PkgToDir(pkg),
-			)
+			if path == "" {
+				return fmt.Errorf("local package %s not found", pkg)
+			}
 		}
 
 		ws, err := workspace.Current()
