@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/GetStream/vg/internal/utils"
 	"github.com/GetStream/vg/internal/workspace"
@@ -51,7 +50,7 @@ After that a 'vg ensure' will install like normal again.
 		if len(args) == 2 {
 			path = args[1]
 		} else {
-			for _, gopath := range strings.Split(utils.OriginalGopath(), ":") {
+			for _, gopath := range filepath.SplitList(utils.OriginalGopath()) {
 				pkgPath := filepath.Join(gopath, "src", utils.PkgToDir(pkg))
 				_, err := os.Stat(pkgPath)
 				if err == os.ErrNotExist {
@@ -59,6 +58,7 @@ After that a 'vg ensure' will install like normal again.
 				}
 				if err == nil {
 					path = pkgPath
+					break
 				}
 			}
 
