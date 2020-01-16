@@ -26,6 +26,10 @@ For people coming from Python `vg` is very similar to `virtualenv`, with `dep`
 being respective to `pip`. The main difference is that `vg` is much easier to
 use than `virtualenv`, because there's almost no mental overhead in using `vg`.
 
+### Go Modules
+
+The Go community is now using Go Modules to handle dependencies. This project is now mostly unmaintained. Please read more about this [here](https://getstream.io/blog/virtual-go-to-go-modules/).
+
 ## Example usage
 
 Below is an example showing some basic usage of `vg`. See further down and `vg help`
